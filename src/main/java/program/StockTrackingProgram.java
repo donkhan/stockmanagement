@@ -17,7 +17,7 @@ public class StockTrackingProgram extends AbstractProgram{
 	}
 
 	@Override
-	protected void execute(boolean force, boolean sendmail, String specificStock) {
+	protected void execute(boolean force, boolean sendmail, String specificStock,String filePath) {
 		String stocks[] = specificStock.split(",");
 		StockList stockList = new StockList();		
 		stockList.setInputFile("c://Users//kkhan//Trade.xls");

@@ -32,7 +32,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 	}
 	
 	
-	public void execute(final boolean force,final boolean sendmail,final String specificStock){
+	public void execute(final boolean force,final boolean sendmail,final String specificStock,final String filePath){
 		GregorianCalendar currentTime = new GregorianCalendar();
 		System.out.println("Pass started at " + currentTime.getTime());
 		
@@ -42,12 +42,12 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		}
 		
 		if(force){
-			doWork(force,sendmail,specificStock,true);
+			doWork(force,sendmail,specificStock,true,filePath);
 			return;
 		}
 		
 		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17 && currentTime.get(Calendar.HOUR_OF_DAY) < 20){
-			doWork(force,sendmail,specificStock,true);
+			doWork(force,sendmail,specificStock,true,filePath);
 		}
 		
 		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17  || currentTime.get(Calendar.HOUR_OF_DAY) < 9){
@@ -58,16 +58,17 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			System.out.println("Won't Run on Sat or Sun");
 			return;
 		}
-		doWork(force,sendmail,specificStock);
+		doWork(force,sendmail,specificStock,filePath);
 	}
 	
-	private void doWork(final boolean force,final boolean sendmail,final String specificStock){
-		doWork(force,sendmail,specificStock,false);
+	private void doWork(final boolean force,final boolean sendmail,final String specificStock,final String filePath){
+		doWork(force,sendmail,specificStock,false,filePath);
 	}
 	
-	private void doWork(final boolean force,final boolean sendmail,final String specificStock,boolean fullReport){
+	private void doWork(final boolean force,final boolean sendmail,final String specificStock,
+			boolean fullReport,String filePath){
 		StockBuilder builder = new StockBuilder();
-		builder.setInputFile("c://Users//kkhan//Trade.xls");
+		builder.setInputFile(filePath);
 		builder.setFullReport(fullReport);
 		
 		Map<String, Stock> stocks = builder.read(specificStock);

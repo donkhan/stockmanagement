@@ -22,7 +22,7 @@ public class ProfitCalculationProgram extends AbstractProgram{
 	}
 
 	@Override
-	protected void execute(boolean force, boolean sendmail, String specificStock) {
+	protected void execute(boolean force, boolean sendmail, String specificStock,String filePath) {
 		StockBuilder builder= new StockBuilder();
 		builder.setInputFile("c://Users//kkhan//Trade.xls");
 		
