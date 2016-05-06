@@ -13,7 +13,7 @@ public class SquareOffProgram extends AbstractProgram {
 	}
 
 	@Override
-	protected void execute(boolean force, boolean sendmail, String specificStock) {
+	protected void execute(boolean force, boolean sendmail, String specificStock,String filePath) {
 		System.out.println("Execute Square Off Program for Stock " + specificStock);
 		StockBuilder builder = new StockBuilder();
 		builder.setInputFile("c://Users//kkhan//Trade.xls");

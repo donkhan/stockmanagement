@@ -8,18 +8,19 @@ import java.util.TimerTask;
 public abstract class AbstractProgram {
 
 	protected abstract long getTimerInterval();
-	protected abstract void execute(final boolean force,final boolean sendmail,final String specificStock);
+	protected abstract void execute(final boolean force,final boolean sendmail,final String specificStock,
+			final String filePath);
 	
-	protected void main(final boolean force, final boolean sendmail,final String specificStock){
+	protected void main(final boolean force, final boolean sendmail,final String specificStock,final String filePath){
 		if(force){
-			execute(force,sendmail,specificStock);
+			execute(force,sendmail,specificStock,filePath);
 			return;
 		}
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				execute(force,sendmail,specificStock);
+				execute(force,sendmail,specificStock,filePath);
 				System.out.println("Next Scheduled Execution is at " + 
 						new Date(System.currentTimeMillis() + getTimerInterval()));
 			}
@@ -29,6 +30,7 @@ public abstract class AbstractProgram {
 	public void startExecute(String args[]){
 		boolean force = true, sendmail = true;
 		String specificStock = "None";
+		String filePath = "";
 		for(int i = 0;i<args.length;i++){
 			String arg = args[i];
 			if(arg.startsWith("--force")){
@@ -40,8 +42,11 @@ public abstract class AbstractProgram {
 			if(arg.startsWith("--specificstock")){
 				specificStock = getStringProperty(arg);
 			}
+			if(arg.startsWith("--filepath")){
+				filePath = getStringProperty(arg);
+			}
 		}
-		main(force,sendmail,specificStock);
+		main(force,sendmail,specificStock,filePath);
 	}
 	
 	private static boolean getBooleanProperty(String arg){
