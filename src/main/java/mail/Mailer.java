@@ -36,7 +36,7 @@ public class Mailer {
 		Session session = Session.getInstance(getSMTPProperties(),
 			new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication("routetokamil","Farzanakhan");
+						return new PasswordAuthentication("routetokamil","");
 				}
 			}
 		);
@@ -87,7 +87,7 @@ public class Mailer {
 		Mailer mailer = new Mailer();
 		StringBuffer subject = new StringBuffer(); subject.append("Test Subject");
 		StringBuffer content = new StringBuffer(); content.append("Summa Summa");
-		mailer.mail("c://users//kkhan//Trade.xls", subject,content);
+		mailer.mail("c://users//kkhan//sweeties///carmen//Trade.xls", subject,content);
 		//mailer.mail(null,subject,content);
 	}
 
