@@ -1,9 +1,14 @@
 package jasper;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -20,7 +25,7 @@ public class JasperReportGenerator {
 
 	public static void main(String[] args) throws JRException{
 		JasperReportGenerator gen = new JasperReportGenerator();
-		Map<String,Stock> stocks = new HashMap<String,Stock>();
+		List<Stock> stocks = new ArrayList<Stock>();
 		Stock iocStock = new Stock();
 		iocStock.setName("IOC"); 
 		iocStock.setCurrentPrice(13);
@@ -28,18 +33,20 @@ public class JasperReportGenerator {
 		Trade trade = new Trade();
 		trade.setName("IOC"); trade.setQuantity(5); trade.setTradeType("B"); trade.setGrossrate(193);
 		iocStock.addToTradeList(trade);
-		stocks.put("IOC", iocStock);
-		//gen.generate(stocks);
+		stocks.add(iocStock);
+		gen.generate(stocks,12d);
 	}
 	
 	public String generate(List<Stock> stockCollection,double totalProfit){
 		try{
-			JasperReport report = JasperCompileManager.compileReport("c:\\Users\\kkhan\\jaspermetadata\\StockPeriodicReport.jrxml");
+			//InputStream inputStream = new FileInputStream(System.getProperty("user.dir") + "\\src\\main\\resources\\"+ "StockPeriodicReport.jrxml");
+			InputStream inputStream = URLClassLoader.getSystemResourceAsStream("StockPeriodicReport.jrxml");
+			JasperReport report = JasperCompileManager.compileReport(inputStream);
 			JasperPrint print = fill(report,stockCollection,totalProfit);
 			return pdf(print);
 		}catch(JRException jre){
 			jre.printStackTrace();
-		}
+		} 
 		return null;
 	}
 	

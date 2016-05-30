@@ -1,6 +1,7 @@
 package core;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLClassLoader;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -151,8 +152,13 @@ public class StockBuilder {
 	}
 
 	protected Workbook getWorkBook() throws IOException,BiffException{
-		File inputWorkbook = new File(inputFile);
-		Workbook w = Workbook.getWorkbook(inputWorkbook);
+		Workbook w  = null;
+		if(!inputFile.equals("")){
+			File inputWorkbook = new File(inputFile);
+			w = Workbook.getWorkbook(inputWorkbook);
+		}
+		w = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
+		
 		return w;
 	}
 
