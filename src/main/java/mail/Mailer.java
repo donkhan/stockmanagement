@@ -15,28 +15,48 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import util.InternetService;
+import program.AbstractProgram;
 
-public class Mailer {
+public class Mailer extends AbstractProgram{
 
+	
+	private String[] args;
+	public Mailer(String args[]){
+		this.args = args;
+	}
+	
 	public void mail(String fileName,StringBuffer subject) {
 		mail(fileName,subject,null);
 	}
 	
 	private Properties getSMTPProperties(){
 		Properties props = System.getProperties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
+		
 		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class",
+				"javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+		
 		return props;
 	}
 	
+	private String u = "", p = "";
 	private Session getSession(){
+		for(int i = 0;i<args.length;i++){
+			String arg = args[i];
+			if(arg.startsWith("--gmailusername")){
+				u = getStringProperty(arg);
+			}
+			if(arg.startsWith("--gmailpassword")){
+				p = getStringProperty(arg);
+			}
+		}
 		Session session = Session.getInstance(getSMTPProperties(),
 			new javax.mail.Authenticator() {
 				protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication("routetokamil","");
+						return new PasswordAuthentication(u,p);
 				}
 			}
 		);
@@ -44,10 +64,6 @@ public class Mailer {
 	}
 		
 	public void mail(String fileName,StringBuffer subject,StringBuffer content){
-		if(!InternetService.up()){
-			System.out.println("Internet is not up... Hence i am not going to send mail");
-			return;
-		}
 		try {
 			Message message = new MimeMessage(getSession());
 			message.setFrom(new InternetAddress("secret-friend@gmail.com"));
@@ -84,11 +100,20 @@ public class Mailer {
 	
 	
 	public static void main(String args[]){
-		Mailer mailer = new Mailer();
+		Mailer mailer = new Mailer(args);
 		StringBuffer subject = new StringBuffer(); subject.append("Test Subject");
 		StringBuffer content = new StringBuffer(); content.append("Summa Summa");
-		mailer.mail("c://users//kkhan//sweeties///carmen//Trade.xls", subject,content);
-		//mailer.mail(null,subject,content);
+		mailer.mail("c://users//kkhan//sweeties///carmen//stockmanagement//src//main//resources//Trade.xls", subject,content);
+	}
+
+	@Override
+	protected long getTimerInterval() {
+		return 0;
+	}
+
+	@Override
+	protected void execute(boolean force, boolean sendmail,
+			String specificStock, String filePath, String[] args) {
 	}
 
 }

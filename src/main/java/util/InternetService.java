@@ -11,13 +11,10 @@ public class InternetService {
 			System.out.println("Going to check internet status");
 			URL url = new URL("http://google.com");
 			URLConnection connection = url.openConnection();
-			//connection.setConnectTimeout(200);
-			//connection.setReadTimeout(200);
 			connection.setDoOutput(true);
 			InputStream in = connection.getInputStream();
 			in.close();
 		}catch(Throwable t){
-			//t.printStackTrace();
 			return false;
 		}
 		return true;

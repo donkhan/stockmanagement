@@ -9,23 +9,24 @@ public abstract class AbstractProgram {
 
 	protected abstract long getTimerInterval();
 	protected abstract void execute(final boolean force,final boolean sendmail,final String specificStock,
-			final String filePath);
+			final String filePath,final String args[]);
 	
-	protected void main(final boolean force, final boolean sendmail,final String specificStock,final String filePath){
+	protected void main(final boolean force, final boolean sendmail,final String specificStock,final String filePath,final String[] args){
 		if(force){
-			execute(force,sendmail,specificStock,filePath);
+			execute(force,sendmail,specificStock,filePath,args);
 			return;
 		}
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				execute(force,sendmail,specificStock,filePath);
+				execute(force,sendmail,specificStock,filePath,args);
 				System.out.println("Next Scheduled Execution is at " + 
 						new Date(System.currentTimeMillis() + getTimerInterval()));
 			}
 		}, 0, getTimerInterval());
 	}
+	
 	
 	public void startExecute(String args[]){
 		boolean force = true, sendmail = true;
@@ -46,18 +47,28 @@ public abstract class AbstractProgram {
 				filePath = getStringProperty(arg);
 			}
 		}
-		main(force,sendmail,specificStock,filePath);
+		main(force,sendmail,specificStock,filePath,args);
 	}
 	
-	private static boolean getBooleanProperty(String arg){
+	protected boolean getBooleanProperty(String arg){
 		StringTokenizer tokenizer = new StringTokenizer(arg,"=");
 		tokenizer.nextToken();
 		return Boolean.parseBoolean(tokenizer.nextToken());
 	}
 
-	private static String getStringProperty(String arg){
+	protected String getStringProperty(String arg){
 		StringTokenizer tokenizer = new StringTokenizer(arg,"=");
 		tokenizer.nextToken();
 		return tokenizer.nextToken();
 	}
+	
+	protected int getIntegerValue(String args[],String arg){
+		for(int i = 0;i<args.length;i++){
+			if(args[i].startsWith("--"+ arg)){
+				return Integer.parseInt(getStringProperty(args[i]));
+			}
+		}
+		return 30;
+	}
+	
 }

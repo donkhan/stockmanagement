@@ -17,12 +17,12 @@ public class StockTrackingProgram extends AbstractProgram{
 	}
 
 	@Override
-	protected void execute(boolean force, boolean sendmail, String specificStock,String filePath) {
+	protected void execute(boolean force, boolean sendmail, String specificStock,String filePath,String args[]) {
 		String stocks[] = specificStock.split(",");
 		StockList stockList = new StockList();		
 		stockList.setInputFile("c://Users//kkhan//Trade.xls");
 		List<Stock> list = stockList.getCurrentStockPriceList(stocks);
-		Mailer mailer = new Mailer();
+		Mailer mailer = new Mailer(args);
 		StringBuffer subject = new StringBuffer("");
 		subject.append("Alert. Stock Updates...");
 		StringBuffer content = new StringBuffer();

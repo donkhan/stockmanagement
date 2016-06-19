@@ -22,17 +22,28 @@ import file.FileCleaner;
 
 public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 
+	private String[] args;
+	
+	public String[] getArgs() {
+		return args;
+	}
+
+	public void setArgs(String[] args) {
+		this.args = args;
+	}
+
 	public static void main(String[] args){
 		PeriodicPortfolioUpdateProgram main = new PeriodicPortfolioUpdateProgram();
+		main.setArgs(args);
 		main.startExecute(args);
 	}
 	
 	public long getTimerInterval(){
-		return 30 * 60 * 1000; 
+		return getIntegerValue(this.args,"interval") * 60 * 1000; 
 	}
 	
 	
-	public void execute(final boolean force,final boolean sendmail,final String specificStock,final String filePath){
+	public void execute(final boolean force,final boolean sendmail,final String specificStock,final String filePath,String args[]){
 		GregorianCalendar currentTime = new GregorianCalendar();
 		System.out.println("Pass started at " + currentTime.getTime());
 		
@@ -42,31 +53,33 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		}
 		
 		if(force){
-			doWork(force,sendmail,specificStock,true,filePath);
+			doWork(force,sendmail,specificStock,true,filePath,args);
 			return;
 		}
 		
 		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17 && currentTime.get(Calendar.HOUR_OF_DAY) < 20){
-			doWork(force,sendmail,specificStock,true,filePath);
+			doWork(force,sendmail,specificStock,true,filePath,args);
 		}
 		
 		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17  || currentTime.get(Calendar.HOUR_OF_DAY) < 9){
 			System.out.println("Since time crossed 5 PM Markets would have been closed. Hence not running this time");
 			return;
 		}
-		if(currentTime.get(Calendar.DAY_OF_WEEK) == 7 ||  currentTime.get(Calendar.DAY_OF_WEEK) == 0){
+		if(currentTime.get(Calendar.DAY_OF_WEEK) == 7 ||  currentTime.get(Calendar.DAY_OF_WEEK) == 1){
 			System.out.println("Won't Run on Sat or Sun");
 			return;
 		}
-		doWork(force,sendmail,specificStock,filePath);
+		doWork(force,sendmail,specificStock,filePath,args);
 	}
 	
-	private void doWork(final boolean force,final boolean sendmail,final String specificStock,final String filePath){
-		doWork(force,sendmail,specificStock,false,filePath);
+	private void doWork(final boolean force,final boolean sendmail,final String specificStock,final String filePath,String args[]){
+		doWork(force,sendmail,specificStock,false,filePath,args);
 	}
 	
 	private void doWork(final boolean force,final boolean sendmail,final String specificStock,
-			boolean fullReport,String filePath){
+			boolean fullReport,String filePath,String args[]){
+		
+		System.out.println("File Path " + filePath);
 		StockBuilder builder = new StockBuilder();
 		builder.setInputFile(filePath);
 		builder.setFullReport(fullReport);
@@ -78,6 +91,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		while(values.hasNext()){
 			Stock stock = values.next();
 			if(stock.getTotalQuantity() > 0 || fullReport){
+				
 				stockList.add(stock);
 			}
 			totalProfit += stock.getProfitRealised();
@@ -88,14 +102,19 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		String generatedFileName = gen.generate(stockList,totalProfit);
 		
 		if(generatedFileName != null && sendmail){
-			Mailer mailer = new Mailer();
+			Mailer mailer = new Mailer(args);
 			StringBuffer subject = new StringBuffer("");
 			subject.append("Investment Bulletin @ " + DateFormat.getDateTimeInstance().format(new Date()));
-			mailer.mail(generatedFileName,subject);
-			FileCleaner fc = new FileCleaner();
-			fc.clean(generatedFileName);
+			try{
+				mailer.mail(generatedFileName,subject);
+				FileCleaner fc = new FileCleaner();
+				fc.clean(generatedFileName);
+			}catch(Throwable t){
+				System.err.println("Unable to send email");
+			}
 		}
 	}
 
+	
 
 }

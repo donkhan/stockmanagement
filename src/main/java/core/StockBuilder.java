@@ -156,8 +156,9 @@ public class StockBuilder {
 		if(!inputFile.equals("")){
 			File inputWorkbook = new File(inputFile);
 			w = Workbook.getWorkbook(inputWorkbook);
+		}else{
+			w = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
 		}
-		w = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
 		
 		return w;
 	}

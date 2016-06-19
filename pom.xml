@@ -14,7 +14,14 @@
 		<groupId>javax.mail</groupId>
 		<artifactId>mailapi</artifactId>
 		<version>1.4.3</version>
+	</dependency> 
+
+	<dependency>
+    <groupId>javax.mail</groupId>
+    	<artifactId>mail</artifactId>
+    	<version>1.4</version>
 	</dependency>
+	
   	<dependency>
 		<groupId>net.sf.jasperreports</groupId>
 		<artifactId>jasperreports</artifactId>
@@ -30,7 +37,8 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>program.PeriodicPortfolioUpdateProgram</mainClass>
+							<mainClass>program.PeriodicPortfolioUpdateProgram</mainClass> 
+
 						</manifest>
 					</archive>
 				</configuration>

@@ -18,8 +18,25 @@ public class Stock {
 	private double profitRealised = 0;
 	private String broker;
 	private double imaginaryProfit;
+	private double squareOffAmount = 0;
+	private int squareOffQuantity = 0;
 	
-	
+	public double getSquareOffAmount() {
+		return squareOffAmount;
+	}
+
+	public void setSquareOffAmount(double squareOffAmount) {
+		this.squareOffAmount = squareOffAmount;
+	}
+
+	public int getSquareOffQuantity() {
+		return squareOffQuantity;
+	}
+
+	public void setSquareOffQuantity(int squareOffQuantity) {
+		this.squareOffQuantity = squareOffQuantity;
+	}
+
 	public String getBroker() {
 		return broker;
 	}
@@ -122,10 +139,11 @@ public class Stock {
 	
 	public void setCurrentPrice(double currentPrice) {
 		this.currentPrice = currentPrice;
+		applySquareOff(.1d);
 	}
 	
 	public void print(){
-		System.out.println("Stock " + name + " Avg: " + average + " Qty: " + totalQuantity + " Total: " + average*totalQuantity + " Profit Realised " + profitRealised);
+		System.out.println("Stock " + name + " Avg: " + average + " Qty: " + totalQuantity + " Total: " + average*totalQuantity + " Profit Realised " + profitRealised + " Square Off " + squareOffAmount);
 	}
 
 	public void calculateImaginaryProfit(CommissionCalculator cc) {
@@ -141,6 +159,17 @@ public class Stock {
 		System.out.println("Imaginary Profit " + this.getImaginaryProfit());
 	}
 	
+	private void applySquareOff(double margin){
+		if(getAverage() < getCurrentPrice()){
+			squareOffQuantity= -1 * (int)(((getAverage() - (getCurrentPrice()+margin)) * getTotalQuantity()) / margin);
+			squareOffAmount =  squareOffQuantity * getAverage();
+		}
+		else{
+			squareOffQuantity= (int)(((getAverage() - (getCurrentPrice()+margin)) * getTotalQuantity()) / margin);
+			squareOffAmount =  squareOffQuantity * getAverage();
+		}
+		
+	}	
 	
 	
 }
