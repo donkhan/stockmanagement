@@ -43,7 +43,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 	}
 	
 	
-	public void execute(final boolean force,final boolean sendmail,final String specificStock,final String filePath,String args[]){
+	public void execute(final boolean force,String args[]){
 		GregorianCalendar currentTime = new GregorianCalendar();
 		System.out.println("Pass started at " + currentTime.getTime());
 		
@@ -53,12 +53,12 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		}
 		
 		if(force){
-			doWork(force,sendmail,specificStock,true,filePath,args);
+			doWork(force,args);
 			return;
 		}
 		
 		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17 && currentTime.get(Calendar.HOUR_OF_DAY) < 20){
-			doWork(force,sendmail,specificStock,true,filePath,args);
+			doWork(force,args);
 		}
 		
 		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17  || currentTime.get(Calendar.HOUR_OF_DAY) < 9){
@@ -69,18 +69,18 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			System.out.println("Won't Run on Sat or Sun");
 			return;
 		}
-		doWork(force,sendmail,specificStock,filePath,args);
+		doWork(force,args);
 	}
 	
-	private void doWork(final boolean force,final boolean sendmail,final String specificStock,final String filePath,String args[]){
-		doWork(force,sendmail,specificStock,false,filePath,args);
-	}
-	
-	private void doWork(final boolean force,final boolean sendmail,final String specificStock,
-			boolean fullReport,String filePath,String args[]){
+	private void doWork(final boolean force,String args[]){
 		
-		System.out.println("File Path " + filePath);
+		boolean fullReport = getBooleanValue(args,"fullreport");
+		String filePath = getValue(args,"filepath",""); 
+		String specificStock = getValue(args,"specificstock","None");
+		boolean sendmail  = getBooleanValue(args,"sendmail");
+		System.out.println("File Path " + filePath + "  " + fullReport +  " Specific Stock " + specificStock);
 		StockBuilder builder = new StockBuilder();
+		
 		builder.setInputFile(filePath);
 		builder.setFullReport(fullReport);
 		

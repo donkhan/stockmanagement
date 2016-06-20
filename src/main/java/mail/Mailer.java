@@ -112,8 +112,7 @@ public class Mailer extends AbstractProgram{
 	}
 
 	@Override
-	protected void execute(boolean force, boolean sendmail,
-			String specificStock, String filePath, String[] args) {
+	protected void execute(boolean force,  String[] args) {
 	}
 
 }
