@@ -102,8 +102,9 @@ public class Stock {
             price -= extraCharges;
             totalQuantity -= trade.getQuantity();
             addProfit(trade);
+            trade.print();
         }
-        trade.print();
+        
     }
 
     private void addProfit(Trade trade){
@@ -173,10 +174,7 @@ public class Stock {
         imaginaryTrade.setTransactionTime(new java.util.Date());
         imaginaryTrade.setName(getName());
 		cc.calculateCommission(imaginaryTrade);
-
-
         handleSell(imaginaryTrade,false);
-
         imaginaryProfit = (imaginaryTrade.getNetRate() - getAverage()) * getTotalQuantity();
 
 	}
