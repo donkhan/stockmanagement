@@ -60,12 +60,9 @@ public class StockBuilder {
 	
 	private double getRate(String stockName,String url,StockService reader,Map<String,Double> rateMap){
 		if(rateMap.containsKey(stockName)){
-			System.out.println("Fetched Already");
 			return rateMap.get(stockName);
 		}
-		System.out.println(stockName + ":" +  url);
 		double currentPrice = reader.getCurrentPrice(url);
-		System.out.println(stockName + ":" + currentPrice);
 		rateMap.put(stockName,currentPrice);
 		return currentPrice;
 	}
@@ -80,7 +77,6 @@ public class StockBuilder {
 			Stock stock = stockIterator.next();
 			String stockName = stock.getName();
 			if(stock.getTotalQuantity() == 0 && !fullReport){
-				System.out.println("As Total Quantity of " + stockName + " is zero,it's price will not be queried");
 				continue;
 			}
 			String url = getURL(sheet,stockName);
@@ -188,7 +184,20 @@ public class StockBuilder {
 		trade.setBroker(broker);
 		CommissionCalculator cc = getCommissionCalculator(broker);
 		cc.calculateCommission(trade);
-		trade.print();
+		
+		if(trade.getTradeType().equals(Trade.SELL)){
+			int columns = sheet.getColumns();
+			if(columns == 9){
+				cell = sheet.getCell(8,index);
+				if(cell != null){
+					double buyRate = Double.parseDouble(cell.getContents());
+					trade.setBuyRate(buyRate);
+				}
+			}
+		}
+		
+		
+		//trade.print();
 	}
 	
 	private CommissionCalculator getCommissionCalculator(String broker){

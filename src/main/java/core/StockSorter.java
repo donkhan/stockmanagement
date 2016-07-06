@@ -3,7 +3,6 @@ import java.util.Comparator;
 
 public class StockSorter implements Comparator<Stock>{
 
-	@Override
 	public int compare(Stock s1, Stock s2) {
 		
 		if(s1.getTotalQuantity() == 0 && s2.getTotalQuantity() == 0){

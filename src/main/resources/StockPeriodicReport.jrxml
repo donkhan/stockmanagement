@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2016-06-10T16:43:05 -->
+<!-- 2016-07-05T22:51:52 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" pageWidth="300" pageHeight="842" columnWidth="300" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8e4a5205-2205-4d4b-8419-3079dc5058a1">
 	<style name="profitStyle" forecolor="#FF0000" isBold="true">
 		<conditionalStyle>
@@ -29,12 +29,6 @@
 	</field>
 	<field name="profitRealised" class="java.lang.Double">
 		<fieldDescription><![CDATA[profitRealised]]></fieldDescription>
-	</field>
-	<field name="squareOffAmount" class="java.lang.Double">
-		<fieldDescription><![CDATA[squareOffAmount]]></fieldDescription>
-	</field>
-	<field name="squareOffQuantity" class="java.lang.Integer">
-		<fieldDescription><![CDATA[squareOffQuantity]]></fieldDescription>
 	</field>
 	<variable name="totalInvestment" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{average} * $F{totalQuantity}]]></variableExpression>
@@ -168,13 +162,6 @@
 				</textElement>
 				<text><![CDATA[Profit Realised]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="515" y="3" width="100" height="15" uuid="d166f899-e1e5-42c9-851b-99fcc3090e59"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Square Off]]></text>
-			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
@@ -220,13 +207,6 @@
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[Math.round($F{profitRealised})]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement style="profitStyle" x="515" y="3" width="100" height="15" uuid="758559b0-f508-4560-aeed-adb0002d5aed"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="9"/>
-				</textElement>
-				<textFieldExpression><![CDATA[Math.round($F{squareOffAmount}) + "/" + $F{squareOffQuantity}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

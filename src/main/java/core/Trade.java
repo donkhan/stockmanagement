@@ -11,7 +11,25 @@ public class Trade {
 	private String tradeType;
 	private double cess;
 	private String broker;
+
+	private double buyRate;
+	private double sellRate;
 	
+	public static String BUY = "B";
+	public static String SELL = "S";
+	
+	public double getBuyRate() {
+		return buyRate;
+	}
+	public void setBuyRate(double buyRate) {
+		this.buyRate = buyRate;
+	}
+	public double getSellRate() {
+		return sellRate;
+	}
+	public void setSellRate(double sellRate) {
+		this.sellRate = sellRate;
+	}
 	public String getBroker() {
 		return broker;
 	}
