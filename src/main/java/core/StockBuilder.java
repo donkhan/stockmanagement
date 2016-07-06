@@ -42,7 +42,9 @@ public class StockBuilder {
 	
 	private void analyzeTrades(Workbook w,Map<String, Stock> stocks,String specificStock){
 		Sheet sheet = w.getSheet(0);
-		for (int i = 0; i < sheet.getRows(); i++) {
+		int noOfTrades = sheet.getRows();
+		System.out.println("No of Trades " + noOfTrades);
+		for (int i = 1; i < noOfTrades; i++) {
 			String stockName = sheet.getCell(0, i).getContents();
 			if(!specificStock.equals("None") && !stockName.contains(specificStock)){
 				continue;
@@ -161,7 +163,6 @@ public class StockBuilder {
 	private MoneyPalmCommissionCalculator mcc  = new MoneyPalmCommissionCalculator();
 	
 	private void fill(Trade trade,Sheet sheet,int index){
-
 		Cell cell = sheet.getCell(1, index);
 		StringTokenizer tokenizer = new StringTokenizer(cell.getContents(),"/");
 		Calendar calendar = new GregorianCalendar();
