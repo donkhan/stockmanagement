@@ -5,7 +5,7 @@ import core.Trade;
 
 public class MoneyPalmCommissionCalculator implements CommissionCalculator{
 
-	@Override
+
 	public void calculateCommission(Trade trade) {
 		double totalCommission = trade.getGrossrate() * .0014;
 		trade.setCommission(totalCommission);
@@ -13,7 +13,7 @@ public class MoneyPalmCommissionCalculator implements CommissionCalculator{
 		
 	}
 
-	@Override
+
 	public void adjustCurrentPrice(Stock stock) {
 		if(stock.getTotalQuantity() == 0){
 			return;

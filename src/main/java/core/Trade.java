@@ -6,9 +6,30 @@ public class Trade {
 
 	private long quantity;
 	private double grossrate;
+	private double netRate;
+
+	public double getNetRate() {
+		return netRate;
+	}
+
+	public void setNetRate(double netRate) {
+		this.netRate = netRate;
+	}
+
 	private double commission;
 	private Date tradeTime;
 	private String tradeType;
+
+	private double extraCharges;
+
+	public double getExtraCharges() {
+		return extraCharges;
+	}
+
+	public void setExtraCharges(double extraCharges) {
+		this.extraCharges = extraCharges;
+	}
+
 	private double cess;
 	private String broker;
 
@@ -66,15 +87,15 @@ public class Trade {
 	public void setGrossrate(double grossrate) {
 		this.grossrate = grossrate;
 	}
-	
-	
+
+
 	public double getCommission() {
 		return commission;
 	}
 	public void setCommission(double commission) {
 		this.commission = commission;
 	}
-	
+
 	private Date transactionTime;
 	public Date getTransactionTime() {
 		return transactionTime;
@@ -96,15 +117,18 @@ public class Trade {
 		if(tradeType.equals("BONUS")){
 			return "Got in BONUS";
 		}
-		return tradeType.equals("R") ? "Bought in Rights " : tradeType.equals("S") ? "Sold" : "Bought" + " through " + broker;
+		return tradeType.equals("R") ? "Bought in Rights " : (tradeType.equals("S") ? "Sold" : "Bought") + " through " + broker;
 	}
 	
-	private String getSymbol(){
-		return tradeType.equals("B")  ? "+" : "-";
-	}
+
 	
 	public String toString(){
-		return getTradeTypeSymbol() + " " + quantity + " " + name + "@Price " + grossrate + getSymbol() + " with commission " + commission  + " transaction tax "  + transactionTax + " @" + transactionTime;
+		double cost = getNetRate() * getQuantity();
+		return getTradeTypeSymbol() + " " + quantity
+				+ " " + name + " "  + " " + cost
+				+ " @" + transactionTime  + " " + getGrossrate() +"/" + getNetRate();
+
+
 	}
 	
 	public void print(){

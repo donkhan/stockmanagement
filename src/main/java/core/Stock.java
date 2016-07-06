@@ -72,37 +72,62 @@ public class Stock {
 	}
 	
 	private double findExtraCharges(double price){
-		double extraCharges = price * .4 / 100;
+		double extraCharges = (price * .4) / 100;
+
 		return extraCharges;
 	}
-	
+
+    private void handleBuy(Trade trade){
+        double netRate = trade.getGrossrate() + (trade.getCommission() / trade.getQuantity());
+        double price = netRate * trade.getQuantity();
+        double extraCharges = findExtraCharges(price);
+        double extraNetChargePerStock = extraCharges / trade.getQuantity();
+        netRate += extraNetChargePerStock;
+        trade.setNetRate(netRate);
+        price += extraCharges;
+        average = ((totalQuantity * average) + price) / (totalQuantity + trade.getQuantity());
+        totalQuantity += trade.getQuantity();
+        trade.print();
+    }
+
+    private void handleSell(Trade trade,boolean real){
+        double netRate = trade.getGrossrate() - (trade.getCommission() / trade.getQuantity());
+        double price = netRate * trade.getQuantity();
+        double extraCharges = findExtraCharges(price);
+        double extraNetChargePerStock = extraCharges / trade.getQuantity();
+        netRate -= extraNetChargePerStock;
+        trade.setNetRate(netRate);
+
+        if(real) {
+            price -= extraCharges;
+            totalQuantity -= trade.getQuantity();
+            addProfit(trade);
+        }
+        trade.print();
+    }
+
+    private void addProfit(Trade trade){
+        double profit = 0;
+        if(trade.getBuyRate() != 0.0d){
+            profit = (trade.getNetRate() - trade.getBuyRate()) * trade.getQuantity();
+            double newAverage = ((totalQuantity * getAverage()) + profit) / totalQuantity;
+            setAverage(newAverage);
+        }else{
+            profit = (trade.getNetRate() - getAverage()) * trade.getQuantity();
+        }
+        appendProfit(profit);
+    }
+
 	public void addToTradeList(Trade trade) {
 		tradeList.add(trade);
-		
 		if(trade.getTradeType().equals("B") || trade.getTradeType().equals("R") 
 				|| trade.getTradeType().equals("BONUS")){
-			double netrate = trade.getGrossrate() + trade.getCommission();
-			double price = netrate * trade.getQuantity();
-			price += findExtraCharges(price);
-			average = ((totalQuantity * average) + price) / (totalQuantity + trade.getQuantity());
-			totalQuantity += trade.getQuantity();
+			handleBuy(trade);
 		}
-		
 		if(trade.getTradeType().equals("S")){
-			double price = MathUtils.Round((trade.getGrossrate() - trade.getCommission()) * trade.getQuantity(),2);
-			price -= findExtraCharges(price);
-			double profit = 0;
-			if(trade.getBuyRate() == 0.0d){
-				profit = price - (getAverage() * trade.getQuantity());
-			}else{
-				profit = price - (trade.getBuyRate() * trade.getQuantity());
-				System.out.println("Need to increase the average");
-			}
-			profit = MathUtils.Round(profit,2);
-			totalQuantity -= trade.getQuantity();
-			appendProfit(profit);
+            handleSell(trade,true);
 		}
-		
+        print();
 	}
 	
 	private List<Trade> tradeList = new ArrayList<Trade>();
@@ -115,7 +140,8 @@ public class Stock {
 	}
 	public String getUrl() {
 		return url;
-	}	public void setUrl(String url) {
+	}
+    public void setUrl(String url) {
 		this.url = url;
 	}
 
@@ -143,8 +169,15 @@ public class Stock {
 		imaginaryTrade.setQuantity(this.getTotalQuantity());
 		imaginaryTrade.setTradeType("S");
 		imaginaryTrade.setGrossrate(getCurrentPrice());
+        imaginaryTrade.setBroker(getBroker());
+        imaginaryTrade.setTransactionTime(new java.util.Date());
+        imaginaryTrade.setName(getName());
 		cc.calculateCommission(imaginaryTrade);
-		setImaginaryProfit((getTotalQuantity() * (getCurrentPrice() - getAverage())) - (imaginaryTrade.getQuantity() * imaginaryTrade.getCommission()));
-		System.out.println("Imaginary Profit " + this.getImaginaryProfit());
+
+
+        handleSell(imaginaryTrade,false);
+
+        imaginaryProfit = (imaginaryTrade.getNetRate() - getAverage()) * getTotalQuantity();
+
 	}
 }

@@ -43,9 +43,6 @@ public class StockBuilder {
 	private void analyzeTrades(Workbook w,Map<String, Stock> stocks,String specificStock){
 		Sheet sheet = w.getSheet(0);
 		for (int i = 0; i < sheet.getRows(); i++) {
-			if(i == 0 || sheet.getCell(7,i).getContents().equals("Closed")){
-				continue;
-			}
 			String stockName = sheet.getCell(0, i).getContents();
 			if(!specificStock.equals("None") && !stockName.contains(specificStock)){
 				continue;
@@ -175,10 +172,6 @@ public class StockBuilder {
 		trade.setName(sheet.getCell(0,index).getContents());
 		trade.setTradeType(sheet.getCell(2, index).getContents());
 		trade.setQuantity(Long.parseLong(sheet.getCell(4, index).getContents()));
-		String commi = sheet.getCell(5, index).getContents();
-		if(commi != null && !commi.equals("")){
-			trade.setCommission(Double.parseDouble(commi));
-		}
 		trade.setGrossrate(Double.parseDouble(sheet.getCell(3, index).getContents()));
 		String broker = sheet.getCell(6, index).getContents();
 		trade.setBroker(broker);
@@ -189,15 +182,16 @@ public class StockBuilder {
 			int columns = sheet.getColumns();
 			if(columns == 9){
 				cell = sheet.getCell(8,index);
-				if(cell != null){
-					double buyRate = Double.parseDouble(cell.getContents());
-					trade.setBuyRate(buyRate);
+				if(cell != null) {
+					String content = cell.getContents();
+					if (content != null && !content.equals("")){
+						double buyRate = Double.parseDouble(content);
+						trade.setBuyRate(buyRate);
+					}
 				}
 			}
 		}
-		
-		
-		//trade.print();
+
 	}
 	
 	private CommissionCalculator getCommissionCalculator(String broker){
