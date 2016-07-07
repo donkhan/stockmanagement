@@ -17,6 +17,7 @@ public class InternetService {
 		}catch(Throwable t){
 			return false;
 		}
+		System.out.println("Internet is up");
 		return true;
 	}
 	
