@@ -41,6 +41,7 @@ public class StockBuilder {
 	}
 	
 	private void analyzeTrades(Workbook w,Map<String, Stock> stocks,String specificStock){
+		System.out.println("Going to Analyze trades");
 		Sheet sheet = w.getSheet(0);
 		int noOfTrades = sheet.getRows();
 		System.out.println("No of Trades " + noOfTrades);
@@ -55,6 +56,7 @@ public class StockBuilder {
 			fill(trade,sheet,i);
 			stock.addToTradeList(trade);
 		}
+		System.out.println("Trades are analyzed");
 	}
 	
 	private double getRate(String stockName,String url,StockService reader,Map<String,Double> rateMap){
@@ -67,6 +69,7 @@ public class StockBuilder {
 	}
 	
 	public void updateStocks(Workbook w,Map<String, Stock> stocks){
+		System.out.println("Going to update stocks with current Price");
 		StockService reader = StockServiceFactory.getStockService();
 		String brokers [] = { "Kotak","Geojit","Money Palm"};
 		Map<String,Double> rateMap = new HashMap<String,Double>();
@@ -75,11 +78,13 @@ public class StockBuilder {
 		while(stockIterator.hasNext()){
 			Stock stock = stockIterator.next();
 			String stockName = stock.getName();
+
 			if(stock.getTotalQuantity() == 0 && !fullReport){
 				continue;
 			}
 			String url = getURL(sheet,stockName);
 			double currentPrice = getRate(stockName,url,reader,rateMap);
+			System.out.println("Current Price of " + stockName + " = "  + currentPrice);
 			for(int j = 0;j<brokers.length;j++){
 				String uniqueName = stockName + "-" + brokers[j];
 				Stock s = stocks.get(uniqueName);
@@ -89,6 +94,7 @@ public class StockBuilder {
 				}
 			}
 		}
+		System.out.println("Stocks are updated");
 	}
 	
 	protected String getURL(Sheet sheet,String stockName){
@@ -116,6 +122,7 @@ public class StockBuilder {
 	}
 	
 	public Map<String, Stock> read(String specificStock) {
+		System.out.println("Going to read Work Sheet");
 		Map<String, Stock> stocks = new LinkedHashMap<String, Stock>();
 		try {
 			Workbook w = getWorkBook();
@@ -125,6 +132,7 @@ public class StockBuilder {
 		}  catch(IOException ioe){
 			ioe.printStackTrace();
 		}
+		System.out.println("Sheet is read");
 		return stocks;
 	}
 	
