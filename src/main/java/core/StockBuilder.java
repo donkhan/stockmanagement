@@ -86,16 +86,12 @@ public class StockBuilder {
 		}
 
 		for(StockThread st : list){
-
 			try {
 				st.join();
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			
-
 			double currentPrice = st.getStockPrice();
-			System.out.println("Current Price of " + st.getStockName() + " = "  + currentPrice);
 			for(int j = 0;j<brokers.length;j++){
 				String uniqueName = st.getStockName() + "-" + brokers[j];
 				Stock s = stocks.get(uniqueName);
@@ -143,7 +139,6 @@ public class StockBuilder {
 		}  catch(IOException ioe){
 			ioe.printStackTrace();
 		}
-		System.out.println("Sheet is read");
 		return stocks;
 	}
 	

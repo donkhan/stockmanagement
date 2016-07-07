@@ -26,9 +26,6 @@ public class StockThread extends Thread implements Runnable {
 
 
     public double getStockPrice() {
-        MoneyControlStockService mcs = new MoneyControlStockService();
-        stockPrice = mcs.getCurrentPrice(stockURL);
-        System.out.println("Price of " + stockURL + " " + stockPrice);
         return stockPrice;
     }
 
@@ -36,10 +33,9 @@ public class StockThread extends Thread implements Runnable {
         this.stockPrice = stockPrice;
     }
 
-    public void run() {
-        System.out.println("Fetching Price of " + stockURL);
-
-
-
+    public void run(){
+        MoneyControlStockService mcs = new MoneyControlStockService();
+        stockPrice = mcs.getCurrentPrice(stockURL);
+        System.out.println("Price of " + stockName + " " + stockPrice);
     }
 }
