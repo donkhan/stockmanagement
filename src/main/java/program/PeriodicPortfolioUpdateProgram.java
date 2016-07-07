@@ -61,7 +61,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			doWork(force,args);
 		}
 		
-		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17  || currentTime.get(Calendar.HOUR_OF_DAY) < 9){
+		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17  || currentTime.get(Calendar.HOUR_OF_DAY) < 2){
 			System.out.println("Since time crossed 5 PM Markets would have been closed. Hence not running this time");
 			return;
 		}
@@ -73,7 +73,9 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 	}
 	
 	private void doWork(final boolean force,String args[]){
-		
+
+		long start = System.currentTimeMillis();
+
 		boolean fullReport = getBooleanValue(args,"fullreport");
 		String filePath = getValue(args,"filepath",""); 
 		String specificStock = getValue(args,"specificstock","None");
@@ -113,6 +115,8 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 				System.err.println("Unable to send email");
 			}
 		}
+		long elapsed = System.currentTimeMillis() - start;
+		System.out.println("Current Pass took " + elapsed/1000 + " seconds ");
 	}
 
 	
