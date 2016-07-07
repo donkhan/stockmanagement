@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URLClassLoader;
 import java.util.*;
 
-import experiment.StockThread;
+import thread.StockThread;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
