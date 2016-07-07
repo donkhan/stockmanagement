@@ -2,14 +2,9 @@ package core;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
+import thread.StockThread;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -75,18 +70,34 @@ public class StockBuilder {
 		Map<String,Double> rateMap = new HashMap<String,Double>();
 		Sheet sheet = w.getSheet(1);
 		Iterator<Stock> stockIterator = stocks.values().iterator();
-		while(stockIterator.hasNext()){
+		List<StockThread> list = new ArrayList<StockThread>();
+
+		while(stockIterator.hasNext()) {
 			Stock stock = stockIterator.next();
 			String stockName = stock.getName();
 
-			if(stock.getTotalQuantity() == 0 && !fullReport){
+			if (stock.getTotalQuantity() == 0 && !fullReport) {
 				continue;
 			}
-			String url = getURL(sheet,stockName);
-			double currentPrice = getRate(stockName,url,reader,rateMap);
-			System.out.println("Current Price of " + stockName + " = "  + currentPrice);
+			String url = getURL(sheet, stockName);
+			StockThread st = new StockThread(url,stockName);
+			st.start();
+			list.add(st);
+		}
+
+		for(StockThread st : list){
+
+			try {
+				st.join();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+
+			double currentPrice = st.getStockPrice();
+			System.out.println("Current Price of " + st.getStockName() + " = "  + currentPrice);
 			for(int j = 0;j<brokers.length;j++){
-				String uniqueName = stockName + "-" + brokers[j];
+				String uniqueName = st.getStockName() + "-" + brokers[j];
 				Stock s = stocks.get(uniqueName);
 				if (s != null) {
 					s.setCurrentPrice(currentPrice);
