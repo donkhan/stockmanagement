@@ -2,15 +2,20 @@ package core;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
-import thread.StockThread;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
-import services.StockService;
-import util.StockServiceFactory;
+import thread.StockThread;
 
 import commissioncalculators.CommissionCalculator;
 import commissioncalculators.GeojitCommissionCalculator;
@@ -35,11 +40,23 @@ public class StockBuilder {
 		this.inputFile = inputFile;
 	}
 	
+	private TradeSummary tradeSummary = new TradeSummary();
+	
+	public TradeSummary getTradeSummary() {
+		return tradeSummary;
+	}
+
+	public void setTradeSummary(TradeSummary tradeSummary) {
+		this.tradeSummary = tradeSummary;
+	}
+
 	private void analyzeTrades(Workbook w,Map<String, Stock> stocks,String specificStock){
 		System.out.println("Going to Analyze trades");
 		Sheet sheet = w.getSheet(0);
+		tradeSummary = new TradeSummary();
 		int noOfTrades = sheet.getRows();
-		System.out.println("No of Trades " + noOfTrades);
+		tradeSummary.setNoOfTrades(noOfTrades);
+		
 		for (int i = 1; i < noOfTrades; i++) {
 			String stockName = sheet.getCell(0, i).getContents();
 			if(!specificStock.equals("None") && !stockName.contains(specificStock)){
@@ -49,25 +66,14 @@ public class StockBuilder {
 			Stock stock = getStock(stockName,brokerName,stocks);
 			Trade trade = new Trade();
 			fill(trade,sheet,i);
-			stock.addToTradeList(trade);
+			stock.addToTradeList(trade,tradeSummary);
 		}
 		System.out.println("Trades are analyzed");
 	}
 	
-	private double getRate(String stockName,String url,StockService reader,Map<String,Double> rateMap){
-		if(rateMap.containsKey(stockName)){
-			return rateMap.get(stockName);
-		}
-		double currentPrice = reader.getCurrentPrice(url);
-		rateMap.put(stockName,currentPrice);
-		return currentPrice;
-	}
-	
 	public void updateStocks(Workbook w,Map<String, Stock> stocks){
 		System.out.println("Going to update stocks with current Price");
-		StockService reader = StockServiceFactory.getStockService();
 		String brokers [] = { "Kotak","Geojit","Money Palm"};
-		Map<String,Double> rateMap = new HashMap<String,Double>();
 		Sheet sheet = w.getSheet(1);
 		Iterator<Stock> stockIterator = stocks.values().iterator();
 		List<StockThread> list = new ArrayList<StockThread>();

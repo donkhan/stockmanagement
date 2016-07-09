@@ -17,6 +17,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import core.Stock;
 import core.Trade;
+import core.TradeSummary;
 import file.FileNameGenerator;
 
 public class JasperReportGenerator {
@@ -30,17 +31,17 @@ public class JasperReportGenerator {
 		iocStock.setBroker("Geojit");
 		Trade trade = new Trade();
 		trade.setName("IOC"); trade.setQuantity(5); trade.setTradeType("B"); trade.setGrossrate(193);
-		iocStock.addToTradeList(trade);
+		iocStock.addToTradeList(trade,new TradeSummary());
 		stocks.add(iocStock);
-		gen.generate(stocks,12d);
+		gen.generate(stocks,new TradeSummary());
 	}
 	
-	public String generate(List<Stock> stockCollection,double totalProfit){
+	public String generate(List<Stock> stockCollection,TradeSummary summary){
 		try{
 			//InputStream inputStream = new FileInputStream(System.getProperty("user.dir") + "\\src\\main\\resources\\"+ "StockPeriodicReport.jrxml");
 			InputStream inputStream = URLClassLoader.getSystemResourceAsStream("StockPeriodicReport.jrxml");
 			JasperReport report = JasperCompileManager.compileReport(inputStream);
-			JasperPrint print = fill(report,stockCollection,totalProfit);
+			JasperPrint print = fill(report,stockCollection,summary);
 			return pdf(print);
 		}catch(JRException jre){
 			jre.printStackTrace();
@@ -49,10 +50,12 @@ public class JasperReportGenerator {
 	}
 	
 	
-	public JasperPrint fill(JasperReport jasperReport,Collection<Stock> stockCollection,double totalProfit) throws JRException{
+	public JasperPrint fill(JasperReport jasperReport,Collection<Stock> stockCollection,
+			TradeSummary summary) throws JRException{
 		JRBeanCollectionDataSource dataSource =   new JRBeanCollectionDataSource(stockCollection);
 		Map<String,Object> parameters = new HashMap<String,Object>();
-		parameters.put("TotalProfit", new Double(totalProfit));
+		parameters.put("TotalProfit", new Double(summary.getTotalProfit()));
+		parameters.put("TotalTurnOver", new Double(summary.getTotalTurnOver()));
 		return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 	}
 	

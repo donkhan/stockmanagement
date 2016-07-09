@@ -3,8 +3,6 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.MathUtils;
-
 import commissioncalculators.CommissionCalculator;
 
 
@@ -77,7 +75,7 @@ public class Stock {
 		return extraCharges;
 	}
 
-    private void handleBuy(Trade trade){
+    private void handleBuy(Trade trade,TradeSummary summary){
         double netRate = trade.getGrossrate() + (trade.getCommission() / trade.getQuantity());
         double price = netRate * trade.getQuantity();
         double extraCharges = findExtraCharges(price);
@@ -88,9 +86,11 @@ public class Stock {
         average = ((totalQuantity * average) + price) / (totalQuantity + trade.getQuantity());
         totalQuantity += trade.getQuantity();
         trade.print();
+        summary.incrementBuyTrade();
+        summary.incrementTurnOver(trade.getNetRate() * trade.getQuantity());
     }
 
-    private void handleSell(Trade trade,boolean real){
+    private void handleSell(Trade trade,boolean real,TradeSummary summary){
         double netRate = trade.getGrossrate() - (trade.getCommission() / trade.getQuantity());
         double price = netRate * trade.getQuantity();
         double extraCharges = findExtraCharges(price);
@@ -103,7 +103,10 @@ public class Stock {
             totalQuantity -= trade.getQuantity();
             addProfit(trade);
             trade.print();
+            summary.incrementSellTrade();
+            summary.incrementTurnOver(trade.getNetRate() * trade.getQuantity());
         }
+        
         
     }
 
@@ -119,15 +122,16 @@ public class Stock {
         appendProfit(profit);
     }
 
-	public void addToTradeList(Trade trade) {
+	public void addToTradeList(Trade trade,TradeSummary summary) {
 		tradeList.add(trade);
 		if(trade.getTradeType().equals("B") || trade.getTradeType().equals("R") 
 				|| trade.getTradeType().equals("BONUS")){
-			handleBuy(trade);
+			handleBuy(trade,summary);
 		}
 		if(trade.getTradeType().equals("S")){
-            handleSell(trade,true);
+            handleSell(trade,true,summary);
 		}
+		
         print();
 	}
 	
@@ -174,7 +178,7 @@ public class Stock {
         imaginaryTrade.setTransactionTime(new java.util.Date());
         imaginaryTrade.setName(getName());
 		cc.calculateCommission(imaginaryTrade);
-        handleSell(imaginaryTrade,false);
+        handleSell(imaginaryTrade,false,null);
         imaginaryProfit = (imaginaryTrade.getNetRate() - getAverage()) * getTotalQuantity();
 
 	}

@@ -66,8 +66,8 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			return;
 		}
 		if(currentTime.get(Calendar.DAY_OF_WEEK) == 7 ||  currentTime.get(Calendar.DAY_OF_WEEK) == 1){
-			System.out.println("Won't Run on Sat or Sun");
-			return;
+			//System.out.println("Won't Run on Sat or Sun");
+			//return;
 		}
 		doWork(force,args);
 	}
@@ -98,10 +98,10 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			}
 			totalProfit += stock.getProfitRealised();
 		}
-		
+		builder.getTradeSummary().setTotalProfit(totalProfit);
 		Collections.sort(stockList,new StockSorter());
 		JasperReportGenerator gen = new JasperReportGenerator();
-		String generatedFileName = gen.generate(stockList,totalProfit);
+		String generatedFileName = gen.generate(stockList,builder.getTradeSummary());
 		
 		if(generatedFileName != null && sendmail){
 			Mailer mailer = new Mailer(args);
