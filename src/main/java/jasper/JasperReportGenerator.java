@@ -55,7 +55,8 @@ public class JasperReportGenerator {
 		JRBeanCollectionDataSource dataSource =   new JRBeanCollectionDataSource(stockCollection);
 		Map<String,Object> parameters = new HashMap<String,Object>();
 		parameters.put("TotalProfit", new Double(summary.getTotalProfit()));
-		parameters.put("TotalTurnOver", new Double(summary.getTotalTurnOver()));
+		parameters.put("tradeSummary", summary);
+
 		return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 	}
 	

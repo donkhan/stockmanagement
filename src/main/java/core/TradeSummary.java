@@ -5,8 +5,8 @@ import java.util.Date;
 public class TradeSummary {
 
 	private int noOfTrades;
-	private int buyTrades;
-	private int sellTrades;
+	private int noOfBuyTrades;
+	private int noOfSellTrades;
 	private Date firstTradeDate;
 	
 	private double totalTurnOver;
@@ -17,17 +17,17 @@ public class TradeSummary {
 	public void setNoOfTrades(int noOfTrades) {
 		this.noOfTrades = noOfTrades;
 	}
-	public int getBuyTrades() {
-		return buyTrades;
+	public int getNoOfBuyTrades() {
+		return noOfBuyTrades;
 	}
-	public void setBuyTrades(int buyTrades) {
-		this.buyTrades = buyTrades;
+	public void setNoOfBuyTrades(int noOfBuyTrades) {
+		this.noOfBuyTrades = noOfBuyTrades;
 	}
-	public int getSellTrades() {
-		return sellTrades;
+	public int getNoOfSellTrades() {
+		return noOfSellTrades;
 	}
-	public void setSellTrades(int sellTrades) {
-		this.sellTrades = sellTrades;
+	public void setNoOfSellTrades(int sellTrades) {
+		this.noOfSellTrades = sellTrades;
 	}
 	public Date getFirstTradeDate() {
 		return firstTradeDate;
@@ -49,11 +49,11 @@ public class TradeSummary {
 	}
 	
 	public void incrementBuyTrade(){
-		buyTrades++;
+		noOfBuyTrades++;
 	}
 	
 	public void incrementSellTrade(){
-		sellTrades++;
+		noOfSellTrades++;
 	}
 	
 	public void incrementTurnOver(double turnOver){
