@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2016-07-09T08:21:57 -->
+<!-- 2016-07-11T16:28:18 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" pageWidth="300" pageHeight="842" columnWidth="300" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8e4a5205-2205-4d4b-8419-3079dc5058a1">
 	<style name="profitStyle" forecolor="#FF0000" isBold="true">
 		<conditionalStyle>
@@ -8,11 +8,7 @@
 			<style forecolor="#0000FF" isBold="true"/>
 		</conditionalStyle>
 	</style>
-
 	<parameter name="tradeSummary" class="core.TradeSummary"/>
-
-
-
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -31,6 +27,9 @@
 	<field name="totalQuantity" class="java.lang.Integer">
 		<fieldDescription><![CDATA[totalQuantity]]></fieldDescription>
 	</field>
+	<field name="lookOutTrades" class="java.lang.String">
+		<fieldDescription><![CDATA[lookOutTrades]]></fieldDescription>
+	</field>
 	<field name="profitRealised" class="java.lang.Double">
 		<fieldDescription><![CDATA[profitRealised]]></fieldDescription>
 	</field>
@@ -45,13 +44,13 @@
 	<title>
 		<band height="100" splitType="Stretch">
 			<rectangle>
-				<reportElement key="third.rectangle" x="-50" y="0" width="320" height="100" backcolor="#FFAFAF"/>
+				<reportElement key="third.rectangle" x="-50" y="0" width="320" height="100" backcolor="#FFAFAF" uuid="ea8e63d5-3d75-476c-b5bf-9d887c892cbf"/>
 				<graphicElement>
 					<pen lineWidth="4.0"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="10" width="100" height="15"/>
+				<reportElement x="0" y="10" width="100" height="15" uuid="4adaff10-924d-451e-8c6c-10351a56d0f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
@@ -120,7 +119,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
 			</textField>
-
 		</band>
 	</title>
 	<columnHeader>
@@ -137,7 +135,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Quantity]]></text>
+				<text><![CDATA[#]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="115" y="3" width="100" height="15" uuid="1d27291a-808e-43bd-8b67-e359abf61072"/>
@@ -166,6 +164,13 @@
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Profit Realised]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="515" y="3" width="100" height="15" uuid="d166f899-e1e5-42c9-851b-99fcc3090e59"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Look Out]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -213,12 +218,19 @@
 				</textElement>
 				<textFieldExpression><![CDATA[Math.round($F{profitRealised})]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement style="profitStyle" x="515" y="3" width="100" height="15" uuid="758559b0-f508-4560-aeed-adb0002d5aed"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lookOutTrades}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<summary>
 		<band height="100" splitType="Stretch">
 			<rectangle>
-				<reportElement key="third.rectangle" x="-50" y="0" width="320" height="100" backcolor="#FFAFAF"/>
+				<reportElement key="third.rectangle" x="-50" y="0" width="320" height="100" backcolor="#FFAFAF" uuid="a1657f4a-2a1b-4c86-8332-d998e55a94f8"/>
 				<graphicElement>
 					<pen lineWidth="4.0"/>
 				</graphicElement>
@@ -230,16 +242,13 @@
 				</textElement>
 				<text><![CDATA[Total Turn Over]]></text>
 			</staticText>
-
-
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="10" width="100" height="15"/>
+				<reportElement x="100" y="10" width="100" height="15" uuid="2b44b307-e780-43f9-af24-1a9a65de2639"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($P{tradeSummary}.getTotalTurnOver())]]></textFieldExpression>
 			</textField>
-
 			<staticText>
 				<reportElement x="0" y="25" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -247,16 +256,13 @@
 				</textElement>
 				<text><![CDATA[Total Buy Trades]]></text>
 			</staticText>
-
-
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="25" width="100" height="15"/>
+				<reportElement x="100" y="25" width="100" height="15" uuid="d33baf8c-9a6b-4224-b275-eddc7d94edb9"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{tradeSummary}.getNoOfBuyTrades()]]></textFieldExpression>
 			</textField>
-
 			<staticText>
 				<reportElement x="0" y="40" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -264,17 +270,13 @@
 				</textElement>
 				<text><![CDATA[Total Sell Trades]]></text>
 			</staticText>
-
-
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="40" width="100" height="15"/>
+				<reportElement x="100" y="40" width="100" height="15" uuid="761f6d98-fe18-4684-8b4c-01593a135560"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{tradeSummary}.getNoOfSellTrades()]]></textFieldExpression>
 			</textField>
-
 		</band>
-
 	</summary>
 </jasperReport>

@@ -4,9 +4,41 @@ import java.util.Date;
 
 public class Trade {
 
+	private int id;
 	private long quantity;
 	private double grossrate;
 	private double netRate;
+
+	private boolean soldOff = false;
+	private int unsoldUnits = 0;
+
+	public static int TRADE_ID = 1;
+
+	public Trade(){
+		id = ++TRADE_ID;
+	}
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	
+	public int getUnsoldUnits() {
+		return unsoldUnits;
+	}
+
+	public void setUnsoldUnits(int unsoldUnits) {
+		this.unsoldUnits = unsoldUnits;
+	}
+
+	public boolean isSoldOff() {
+		return soldOff;
+	}
+
+	public void setSoldOff(boolean soldOff) {
+		this.soldOff = soldOff;
+	}
 
 	public double getNetRate() {
 		return netRate;

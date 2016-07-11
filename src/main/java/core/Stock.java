@@ -136,6 +136,28 @@ public class Stock {
 	}
 	
 	private List<Trade> tradeList = new ArrayList<Trade>();
+	private List<Trade> positiveTrades = new ArrayList<Trade>();
+	
+	public void addToPositiveTrade(Trade trade){
+		for(Trade t : positiveTrades){
+			if(t.getId() == trade.getId()) return;
+		}
+		positiveTrades.add(trade);
+	}
+	
+	public String getLookOutTrades(){
+		String x = "";
+		if(positiveTrades.size() == 0) {
+			return "";
+		}
+		for(Trade trade : positiveTrades){
+			x += trade.getId() + ",";
+		}
+		return x.substring(0,x.length()-1);
+	}
+	
+	
+	
 
 	public String getName() {
 		return name;

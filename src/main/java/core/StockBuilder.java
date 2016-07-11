@@ -68,6 +68,8 @@ public class StockBuilder {
 			fill(trade,sheet,i);
 			stock.addToTradeList(trade,tradeSummary);
 		}
+		
+		
 		System.out.println("Trades are analyzed");
 	}
 	
@@ -100,13 +102,23 @@ public class StockBuilder {
 			double currentPrice = st.getStockPrice();
 			for(int j = 0;j<brokers.length;j++){
 				String uniqueName = st.getStockName() + "-" + brokers[j];
-				Stock s = stocks.get(uniqueName);
-				if (s != null) {
-					s.setCurrentPrice(currentPrice);
-					s.calculateImaginaryProfit(getCommissionCalculator(s.getBroker()));
+				Stock stock = stocks.get(uniqueName);
+				if (stock != null) {
+					stock.setCurrentPrice(currentPrice);
+					stock.calculateImaginaryProfit(getCommissionCalculator(stock.getBroker()));
+					List<Trade> trades = stock.getTradeList();
+					for(Trade trade: trades){
+						if(trade.getTradeType().equals(Trade.BUY) && !trade.isSoldOff()){
+							if(stock.getCurrentPrice() > trade.getNetRate()){
+								stock.addToPositiveTrade(trade);
+							}
+						}
+					}
 				}
 			}
 		}
+		
+		Trade.TRADE_ID = 1;
 		System.out.println("Stocks are updated");
 	}
 	
@@ -196,18 +208,48 @@ public class StockBuilder {
 		
 		if(trade.getTradeType().equals(Trade.SELL)){
 			int columns = sheet.getColumns();
-			if(columns == 9){
+			if(columns >= 9){
 				cell = sheet.getCell(8,index);
-				if(cell != null) {
-					String content = cell.getContents();
-					if (content != null && !content.equals("")){
-						double buyRate = Double.parseDouble(content);
-						trade.setBuyRate(buyRate);
+				handleBuyRateCase(trade,cell);
+			}
+		}
+		
+		if(trade.getTradeType().equals(Trade.BUY)){
+			handleSoldOffs(sheet,7,index,trade);
+		}
+	}
+	
+	private void handleSoldOffs(Sheet sheet,int col,int index,Trade trade){
+		Cell cell = sheet.getCell(col,index);
+		if(cell != null){
+			String content = cell.getContents();
+			if (content != null && !content.equals("")){
+				if(content.equals("Sold Off")){
+					trade.setSoldOff(true);
+					Cell unitsSoldCell = sheet.getCell(9,index);
+					if(unitsSoldCell != null){
+						String usContent = unitsSoldCell.getContents();
+						if(usContent != null && !usContent.equals("")){
+							int units = Integer.parseInt(usContent);
+							trade.setUnsoldUnits((int)trade.getQuantity() - units);
+							if(trade.getUnsoldUnits() != 0){
+								trade.setSoldOff(false);
+							}
+						}
 					}
 				}
 			}
 		}
-
+	}
+	
+	private void handleBuyRateCase(Trade trade,Cell cell){
+		if(cell != null) {
+			String content = cell.getContents();
+			if (content != null && !content.equals("")){
+				double buyRate = Double.parseDouble(content);
+				trade.setBuyRate(buyRate);
+			}
+		}
 	}
 	
 	private CommissionCalculator getCommissionCalculator(String broker){
