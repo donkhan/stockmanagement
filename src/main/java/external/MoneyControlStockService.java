@@ -44,15 +44,20 @@ public class MoneyControlStockService implements StockService{
 			}
 		}catch (MalformedURLException e) {
 			System.out.println("Malformed URL " + singleURL);
-			return getCurrentPrice(singleURL, retry+1);
+			return getCurrentPrice(singleURL, retry);
 		}catch (IOException e) {
 			System.out.println("Failed to fetch current price for " + singleURL);
-			return getCurrentPrice(singleURL, retry +1);
+			return getCurrentPrice(singleURL, retry);
 		}catch(NumberFormatException ne){
-			return getCurrentPrice(singleURL,retry + 1);
+			return getCurrentPrice(singleURL,retry);
 		}catch(Throwable t){
-			return getCurrentPrice(singleURL,retry + 1);
+			return getCurrentPrice(singleURL,retry);
 		}
+		if(d == 0.0d){
+			System.out.println("Hit Dead");
+			return getCurrentPrice(singleURL,retry);
+		}
+		//System.out.println(singleURL + " " + d);
 		return d;
 	}
 	

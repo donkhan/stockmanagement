@@ -12,12 +12,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import util.InternetService;
-
 import mail.Mailer;
+import util.InternetService;
 import core.Stock;
 import core.StockBuilder;
 import core.StockSorter;
+import core.TradeSummary;
 import file.FileCleaner;
 
 public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
@@ -66,8 +66,8 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			return;
 		}
 		if(currentTime.get(Calendar.DAY_OF_WEEK) == 7 ||  currentTime.get(Calendar.DAY_OF_WEEK) == 1){
-			//System.out.println("Won't Run on Sat or Sun");
-			//return;
+			System.out.println("Won't Run on Sat or Sun");
+			return;
 		}
 		doWork(force,args);
 	}
@@ -93,12 +93,13 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		while(values.hasNext()){
 			Stock stock = values.next();
 			if(stock.getTotalQuantity() > 0 || fullReport){
-				
 				stockList.add(stock);
 			}
 			totalProfit += stock.getProfitRealised();
+			
 		}
-		builder.getTradeSummary().setTotalProfit(totalProfit);
+		TradeSummary tradeSummary = builder.getTradeSummary();
+		tradeSummary.setTotalProfit(totalProfit);
 		Collections.sort(stockList,new StockSorter());
 		JasperReportGenerator gen = new JasperReportGenerator();
 		String generatedFileName = gen.generate(stockList,builder.getTradeSummary());
