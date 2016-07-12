@@ -156,11 +156,8 @@ public class Trade {
 	
 	public String toString(){
 		double cost = getNetRate() * getQuantity();
-		return getTradeTypeSymbol() + " " + quantity
-				+ " " + name + " "  + " " + cost
-				+ " @" + transactionTime  + " " + getGrossrate() +"/" + getNetRate() + " Cost " + getNetRate() * getQuantity();
-
-
+		return id + ":" + getTradeTypeSymbol() + " " + quantity
+				+ " " + name +  " " + cost;
 	}
 	
 	public void print(){

@@ -47,13 +47,13 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		GregorianCalendar currentTime = new GregorianCalendar();
 		System.out.println("Pass started at " + currentTime.getTime());
 		
-		if(!InternetService.up()){
-			System.err.println("Internet is not Up.");
+		if(force){
+			doWork(force,args);
 			return;
 		}
 		
-		if(force){
-			doWork(force,args);
+		if(!InternetService.up()){
+			System.err.println("Internet is not Up.");
 			return;
 		}
 		

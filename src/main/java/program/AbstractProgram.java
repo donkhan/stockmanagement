@@ -4,6 +4,8 @@ import java.util.StringTokenizer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import util.Global;
+
 
 public abstract class AbstractProgram {
 
@@ -28,7 +30,8 @@ public abstract class AbstractProgram {
 	
 	
 	public void startExecute(String args[]){
-		boolean force = getBooleanProperty("force");
+		boolean force = getBooleanValue(args,"force");
+		Global.debug = getBooleanValue(args,"debug");
 		main(force,args);
 	}
 	

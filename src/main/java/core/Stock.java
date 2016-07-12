@@ -3,6 +3,8 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.Global;
+
 import commissioncalculators.CommissionCalculator;
 
 
@@ -70,22 +72,32 @@ public class Stock {
 	}
 	
 	private double findExtraCharges(double price){
-		double extraCharges = (price * .4) / 100;
-
+		double extraCharges = (price * .04) / 100;
 		return extraCharges;
 	}
 
     private void handleBuy(Trade trade,TradeSummary summary){
         double netRate = trade.getGrossrate() + (trade.getCommission() / trade.getQuantity());
+        
+        if(Global.debug){
+        	System.out.println("Name " + name + " Quantity " + trade.getQuantity());
+        	System.out.println("Gross Rate " + trade.getGrossrate());
+        	System.out.println("Net Rate after commission " + netRate);
+        }
+        
         double price = netRate * trade.getQuantity();
         double extraCharges = findExtraCharges(price);
         double extraNetChargePerStock = extraCharges / trade.getQuantity();
         netRate += extraNetChargePerStock;
         trade.setNetRate(netRate);
+        
+        if(Global.debug){
+        	System.out.println("Net Rate after Extra Charges " + trade.getNetRate());
+        }
+        
         price += extraCharges;
         average = ((totalQuantity * average) + price) / (totalQuantity + trade.getQuantity());
         totalQuantity += trade.getQuantity();
-        trade.print();
         summary.incrementBuyTrade();
         summary.incrementTurnOver(trade.getNetRate() * trade.getQuantity());
     }
@@ -93,29 +105,36 @@ public class Stock {
     private void handleSell(Trade trade,boolean real,TradeSummary summary){
         double netRate = trade.getGrossrate() - (trade.getCommission() / trade.getQuantity());
         double price = netRate * trade.getQuantity();
+        
+        if(Global.debug){
+        	System.out.println("Name " + name + " Quantity " + trade.getQuantity());
+        	System.out.println("Gross Rate " + trade.getGrossrate());
+        	System.out.println("Net Rate after commission " + netRate);
+        }
+        
         double extraCharges = findExtraCharges(price);
         double extraNetChargePerStock = extraCharges / trade.getQuantity();
+        
         netRate -= extraNetChargePerStock;
         trade.setNetRate(netRate);
-
+        
+        if(Global.debug){
+        	System.out.println("Net Rate after Extra Charges " + trade.getNetRate());
+        }
+        
         if(real) {
             price -= extraCharges;
             totalQuantity -= trade.getQuantity();
             addProfit(trade);
-            trade.print();
             summary.incrementSellTrade();
             summary.incrementTurnOver(trade.getNetRate() * trade.getQuantity());
         }
-        
-        
     }
 
     private void addProfit(Trade trade){
         double profit = 0;
         if(trade.getBuyRate() != 0.0d){
-        	// Need work here
             profit = (trade.getNetRate() - trade.getBuyRate()) * trade.getQuantity();
-            
             double tradeCost = trade.getBuyRate() * trade.getQuantity();
             double totalCost = getAverage() * (trade.getQuantity() + totalQuantity);
             totalCost -= tradeCost;
@@ -136,8 +155,12 @@ public class Stock {
 		if(trade.getTradeType().equals("S")){
             handleSell(trade,true,summary);
 		}
-		
-       // print();
+        
+		if(Global.debug){
+			trade.print();
+			print();
+			Global.printLine();
+		}
 	}
 	
 	private List<Trade> tradeList = new ArrayList<Trade>();
@@ -190,7 +213,7 @@ public class Stock {
 	}
 	
 	public void print(){
-		System.out.println("Stock " + name + " Avg: " + average + " Qty: " + totalQuantity + " Total: " + average*totalQuantity + " Profit Realised " + profitRealised);
+		System.out.println(name + " Avg: " + average + " Qty: " + totalQuantity + " Total: " + average*totalQuantity + " Profit Realised " + profitRealised);
 	}
 
 	public void calculateImaginaryProfit(CommissionCalculator cc) {

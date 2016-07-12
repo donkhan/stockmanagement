@@ -16,6 +16,7 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import thread.StockThread;
+import util.Global;
 
 import commissioncalculators.CommissionCalculator;
 import commissioncalculators.GeojitCommissionCalculator;
@@ -57,6 +58,7 @@ public class StockBuilder {
 		int noOfTrades = sheet.getRows();
 		tradeSummary.setNoOfTrades(noOfTrades);
 		
+		Global.printLine();
 		for (int i = 1; i < noOfTrades; i++) {
 			String stockName = sheet.getCell(0, i).getContents();
 			if(!specificStock.equals("None") && !stockName.contains(specificStock)){
