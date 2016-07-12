@@ -9,7 +9,7 @@ import services.StockService;
 
 public class MoneyControlStockService implements StockService{
 
-	private int  MAX_RETRIES = 3;
+	private int  MAX_RETRIES = 10;
 	public static void main(String args[]){
 		System.out.println(new MoneyControlStockService().getCurrentPrice("http://www.moneycontrol.com/india/stockpricequote/refineries/indianoilcorporation/IOC"));
 	}
@@ -44,18 +44,22 @@ public class MoneyControlStockService implements StockService{
 			}
 		}catch (MalformedURLException e) {
 			System.out.println("Malformed URL " + singleURL);
-			return getCurrentPrice(singleURL, retry);
+			return getCurrentPrice(singleURL, retry+1);
 		}catch (IOException e) {
 			System.out.println("Failed to fetch current price for " + singleURL);
-			return getCurrentPrice(singleURL, retry);
+			return getCurrentPrice(singleURL, retry+1);
 		}catch(NumberFormatException ne){
-			return getCurrentPrice(singleURL,retry);
+			return getCurrentPrice(singleURL,retry+1);
 		}catch(Throwable t){
-			return getCurrentPrice(singleURL,retry);
+			return getCurrentPrice(singleURL,retry+1);
 		}
 		if(d == 0.0d){
-			System.out.println("Hit Dead");
-			return getCurrentPrice(singleURL,retry);
+			try{
+				Thread.currentThread().sleep(2*1000);
+			}catch(Exception e){
+				
+			}
+			return getCurrentPrice(singleURL,retry+1);
 		}
 		//System.out.println(singleURL + " " + d);
 		return d;

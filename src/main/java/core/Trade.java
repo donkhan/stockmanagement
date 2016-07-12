@@ -158,7 +158,7 @@ public class Trade {
 		double cost = getNetRate() * getQuantity();
 		return getTradeTypeSymbol() + " " + quantity
 				+ " " + name + " "  + " " + cost
-				+ " @" + transactionTime  + " " + getGrossrate() +"/" + getNetRate();
+				+ " @" + transactionTime  + " " + getGrossrate() +"/" + getNetRate() + " Cost " + getNetRate() * getQuantity();
 
 
 	}

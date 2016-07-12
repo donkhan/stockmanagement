@@ -113,8 +113,13 @@ public class Stock {
     private void addProfit(Trade trade){
         double profit = 0;
         if(trade.getBuyRate() != 0.0d){
+        	// Need work here
             profit = (trade.getNetRate() - trade.getBuyRate()) * trade.getQuantity();
-            double newAverage = ((totalQuantity * getAverage()) + profit) / totalQuantity;
+            
+            double tradeCost = trade.getBuyRate() * trade.getQuantity();
+            double totalCost = getAverage() * (trade.getQuantity() + totalQuantity);
+            totalCost -= tradeCost;
+            double newAverage = totalCost / totalQuantity;
             setAverage(newAverage);
         }else{
             profit = (trade.getNetRate() - getAverage()) * trade.getQuantity();
@@ -132,7 +137,7 @@ public class Stock {
             handleSell(trade,true,summary);
 		}
 		
-        print();
+       // print();
 	}
 	
 	private List<Trade> tradeList = new ArrayList<Trade>();
