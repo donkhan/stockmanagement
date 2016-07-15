@@ -248,8 +248,8 @@ public class StockBuilder {
 		if(cell != null) {
 			String content = cell.getContents();
 			if (content != null && !content.equals("")){
-				double buyRate = Double.parseDouble(content);
-				trade.setBuyRate(buyRate);
+				int buyTradeId = Integer.parseInt(content);
+				trade.setBuyTradeId(buyTradeId);
 			}
 		}
 	}

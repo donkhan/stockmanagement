@@ -130,12 +130,23 @@ public class Stock {
             summary.incrementTurnOver(trade.getNetRate() * trade.getQuantity());
         }
     }
+    
+    private Trade getTrade(int tradeId){
+    	List<Trade> trades = getTradeList();
+    	for(Trade trade : trades){
+    		if(trade.getId() == tradeId){
+    			return trade;
+    		}
+    	}
+    	return new Trade();
+    }
 
     private void addProfit(Trade trade){
         double profit = 0;
-        if(trade.getBuyRate() != 0.0d){
-            profit = (trade.getNetRate() - trade.getBuyRate()) * trade.getQuantity();
-            double tradeCost = trade.getBuyRate() * trade.getQuantity();
+        if(trade.getBuyTradeId() != 0){
+        	Trade buyTrade = getTrade(trade.getBuyTradeId());
+            profit = (trade.getNetRate() - buyTrade.getNetRate()) * trade.getQuantity();
+            double tradeCost = buyTrade.getNetRate() * trade.getQuantity();
             double totalCost = getAverage() * (trade.getQuantity() + totalQuantity);
             totalCost -= tradeCost;
             double newAverage = totalCost / totalQuantity;
