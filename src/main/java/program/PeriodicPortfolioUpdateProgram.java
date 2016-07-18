@@ -14,6 +14,7 @@ import java.util.Map;
 
 import mail.Mailer;
 import util.InternetService;
+import core.ExecutionSummary;
 import core.Stock;
 import core.StockBuilder;
 import core.StockSorter;
@@ -99,10 +100,19 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			
 		}
 		TradeSummary tradeSummary = builder.getTradeSummary();
+		ExecutionSummary executionSummary = new ExecutionSummary();
+		GregorianCalendar currentTime = new GregorianCalendar();
+		executionSummary.setExecutionTime(currentTime.getTime());
+		currentTime.add(Calendar.MINUTE, getIntegerValue(this.args,"interval"));
+		executionSummary.setNextExecutionTime(currentTime.getTime());
+		
 		tradeSummary.setTotalProfit(totalProfit);
 		Collections.sort(stockList,new StockSorter());
+		long elapsed = System.currentTimeMillis() - start;
+		executionSummary.setTimeToExecute(elapsed);
+		
 		JasperReportGenerator gen = new JasperReportGenerator();
-		String generatedFileName = gen.generate(stockList,builder.getTradeSummary());
+		String generatedFileName = gen.generate(stockList,tradeSummary,executionSummary);
 		
 		if(generatedFileName != null && sendmail){
 			Mailer mailer = new Mailer(args);
@@ -116,7 +126,8 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 				System.err.println("Unable to send email");
 			}
 		}
-		long elapsed = System.currentTimeMillis() - start;
+		
+		elapsed = System.currentTimeMillis() - start;
 		System.out.println("Current Pass took " + elapsed/1000 + " seconds ");
 	}
 
