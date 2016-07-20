@@ -14,18 +14,14 @@ public class GeojitCommissionCalculator extends SEBICommissionCalculator impleme
 		if(commission > _sebiMaxCommission){
 			commission = _sebiMaxCommission;
 		}
-		trade.setCommission(commission);
-		double transactionTax = trade.getQuantity() * trade.getGrossrate()*.1/100;
-		transactionTax = Math.ceil(transactionTax);
-		trade.setTransactionTax(transactionTax);
+		if(trade.getTradeType().equals("R")){
+			trade.setExtraCost(0);
+		}
 	}
+	
 	
 
 	public void calculateCommission(Trade trade) {
-		if(trade.getTradeType().equals("R")){
-			trade.setCommission(0);
-			return;
-		}
 		double transactionAmount = trade.getQuantity() * trade.getGrossrate();
 		setCommission(trade,transactionAmount,trade.getGrossrate(),trade.getQuantity());
 	}

@@ -8,7 +8,7 @@ public class MoneyPalmCommissionCalculator implements CommissionCalculator{
 
 	public void calculateCommission(Trade trade) {
 		double totalCommission = trade.getGrossrate() * .0014;
-		trade.setCommission(totalCommission);
+		trade.setExtraCost(totalCommission);
 		return;
 		
 	}
@@ -32,7 +32,6 @@ public class MoneyPalmCommissionCalculator implements CommissionCalculator{
 		trade.setTradeType("B");
 		trade.setGrossrate(1917.86);
 		kc.calculateCommission(trade);
-		System.out.println("Commission " + trade.getCommission());
 	}
 
 	

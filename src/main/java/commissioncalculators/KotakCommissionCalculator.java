@@ -14,18 +14,24 @@ public class KotakCommissionCalculator extends SEBICommissionCalculator implemen
 		if(commission > _sebiMaxCommission){
 			commission = _sebiMaxCommission;
 		}
-		trade.setCommission(commission);
-		double transactionTax = trade.getQuantity() * trade.getGrossrate()*.1/100;
-		transactionTax = Math.ceil(transactionTax);
-		trade.setTransactionTax(transactionTax);
+		
+		if(trade.getTradeType().equals("R")){
+			trade.setExtraCost(0);
+			return;
+		}
+		
+		double extraCost = commission;
+		double serviceTaxOnBrokerage = 14.5*commission / 100;
+		double stt = 4;
+		
+		extraCost += serviceTaxOnBrokerage;
+		extraCost += stt;
+		
+		trade.setExtraCost(extraCost);
 	}
 
 
 	public void calculateCommission(Trade trade) {
-		if(trade.getTradeType().equals("R")){
-			trade.setCommission(0);
-			return;
-		}
 		double transactionAmount = trade.getQuantity() * trade.getGrossrate();
 		setCommission(trade,transactionAmount,trade.getGrossrate(),trade.getQuantity());
 	}

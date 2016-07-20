@@ -1,6 +1,8 @@
 package core;
 import java.util.Date;
 
+import util.Global;
+
 
 public class Trade {
 
@@ -48,21 +50,9 @@ public class Trade {
 		this.netRate = netRate;
 	}
 
-	private double commission;
+	
 	private Date tradeTime;
 	private String tradeType;
-
-	private double extraCharges;
-
-	public double getExtraCharges() {
-		return extraCharges;
-	}
-
-	public void setExtraCharges(double extraCharges) {
-		this.extraCharges = extraCharges;
-	}
-
-	private double cess;
 	private String broker;
 
 	private int buyTradeId;
@@ -84,12 +74,7 @@ public class Trade {
 	public void setBroker(String broker) {
 		this.broker = broker;
 	}
-	public double getCess() {
-		return cess;
-	}
-	public void setCess(double cess) {
-		this.cess = cess;
-	}
+
 	public Date getTradeTime() {
 		return tradeTime;
 	}
@@ -101,6 +86,9 @@ public class Trade {
 	}
 	public void setTradeType(String tradeType) {
 		this.tradeType = tradeType;
+		if(tradeType.equals(SELL)){
+			setExtraCost(20);
+		}
 	}
 	public long getQuantity() {
 		return quantity;
@@ -115,13 +103,6 @@ public class Trade {
 		this.grossrate = grossrate;
 	}
 
-
-	public double getCommission() {
-		return commission;
-	}
-	public void setCommission(double commission) {
-		this.commission = commission;
-	}
 
 	private Date transactionTime;
 	public Date getTransactionTime() {
@@ -159,13 +140,27 @@ public class Trade {
 		System.out.println(this);
 	}
 
-	private double transactionTax;
+	private double stt;
 
-	public double getTransactionTax() {
-		return transactionTax;
+	public double getStt() {
+		return stt;
 	}
-	public void setTransactionTax(double transactionTax) {
-		this.transactionTax = transactionTax;
+	public void setStt(double stt) {
+		this.stt = stt;
+	}
+	
+	private double extraCost;
+
+	public double getExtraCost() {
+		return extraCost;
+	}
+
+	public void setExtraCost(double extraCost) {
+		this.extraCost = extraCost;
+	}
+	
+	public double getUnitAcquistionCost(){
+		return extraCost/quantity;
 	}
 	
 }
