@@ -73,13 +73,20 @@ public class Stock {
 	
 
     private void handleBuy(Trade trade,TradeSummary summary){
-    	double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
+
+        if(Global.debug){
+            System.out.println("Name " + name + " Quantity " + trade.getQuantity() + " "
+                    + (trade.getTradeType().equals(Trade.SELL) ? "SELL" : "BUY") + "  "+ trade.getTransactionTime() );
+            System.out.println("Gross Rate " + trade.getGrossrate());
+        }
+
+        double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
     	double netRate = trade.getGrossrate() + unitExtraCost;
         trade.setNetRate(netRate);
         
         if(Global.debug){
-        	System.out.println("Name " + name + " Quantity " + trade.getQuantity() + " " + trade.getTradeType() );
-        	System.out.println("Gross Rate " + trade.getGrossrate()  + " Net Rate  " + netRate);
+            System.out.println("Extra Cost including Commission " + trade.getExtraCost() + " Per Unit " + unitExtraCost);
+            System.out.println("Net Rate " + trade.getNetRate());
         }
         
         double price = netRate * trade.getQuantity();
@@ -91,13 +98,18 @@ public class Stock {
     }
 
     private void handleSell(Trade trade,boolean real,TradeSummary summary){
-    	double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
+        if(Global.debug){
+            System.out.println("Name " + name + " Quantity " + trade.getQuantity() + " "
+                    + (trade.getTradeType().equals(Trade.SELL) ? "SELL" : "BUY") + " " + trade.getTransactionTime());
+        }
+
+        double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
         double netRate = trade.getGrossrate() - unitExtraCost;
         trade.setNetRate(netRate);
-        
+
         if(Global.debug){
-        	System.out.println("Name " + name + " Quantity " + trade.getQuantity() + " " + trade.getTradeType() );
-        	System.out.println("Gross Rate " + trade.getGrossrate()  + " Net Rate  " + netRate);
+            System.out.println("Extra Cost including Commission " + trade.getExtraCost() + " Per Unit " + unitExtraCost);
+            System.out.println("Net Rate " + trade.getNetRate());
         }
         
         if(real) {
