@@ -4,9 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import util.Global;
-
-public class ServiceTaxUtil {
+public class ServiceTaxUtil extends TaxUtil{
 	
 static GregorianCalendar juneone2015 = new GregorianCalendar();
 	
@@ -17,7 +15,7 @@ static GregorianCalendar juneone2015 = new GregorianCalendar();
 	}
 	
 	public static double getServiceTax(Date d) {
-		return d.before(juneone2015.getTime()) ? 12.36d : 14d;
+		return cutOff(d,juneone2015) ? 12.36d : 14d;
 	}
 
 }

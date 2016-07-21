@@ -101,7 +101,8 @@ public class Trade {
 		return transactionTime;
 	}
 	public void setTransactionTime(Date time) {
-		time.setYear(time.getYear() + 2000);
+		if(time.getYear() < 2000)
+			time.setYear(time.getYear() + 2000);
 		this.transactionTime = time;
 	}
 	private String name;

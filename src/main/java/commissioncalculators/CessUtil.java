@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class CessUtil {
+public class CessUtil extends TaxUtil{
 	
 	static GregorianCalendar krishKalyanCess = new GregorianCalendar();
 	static GregorianCalendar swatchBharatCess = new GregorianCalendar();
@@ -22,10 +22,10 @@ public class CessUtil {
 	}
 	
 	public static double getKrishKalyanCess(Date d) {
-		return d.before(krishKalyanCess.getTime()) ? 0d : 0.5d;
+		return cutOff(d,krishKalyanCess) ? 0d : 0.5d;
 	}
 	
 	public static double getSwatchBharatCess(Date d){
-		return d.before(swatchBharatCess.getTime()) ? 0d : 0.5d;
+		return cutOff(d,swatchBharatCess) ? 0d : 0.5d;
 	}
 }

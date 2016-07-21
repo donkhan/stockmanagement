@@ -1,4 +1,5 @@
 package commissioncalculators;
+import util.Global;
 import core.Stock;
 import core.Trade;
 
@@ -17,9 +18,32 @@ public class GeojitCommissionCalculator extends SEBICommissionCalculator impleme
 		if(trade.getTradeType().equals("R")){
 			trade.setExtraCost(0);
 		}
+		
+		if(Global.debug){
+			System.out.println("Brokerage per Unit " + commission/quantity);
+		}
+		double extraCost = commission;
+		double serviceTaxOnBrokeragePercentage = getBrokerageCommission(trade) + getExtraCess(trade);
+		if(Global.debug){
+			System.out.println("Service Tax On Brokerage Percentage " + serviceTaxOnBrokeragePercentage);
+		}
+		double serviceTaxOnBrokerage = serviceTaxOnBrokeragePercentage *commission / 100;
+		double stt = 4;
+		
+		extraCost += serviceTaxOnBrokerage;
+		extraCost += stt;
+		
+		trade.setExtraCost(extraCost);
 	}
 	
-	
+	private double getBrokerageCommission(Trade trade) {
+		return ServiceTaxUtil.getServiceTax(trade.getTransactionTime());
+	}
+
+	private double getExtraCess(Trade trade){
+		return CessUtil.getKrishKalyanCess(trade.getTransactionTime()) + CessUtil.getSwatchBharatCess(trade.getTransactionTime());
+	}
+
 
 	public void calculateCommission(Trade trade) {
 		double transactionAmount = trade.getQuantity() * trade.getGrossrate();
