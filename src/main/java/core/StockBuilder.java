@@ -53,6 +53,7 @@ public class StockBuilder {
 
 	private void analyzeTrades(Workbook w,Map<String, Stock> stocks,String specificStock){
 		System.out.println("Going to Analyze trades");
+		Global.printTaxDetails();
 		Sheet sheet = w.getSheet(0);
 		tradeSummary = new TradeSummary();
 		int noOfTrades = sheet.getRows();
@@ -68,6 +69,7 @@ public class StockBuilder {
 			Stock stock = getStock(stockName,brokerName,stocks);
 			Trade trade = new Trade();
 			fill(trade,sheet,i);
+			
 			stock.addToTradeList(trade,tradeSummary);
 		}
 		
@@ -205,6 +207,13 @@ public class StockBuilder {
 		trade.setGrossrate(Double.parseDouble(sheet.getCell(3, index).getContents()));
 		String broker = sheet.getCell(6, index).getContents();
 		trade.setBroker(broker);
+		
+		if(Global.debug){
+            System.out.println("Name " + trade.getName() + " Quantity " + trade.getQuantity() + " "
+                    + (trade.getTradeType().equals(Trade.SELL) ? "SELL" : "BUY") + "  "+ trade.getTransactionTime() );
+            System.out.println("Gross Rate " + trade.getGrossrate());
+        }
+		
 		CommissionCalculator cc = getCommissionCalculator(broker);
 		cc.calculateCommission(trade);
 		

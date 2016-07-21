@@ -1,8 +1,6 @@
 package core;
 import java.util.Date;
 
-import util.Global;
-
 
 public class Trade {
 
@@ -51,7 +49,6 @@ public class Trade {
 	}
 
 	
-	private Date tradeTime;
 	private String tradeType;
 	private String broker;
 
@@ -75,12 +72,7 @@ public class Trade {
 		this.broker = broker;
 	}
 
-	public Date getTradeTime() {
-		return tradeTime;
-	}
-	public void setTradeTime(Date tradeTime) {
-		this.tradeTime = tradeTime;
-	}
+
 	public String getTradeType() {
 		return tradeType;
 	}
@@ -109,6 +101,7 @@ public class Trade {
 		return transactionTime;
 	}
 	public void setTransactionTime(Date time) {
+		time.setYear(time.getYear() + 2000);
 		this.transactionTime = time;
 	}
 	private String name;
@@ -127,8 +120,6 @@ public class Trade {
 		}
 		return tradeType.equals("R") ? "Bought in Rights " : (tradeType.equals("S") ? "Sold" : "Bought") + " through " + broker;
 	}
-	
-
 	
 	public String toString(){
 		double cost = getNetRate() * getQuantity();

@@ -72,22 +72,19 @@ public class Stock {
 	}
 	
 
-    private void handleBuy(Trade trade,TradeSummary summary){
-
-        if(Global.debug){
-            System.out.println("Name " + name + " Quantity " + trade.getQuantity() + " "
-                    + (trade.getTradeType().equals(Trade.SELL) ? "SELL" : "BUY") + "  "+ trade.getTransactionTime() );
-            System.out.println("Gross Rate " + trade.getGrossrate());
+	private void printNetRate(Trade trade,double unitExtraCost){
+		if(Global.debug){
+            System.out.println("Extra Cost including Commission " + trade.getExtraCost() + " Per Unit " + unitExtraCost);
+            System.out.println("Net Rate " + trade.getNetRate());
         }
-
+	}
+	
+    private void handleBuy(Trade trade,TradeSummary summary){
         double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
     	double netRate = trade.getGrossrate() + unitExtraCost;
         trade.setNetRate(netRate);
         
-        if(Global.debug){
-            System.out.println("Extra Cost including Commission " + trade.getExtraCost() + " Per Unit " + unitExtraCost);
-            System.out.println("Net Rate " + trade.getNetRate());
-        }
+        printNetRate(trade,unitExtraCost);
         
         double price = netRate * trade.getQuantity();
         
@@ -98,19 +95,11 @@ public class Stock {
     }
 
     private void handleSell(Trade trade,boolean real,TradeSummary summary){
-        if(Global.debug){
-            System.out.println("Name " + name + " Quantity " + trade.getQuantity() + " "
-                    + (trade.getTradeType().equals(Trade.SELL) ? "SELL" : "BUY") + " " + trade.getTransactionTime());
-        }
-
         double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
         double netRate = trade.getGrossrate() - unitExtraCost;
         trade.setNetRate(netRate);
 
-        if(Global.debug){
-            System.out.println("Extra Cost including Commission " + trade.getExtraCost() + " Per Unit " + unitExtraCost);
-            System.out.println("Net Rate " + trade.getNetRate());
-        }
+        printNetRate(trade,unitExtraCost);
         
         if(real) {
             totalQuantity -= trade.getQuantity();

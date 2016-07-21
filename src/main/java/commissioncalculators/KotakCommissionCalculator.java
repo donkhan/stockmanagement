@@ -1,4 +1,8 @@
 package commissioncalculators;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import util.Global;
 import core.Stock;
 import core.Trade;
 
@@ -21,7 +25,11 @@ public class KotakCommissionCalculator extends SEBICommissionCalculator implemen
 		}
 		
 		double extraCost = commission;
-		double serviceTaxOnBrokerage = 14.5*commission / 100;
+		double serviceTaxOnBrokeragePercentage = getBrokerageCommission(trade) + getExtraCess(trade);
+		if(Global.debug){
+			System.out.println("Service Tax On Brokerage Percentage " + serviceTaxOnBrokeragePercentage);
+		}
+		double serviceTaxOnBrokerage = serviceTaxOnBrokeragePercentage *commission / 100;
 		double stt = 4;
 		
 		extraCost += serviceTaxOnBrokerage;
@@ -31,20 +39,21 @@ public class KotakCommissionCalculator extends SEBICommissionCalculator implemen
 	}
 
 
+	private double getBrokerageCommission(Trade trade) {
+		return ServiceTaxUtil.getServiceTax(trade.getTransactionTime());
+	}
+
+
+	private double getExtraCess(Trade trade){
+		return CessUtil.getKrishKalyanCess(trade.getTransactionTime()) + CessUtil.getSwatchBharatCess(trade.getTransactionTime());
+	}
+
+
 	public void calculateCommission(Trade trade) {
 		double transactionAmount = trade.getQuantity() * trade.getGrossrate();
 		setCommission(trade,transactionAmount,trade.getGrossrate(),trade.getQuantity());
 	}
 
 
-	public void adjustCurrentPrice(Stock stock) {
-		if(stock.getTotalQuantity() == 0){
-			return;
-		}
-		double transactionAmount = stock.getTotalQuantity() * stock.getCurrentPrice();
-		double commission = 0;
-		transactionAmount -= commission;
-		stock.setCurrentPrice(transactionAmount/stock.getTotalQuantity());
-	}
-	
+		
 }
