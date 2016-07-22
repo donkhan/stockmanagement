@@ -210,7 +210,7 @@ public class StockBuilder {
 		
 		if(Global.debug){
             System.out.println("Name " + trade.getName() + " Quantity " + trade.getQuantity() + " "
-                    + (trade.getTradeType().equals(Trade.SELL) ? "SELL" : "BUY") + "  "+ trade.getTransactionTime() );
+                    + (trade.getTradeType().equals(Trade.SELL) ? "SELL" : "BUY") + "  "+ trade.getTransactionTime()  + " " + trade.getBroker());
             System.out.println("Gross Rate " + trade.getGrossrate());
         }
 		

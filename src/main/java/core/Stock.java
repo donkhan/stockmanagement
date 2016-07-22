@@ -81,6 +81,9 @@ public class Stock {
 	
     private void handleBuy(Trade trade,TradeSummary summary){
         double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
+        if(trade.getTradeType().equals("R")){
+        	unitExtraCost = 0;
+        }
     	double netRate = trade.getGrossrate() + unitExtraCost;
         trade.setNetRate(netRate);
         
@@ -108,6 +111,8 @@ public class Stock {
             summary.incrementTurnOver(trade.getNetRate() * trade.getQuantity());
         }
     }
+    
+
     
     private Trade getTrade(int tradeId){
     	List<Trade> trades = getTradeList();
@@ -146,6 +151,7 @@ public class Stock {
 		}
         
 		if(Global.debug){
+			System.out.println("Trade Value " + trade.getQuantity() * trade.getNetRate());
 			print();
 			Global.printLine();
 		}
