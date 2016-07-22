@@ -67,7 +67,7 @@ public class StockBuilder {
 			}
 			String brokerName = sheet.getCell(6, i).getContents();
 			Stock stock = getStock(stockName,brokerName,stocks);
-			Trade trade = new Trade();
+			Trade trade = new Trade(i+1);
 			fill(trade,sheet,i);
 			
 			stock.addToTradeList(trade,tradeSummary);
@@ -121,8 +121,6 @@ public class StockBuilder {
 				}
 			}
 		}
-		
-		Trade.TRADE_ID = 1;
 		System.out.println("Stocks are updated");
 	}
 	

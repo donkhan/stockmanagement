@@ -121,7 +121,7 @@ public class Stock {
     			return trade;
     		}
     	}
-    	return new Trade();
+    	return new Trade(12);
     }
 
     private void addProfit(Trade trade){
@@ -214,7 +214,7 @@ public class Stock {
 		if(this.getTotalQuantity() == 0){
 			return;
 		}
-		Trade imaginaryTrade = new Trade();
+		Trade imaginaryTrade = new Trade(12);
 		imaginaryTrade.setQuantity(this.getTotalQuantity());
 		imaginaryTrade.setTradeType("S");
 		imaginaryTrade.setGrossrate(getCurrentPrice());

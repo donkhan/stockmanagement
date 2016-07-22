@@ -12,10 +12,9 @@ public class Trade {
 	private boolean soldOff = false;
 	private int unsoldUnits = 0;
 
-	public static int TRADE_ID = 1;
-
-	public Trade(){
-		id = ++TRADE_ID;
+	
+	public Trade(int id){
+		this.id = id;
 	}
 	
 	

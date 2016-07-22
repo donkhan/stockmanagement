@@ -23,16 +23,4 @@ public class MoneyPalmCommissionCalculator implements CommissionCalculator{
 		transactionAmount -= commission;
 		stock.setCurrentPrice(transactionAmount/stock.getTotalQuantity());
 	}
-	
-	public static void main(String args[]){
-		MoneyPalmCommissionCalculator kc = new MoneyPalmCommissionCalculator();
-		Trade trade = new Trade();
-		trade.setName("Cadilla");
-		trade.setQuantity(5);
-		trade.setTradeType("B");
-		trade.setGrossrate(1917.86);
-		kc.calculateCommission(trade);
-	}
-
-	
 }
