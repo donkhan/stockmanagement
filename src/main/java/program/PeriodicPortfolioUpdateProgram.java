@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import mail.Mailer;
-import util.InternetService;
 import core.ExecutionSummary;
 import core.Stock;
 import core.StockBuilder;
@@ -76,13 +75,9 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 	private void doWork(final boolean force,String args[]){
 		long start = System.currentTimeMillis();
 		boolean fullReport = getBooleanValue(args,"fullreport");
-		String filePath = getValue(args,"filepath",""); 
 		String specificStock = getValue(args,"specificstock","None");
-		boolean sendmail  = getBooleanValue(args,"sendmail");
-		System.out.println("File Path " + filePath + "  " + fullReport +  " Specific Stock " + specificStock);
 		StockBuilder builder = new StockBuilder();
-		
-		builder.setInputFile(filePath);
+		builder.setInputFile(getValue(args,"filepath",""));
 		builder.setFullReport(fullReport);
 		
 		Map<String, Stock> stocks = builder.read(specificStock);
@@ -98,7 +93,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		}
 		TradeSummary tradeSummary = builder.getTradeSummary();
 		tradeSummary.setTotalProfit(totalProfit);
-		prepareReport(stockList,tradeSummary,prepareExecutionSummary(tradeSummary,start),sendmail);
+		prepareReport(stockList,tradeSummary,prepareExecutionSummary(tradeSummary,start),getBooleanValue(args,"sendmail"));
 	}
 
 	private ExecutionSummary prepareExecutionSummary(TradeSummary tradeSummary, long start) {
