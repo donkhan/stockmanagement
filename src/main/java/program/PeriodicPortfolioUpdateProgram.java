@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import mail.Mailer;
+import util.InternetService;
 import core.ExecutionSummary;
 import core.Stock;
 import core.StockBuilder;
