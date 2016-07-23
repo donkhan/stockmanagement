@@ -64,19 +64,17 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		
 		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17  || currentTime.get(Calendar.HOUR_OF_DAY) < 2){
 			System.out.println("Since time crossed 5 PM Markets would have been closed. Hence not running this time");
-			return;
+			//return;
 		}
 		if(currentTime.get(Calendar.DAY_OF_WEEK) == 7 ||  currentTime.get(Calendar.DAY_OF_WEEK) == 1){
 			System.out.println("Won't Run on Sat or Sun");
-			return;
+			//return;
 		}
 		doWork(force,args);
 	}
 	
 	private void doWork(final boolean force,String args[]){
-
 		long start = System.currentTimeMillis();
-
 		boolean fullReport = getBooleanValue(args,"fullreport");
 		String filePath = getValue(args,"filepath",""); 
 		String specificStock = getValue(args,"specificstock","None");
@@ -97,20 +95,26 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 				stockList.add(stock);
 			}
 			totalProfit += stock.getProfitRealised();
-			
 		}
 		TradeSummary tradeSummary = builder.getTradeSummary();
+		tradeSummary.setTotalProfit(totalProfit);
+		prepareReport(stockList,tradeSummary,prepareExecutionSummary(tradeSummary,start),sendmail);
+	}
+
+	private ExecutionSummary prepareExecutionSummary(TradeSummary tradeSummary, long start) {
 		ExecutionSummary executionSummary = new ExecutionSummary();
 		GregorianCalendar currentTime = new GregorianCalendar();
 		executionSummary.setExecutionTime(currentTime.getTime());
 		currentTime.add(Calendar.MINUTE, getIntegerValue(this.args,"interval"));
 		executionSummary.setNextExecutionTime(currentTime.getTime());
-		
-		tradeSummary.setTotalProfit(totalProfit);
-		Collections.sort(stockList,new StockSorter());
 		long elapsed = System.currentTimeMillis() - start;
 		executionSummary.setTimeToExecute(elapsed);
-		
+		return executionSummary;
+	}
+
+	private void prepareReport(List<Stock> stockList,
+			TradeSummary tradeSummary, ExecutionSummary executionSummary,boolean sendmail) {
+		Collections.sort(stockList,new StockSorter());
 		JasperReportGenerator gen = new JasperReportGenerator();
 		String generatedFileName = gen.generate(stockList,tradeSummary,executionSummary);
 		
@@ -126,11 +130,5 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 				System.err.println("Unable to send email");
 			}
 		}
-		
-		elapsed = System.currentTimeMillis() - start;
-		System.out.println("Current Pass took " + elapsed/1000 + " seconds ");
 	}
-
-	
-
 }

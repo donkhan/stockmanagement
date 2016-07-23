@@ -178,9 +178,6 @@ public class Stock {
 		return x.substring(0,x.length()-1);
 	}
 	
-	
-	
-
 	public String getName() {
 		return name;
 	}

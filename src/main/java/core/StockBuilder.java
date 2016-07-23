@@ -69,11 +69,8 @@ public class StockBuilder {
 			Stock stock = getStock(stockName,brokerName,stocks);
 			Trade trade = new Trade(i+1);
 			fill(trade,sheet,i);
-			
 			stock.addToTradeList(trade,tradeSummary);
 		}
-		
-		
 		System.out.println("Trades are analyzed");
 	}
 	
