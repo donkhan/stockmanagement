@@ -1,5 +1,5 @@
 package core;
-import java.util.Date;
+import java.util.Calendar;
 
 
 public class Trade {
@@ -96,13 +96,11 @@ public class Trade {
 	}
 
 
-	private Date transactionTime;
-	public Date getTransactionTime() {
+	private Calendar transactionTime;
+	public Calendar getTransactionTime() {
 		return transactionTime;
 	}
-	public void setTransactionTime(Date time) {
-		if(time.getYear() < 2000)
-			time.setYear(time.getYear() + 2000);
+	public void setTransactionTime(Calendar time) {
 		this.transactionTime = time;
 	}
 	private String name;

@@ -1,7 +1,6 @@
 package commissioncalculators;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class CessUtil extends TaxUtil{
@@ -21,11 +20,11 @@ public class CessUtil extends TaxUtil{
 		
 	}
 	
-	public static double getKrishKalyanCess(Date d) {
+	public static double getKrishKalyanCess(Calendar d) {
 		return cutOff(d,krishKalyanCess) ? 0d : 0.5d;
 	}
 	
-	public static double getSwatchBharatCess(Date d){
+	public static double getSwatchBharatCess(Calendar d){
 		return cutOff(d,swatchBharatCess) ? 0d : 0.5d;
 	}
 }

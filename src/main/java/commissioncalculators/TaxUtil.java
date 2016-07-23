@@ -1,13 +1,11 @@
 package commissioncalculators;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class TaxUtil {
 	
-	public static boolean cutOff(Date d, GregorianCalendar c2){
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.setTime(d);
-		return cal.before(c2);
+	public static boolean cutOff(Calendar d, GregorianCalendar c2){
+		return d.before(c2);
 	}
 }

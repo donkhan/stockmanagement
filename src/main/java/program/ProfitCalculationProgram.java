@@ -1,13 +1,19 @@
 package program;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import profit.ProfitCalendar;
 import core.Stock;
 import core.StockBuilder;
 import core.Trade;
+
+
 
 public class ProfitCalculationProgram extends AbstractProgram{
 	
@@ -29,8 +35,7 @@ public class ProfitCalculationProgram extends AbstractProgram{
 		builder.setInputFile(getValue(args,"filepath",""));
 		builder.setFullReport(true);
 		builder.setWorkBook();
-		
-		Map<String,Double> map = new HashMap<String,Double>();
+		Map<Calendar,Double> map = new HashMap<Calendar,Double>();
 		Map<String, Stock> stocks = builder.read("None");
 		Iterator<Stock> values = stocks.values().iterator();
 		while(values.hasNext()){
@@ -38,30 +43,36 @@ public class ProfitCalculationProgram extends AbstractProgram{
 			List<Trade> trades = stock.getTradeList();
 			for(Trade trade : trades){
 				if(trade.getTradeType().equals(Trade.SELL)){
-					//System.out.println(trade.getId() + "  " + trade.getProfit());
-					String key = trade.getTransactionTime().getMonth() + "-" + trade.getTransactionTime().getYear();
-					System.out.println(key);
-					if(map.containsKey(key)){
-						Double d= map.get(key);
+					Calendar c = trade.getTransactionTime();
+					c.set(Calendar.DATE, 1); c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0);
+					c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0);
+					if(map.containsKey(c)){
+						Double d= map.remove(c);
 						Double d1 = new Double(d.doubleValue() + trade.getProfit());
-						map.put(key,d1);
+						map.put(c,d1);
 					}else{
 						Double d1 = new Double(trade.getProfit());
-						map.put(key,d1);
+						map.put(c,d1);
 					}
 				}
 			}
 		}
+		List<ProfitCalendar> list = new ArrayList<ProfitCalendar>();
 		
-		Iterator<String> keyIterator = map.keySet().iterator();
+		Iterator<Calendar> keyIterator = map.keySet().iterator();
 		while(keyIterator.hasNext()){
-			String key = keyIterator.next();
-			System.out.println(key + "  " + map.get(key));
+			Calendar key = keyIterator.next();
+			list.add(new ProfitCalendar(key,map.get(key)));
 		}
-		System.out.println("Done");
 		
+		Collections.sort(list);
+	
+		for(ProfitCalendar pc : list){
+			pc.print();
+		}
 		
 	}
+	
 	
 	
 	

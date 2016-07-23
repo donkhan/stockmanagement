@@ -266,9 +266,8 @@ public class StockBuilder {
 		Calendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.MONTH, Integer.parseInt(tokenizer.nextToken())-1);
 		calendar.set(Calendar.DATE, Integer.parseInt(tokenizer.nextToken()));
-		calendar.set(Calendar.YEAR, Integer.parseInt(tokenizer.nextToken()));
-		
-		trade.setTransactionTime(calendar.getTime());
+		calendar.set(Calendar.YEAR, 2000+Integer.parseInt(tokenizer.nextToken()));
+		trade.setTransactionTime(calendar);
 
 	}
 }

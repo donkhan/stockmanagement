@@ -1,6 +1,7 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import util.Global;
@@ -212,7 +213,7 @@ public class Stock {
 		imaginaryTrade.setTradeType("S");
 		imaginaryTrade.setGrossrate(getCurrentPrice());
         imaginaryTrade.setBroker(getBroker());
-        imaginaryTrade.setTransactionTime(new java.util.Date());
+        imaginaryTrade.setTransactionTime(new GregorianCalendar());
         imaginaryTrade.setName(getName());
 		cc.calculateCommission(imaginaryTrade);
         handleSell(imaginaryTrade,false,null);

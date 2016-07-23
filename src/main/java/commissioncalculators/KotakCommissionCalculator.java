@@ -1,9 +1,5 @@
 package commissioncalculators;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import util.Global;
-import core.Stock;
 import core.Trade;
 
 
