@@ -1,6 +1,7 @@
 package thread;
 
-import external.MoneyControlStockService;
+import services.StockService;
+import util.Global;
 
 /**
  * Created by kkhan on 07/07/16.
@@ -34,7 +35,7 @@ public class StockThread extends Thread implements Runnable {
     }
 
     public void run(){
-        MoneyControlStockService mcs = new MoneyControlStockService();
+        StockService mcs = Global.getStockService(); 
         stockPrice = mcs.getCurrentPrice(stockURL);
         System.out.println("Price of " + stockName + " " + stockPrice);
     }

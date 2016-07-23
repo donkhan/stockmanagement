@@ -1,7 +1,10 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import util.Global;
 
@@ -81,16 +84,13 @@ public class Stock {
 	
     private void handleBuy(Trade trade,TradeSummary summary){
         double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
-        if(trade.getTradeType().equals("R")){
+        if(trade.getTradeType().equals(Trade.RIGHTS)){
         	unitExtraCost = 0;
         }
     	double netRate = trade.getGrossrate() + unitExtraCost;
         trade.setNetRate(netRate);
-        
         printNetRate(trade,unitExtraCost);
-        
         double price = netRate * trade.getQuantity();
-        
         average = ((totalQuantity * average) + price) / (totalQuantity + trade.getQuantity());
         totalQuantity += trade.getQuantity();
         summary.incrementBuyTrade();
@@ -101,12 +101,10 @@ public class Stock {
         double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
         double netRate = trade.getGrossrate() - unitExtraCost;
         trade.setNetRate(netRate);
-
         printNetRate(trade,unitExtraCost);
-        
         if(real) {
             totalQuantity -= trade.getQuantity();
-            addProfit(trade);
+        	addProfitAndAdjustAverage(trade);
             summary.incrementSellTrade();
             summary.incrementTurnOver(trade.getNetRate() * trade.getQuantity());
         }
@@ -124,7 +122,7 @@ public class Stock {
     	return new Trade(12);
     }
 
-    private void addProfit(Trade trade){
+    private void addProfitAndAdjustAverage(Trade trade){
         double profit = 0;
         if(trade.getBuyTradeId() != 0){
         	Trade buyTrade = getTrade(trade.getBuyTradeId());
@@ -137,6 +135,7 @@ public class Stock {
         }else{
             profit = (trade.getNetRate() - getAverage()) * trade.getQuantity();
         }
+        trade.setProfit(profit);
         appendProfit(profit);
     }
 
@@ -223,4 +222,6 @@ public class Stock {
         imaginaryProfit = (imaginaryTrade.getNetRate() - getAverage()) * getTotalQuantity();
 
 	}
+
+
 }

@@ -1,5 +1,8 @@
 package util;
 
+import services.StockService;
+import external.MoneyControlStockService;
+
 public class Global {
 
 	public static boolean debug = false;
@@ -16,5 +19,10 @@ public class Global {
 			System.out.println("Krish Kalyan Cess from June 1 2016= 0.5%");
 			printLine();
 		}
+	}
+	
+	public static StockService getStockService(){
+		return new MoneyControlStockService();
+		
 	}
 }

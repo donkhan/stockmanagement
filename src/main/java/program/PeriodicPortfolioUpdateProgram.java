@@ -81,10 +81,10 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		builder.setInputFile(getValue(args,"filepath",""));
 		builder.setFullReport(fullReport);
 		
+		double totalProfit = 0;
 		Map<String, Stock> stocks = builder.read(specificStock);
 		List<Stock> stockList = new ArrayList<Stock>();
 		Iterator<Stock> values = stocks.values().iterator();
-		double totalProfit = 0;
 		while(values.hasNext()){
 			Stock stock = values.next();
 			if(stock.getTotalQuantity() > 0 || fullReport){
@@ -92,6 +92,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			}
 			totalProfit += stock.getProfitRealised();
 		}
+		
 		TradeSummary tradeSummary = builder.getTradeSummary();
 		tradeSummary.setTotalProfit(totalProfit);
 		prepareReport(stockList,tradeSummary,prepareExecutionSummary(tradeSummary,start),getBooleanValue(args,"sendmail"));

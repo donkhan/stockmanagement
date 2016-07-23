@@ -63,6 +63,7 @@ public class Trade {
 
 	public static String BUY = "B";
 	public static String SELL = "S";
+	public static String RIGHTS = "R";
 	
 	public String getBroker() {
 		return broker;
@@ -152,6 +153,17 @@ public class Trade {
 	
 	public double getUnitAcquistionCost(){
 		return extraCost/quantity;
+	}
+
+	private double profit;
+
+
+	public double getProfit() {
+		return profit;
+	}
+
+	public void setProfit(double profit) {
+		this.profit = profit;
 	}
 	
 }
