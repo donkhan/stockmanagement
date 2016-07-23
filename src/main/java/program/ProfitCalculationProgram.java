@@ -1,5 +1,6 @@
 package program;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class ProfitCalculationProgram extends AbstractProgram{
 		builder.setFullReport(true);
 		builder.setWorkBook();
 		
+		Map<String,Double> map = new HashMap<String,Double>();
 		Map<String, Stock> stocks = builder.read("None");
 		Iterator<Stock> values = stocks.values().iterator();
 		while(values.hasNext()){
@@ -36,10 +38,28 @@ public class ProfitCalculationProgram extends AbstractProgram{
 			List<Trade> trades = stock.getTradeList();
 			for(Trade trade : trades){
 				if(trade.getTradeType().equals(Trade.SELL)){
-					System.out.println(trade.getId() + "  " + trade.getProfit());
+					//System.out.println(trade.getId() + "  " + trade.getProfit());
+					String key = trade.getTransactionTime().getMonth() + "-" + trade.getTransactionTime().getYear();
+					System.out.println(key);
+					if(map.containsKey(key)){
+						Double d= map.get(key);
+						Double d1 = new Double(d.doubleValue() + trade.getProfit());
+						map.put(key,d1);
+					}else{
+						Double d1 = new Double(trade.getProfit());
+						map.put(key,d1);
+					}
 				}
 			}
 		}
+		
+		Iterator<String> keyIterator = map.keySet().iterator();
+		while(keyIterator.hasNext()){
+			String key = keyIterator.next();
+			System.out.println(key + "  " + map.get(key));
+		}
+		System.out.println("Done");
+		
 		
 	}
 	
