@@ -80,9 +80,11 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		StockBuilder builder = new StockBuilder();
 		builder.setInputFile(getValue(args,"filepath",""));
 		builder.setFullReport(fullReport);
+		builder.setWorkBook();
 		
 		double totalProfit = 0;
 		Map<String, Stock> stocks = builder.read(specificStock);
+		builder.updateStocks(stocks);
 		List<Stock> stockList = new ArrayList<Stock>();
 		Iterator<Stock> values = stocks.values().iterator();
 		while(values.hasNext()){

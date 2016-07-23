@@ -51,8 +51,8 @@ public class StockBuilder {
 		this.tradeSummary = tradeSummary;
 	}
 
-	private void analyzeTrades(Workbook w,Map<String, Stock> stocks,String specificStock){
-		System.out.println("Going to Analyze trades");
+	private void analyzeTrades(Map<String, Stock> stocks,String specificStock){
+		System.out.println("Going to Analyze trades " + w);
 		Global.printTaxDetails();
 		Sheet sheet = w.getSheet(0);
 		tradeSummary = new TradeSummary();
@@ -74,7 +74,7 @@ public class StockBuilder {
 		System.out.println("Trades are analyzed");
 	}
 	
-	public void updateStocks(Workbook w,Map<String, Stock> stocks){
+	public void updateStocks(Map<String, Stock> stocks){
 		System.out.println("Going to update stocks with current Price");
 		String brokers [] = { "Kotak","Geojit","Money Palm"};
 		Sheet sheet = w.getSheet(1);
@@ -148,45 +148,33 @@ public class StockBuilder {
 	public Map<String, Stock> read(String specificStock) {
 		System.out.println("Going to read Work Sheet");
 		Map<String, Stock> stocks = new LinkedHashMap<String, Stock>();
-		try {
-			Workbook w = getWorkBook();
-			analyzeAndUpdate(w,stocks,specificStock);
-		} catch (BiffException e) {
-			e.printStackTrace();
-		}  catch(IOException ioe){
-			ioe.printStackTrace();
-		}
+		analyzeTrades(stocks,specificStock);
 		return stocks;
 	}
+	
+	private Workbook w;
 	
 	public Map<String, Stock> readTrades(String specificStock) {
 		Map<String, Stock> stocks = new LinkedHashMap<String, Stock>();
-		try {
-			Workbook w = getWorkBook();
-			analyzeTrades(w,stocks,specificStock);
-		} catch (BiffException e) {
-			e.printStackTrace();
-		}  catch(IOException ioe){
-			ioe.printStackTrace();
-		}
+		analyzeTrades(stocks,specificStock);
 		return stocks;
 	}
 	
-	private void analyzeAndUpdate(Workbook w,Map<String,Stock> stocks, String specificStock){
-		analyzeTrades(w,stocks,specificStock);
-		updateStocks(w,stocks);
-	}
 
-	protected Workbook getWorkBook() throws IOException,BiffException{
-		Workbook w  = null;
-		if(!inputFile.equals("")){
-			File inputWorkbook = new File(inputFile);
-			w = Workbook.getWorkbook(inputWorkbook);
-		}else{
-			w = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
+	public void setWorkBook() {
+		try{
+			if(!inputFile.equals("")){
+				File inputWorkbook = new File(inputFile);
+				w = Workbook.getWorkbook(inputWorkbook);
+			}else{
+				w = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
+			}
+		}catch(IOException ioe){
+			ioe.printStackTrace();
+		}catch(BiffException bie){
+			bie.printStackTrace();
 		}
-		
-		return w;
+		System.out.println(w);
 	}
 
 	private KotakCommissionCalculator kcc  = new KotakCommissionCalculator();
