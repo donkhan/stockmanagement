@@ -1,5 +1,7 @@
 package program;
 
+import jasper.ProfitReportGenerator;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -35,26 +37,35 @@ public class ProfitCalculationProgram extends AbstractProgram{
 		builder.setInputFile(getValue(args,"filepath",""));
 		builder.setFullReport(true);
 		builder.setWorkBook();
-		Map<Calendar,Double> map = new HashMap<Calendar,Double>();
+		Map<Calendar,ProfitCalendar> map = new HashMap<Calendar,ProfitCalendar>();
 		Map<String, Stock> stocks = builder.read("None");
 		Iterator<Stock> values = stocks.values().iterator();
 		while(values.hasNext()){
 			Stock stock = values.next();
 			List<Trade> trades = stock.getTradeList();
 			for(Trade trade : trades){
-				if(trade.getTradeType().equals(Trade.SELL)){
-					Calendar c = trade.getTransactionTime();
-					c.set(Calendar.DATE, 1); c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0);
-					c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0);
-					if(map.containsKey(c)){
-						Double d= map.remove(c);
-						Double d1 = new Double(d.doubleValue() + trade.getProfit());
-						map.put(c,d1);
-					}else{
-						Double d1 = new Double(trade.getProfit());
-						map.put(c,d1);
-					}
+				Calendar c = trade.getTransactionTime();
+				c.set(Calendar.DATE, 1); c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0);
+				c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0);
+				ProfitCalendar pc = null;
+				double tradeAmount = trade.getNetRate() * trade.getQuantity();
+				if(map.containsKey(c)){
+					pc = map.get(c);
+					pc.setBuyTrades(pc.getBuyTrades() + 1);
+
+				}else{
+					pc = new ProfitCalendar(c,0d);
+					map.put(c,pc);
 				}
+				if(trade.getTradeType().equals(Trade.SELL)){
+					pc.setProfit(pc.getProfit() + trade.getProfit());
+					pc.setSellTrades(pc.getSellTrades() + 1);
+					pc.setTotalBuyAmount(pc.getTotalBuyAmount() + tradeAmount);
+				}else{
+					pc.setBuyTrades(pc.getBuyTrades() + 1);
+					pc.setTotalSellAmount(pc.getTotalSellAmount() + tradeAmount);
+				}
+				pc.setTotalTurnOver(pc.getTotalTurnOver() + tradeAmount);
 			}
 		}
 		List<ProfitCalendar> list = new ArrayList<ProfitCalendar>();
@@ -62,16 +73,17 @@ public class ProfitCalculationProgram extends AbstractProgram{
 		Iterator<Calendar> keyIterator = map.keySet().iterator();
 		while(keyIterator.hasNext()){
 			Calendar key = keyIterator.next();
-			list.add(new ProfitCalendar(key,map.get(key)));
+			list.add(map.get(key));
 		}
 		
 		Collections.sort(list);
-	
-		for(ProfitCalendar pc : list){
-			pc.print();
-		}
-		
+		prepareReport(list);
 	}
+	
+	private void prepareReport(List<ProfitCalendar> profitCalendarList) {
+		ProfitReportGenerator gen = new ProfitReportGenerator();
+		gen.generate(profitCalendarList);
+	}	
 	
 	
 	

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2016-07-24T11:24:10 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" pageWidth="300" pageHeight="842" columnWidth="300" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8e4a5205-2205-4d4b-8419-3079dc5058a1">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="displayString" class="java.lang.String">
+		<fieldDescription><![CDATA[displayString]]></fieldDescription>
+	</field>
+	<field name="profit" class="java.lang.Double">
+		<fieldDescription><![CDATA[profit]]></fieldDescription>
+	</field>
+	<field name="totalTurnOver" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalTurnOver]]></fieldDescription>
+	</field>
+	<field name="buy" class="java.lang.Integer">
+		<fieldDescription><![CDATA[buyTrades]]></fieldDescription>
+	</field>
+	<field name="sell" class="java.lang.Integer">
+		<fieldDescription><![CDATA[sellTrades]]></fieldDescription>
+	</field>
+	<field name="totalBuyAmount" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalBuyAmount]]></fieldDescription>
+	</field>
+	<field name="totalSellAmount" class="java.lang.Double">
+		<fieldDescription><![CDATA[totalSellAmount]]></fieldDescription>
+	</field>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="3" width="90" height="15" uuid="2f341ed9-0007-4c16-969a-d9e39f92d415"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Month]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="3" width="90" height="15" uuid="2f341ed9-0007-4c16-969a-d9e39f92d415"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Profit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="3" width="90" height="15" uuid="2f341ed9-0007-4c16-969a-d9e39f92d415"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TurnOver]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="3" width="90" height="15" uuid="2f341ed9-0007-4c16-969a-d9e39f92d415"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Buy]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="3" width="90" height="15" uuid="2f341ed9-0007-4c16-969a-d9e39f92d415"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sell]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="3" width="90" height="15" uuid="2f341ed9-0007-4c16-969a-d9e39f92d415"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Buy Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="540" y="3" width="90" height="15" uuid="2f341ed9-0007-4c16-969a-d9e39f92d415"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sell Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="630" y="3" width="90" height="15" uuid="2f341ed9-0007-4c16-969a-d9e39f92d415"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Profit Percentage]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="3" width="90" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{displayString}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="3" width="90" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($F{profit})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="3" width="90" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($F{totalTurnOver})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="270" y="3" width="90" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{buy}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="3" width="90" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sell}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="3" width="90" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($F{totalBuyAmount})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="540" y="3" width="90" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($F{totalSellAmount})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="630" y="3" width="90" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($F{profit}/$F{totalTurnOver}*100)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

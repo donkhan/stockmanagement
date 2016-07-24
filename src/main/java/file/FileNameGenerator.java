@@ -15,4 +15,12 @@ public class FileNameGenerator {
 		System.out.println("Generated File Name " + file);
 		return file;
 	}
+	
+	public static String getProfitFile(String extension){
+		String file = "profit-report" + "." +extension;
+		String dir = System.getProperty("java.io.tmpdir");
+		file = dir + System.getProperty("file.separator") + file;
+		System.out.println("Generated File Name " + file);
+		return file;
+	}
 }

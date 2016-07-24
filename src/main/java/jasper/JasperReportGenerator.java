@@ -39,7 +39,6 @@ public class JasperReportGenerator {
 	
 	public String generate(List<Stock> stockCollection,TradeSummary summary,ExecutionSummary eSummary){
 		try{
-			//InputStream inputStream = new FileInputStream(System.getProperty("user.dir") + "\\src\\main\\resources\\"+ "StockPeriodicReport.jrxml");
 			InputStream inputStream = URLClassLoader.getSystemResourceAsStream("StockPeriodicReport.jrxml");
 			JasperReport report = JasperCompileManager.compileReport(inputStream);
 			JasperPrint print = fill(report,stockCollection,summary,eSummary);
