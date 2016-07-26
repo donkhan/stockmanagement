@@ -1,7 +1,7 @@
-package thread;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import thread.StockThread;
 
 /**
  * Created by kkhan on 07/07/16.
@@ -15,7 +15,7 @@ public class TestParallel {
                 "http://www.moneycontrol.com/india/stockpricequote/infrastructure-general/gmrinfrastructure/GI27"};
         List<StockThread> list = new ArrayList<StockThread>();
         for(int i = 0;i<stocks.length;i++) {
-            StockThread st = new StockThread(stocks[i],"");
+            StockThread st = new StockThread(stocks[i],"",20);
             st.start();
         }
 

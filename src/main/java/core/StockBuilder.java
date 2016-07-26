@@ -74,7 +74,7 @@ public class StockBuilder {
 		System.out.println("Trades are analyzed");
 	}
 	
-	public void updateStocks(Map<String, Stock> stocks){
+	public void updateStocks(Map<String, Stock> stocks,int maxRetries){
 		System.out.println("Going to update stocks with current Price");
 		String brokers [] = { "Kotak","Geojit","Money Palm"};
 		Sheet sheet = w.getSheet(1);
@@ -89,7 +89,7 @@ public class StockBuilder {
 				continue;
 			}
 			String url = getURL(sheet, stockName);
-			StockThread st = new StockThread(url,stockName);
+			StockThread st = new StockThread(url,stockName,maxRetries);
 			st.start();
 			list.add(st);
 		}

@@ -9,7 +9,15 @@ import services.StockService;
 
 public class MoneyControlStockService implements StockService{
 
-	private int  MAX_RETRIES = 10;
+	private int  maxRetries = 20;
+	public int getMaxRetries() {
+		return maxRetries;
+	}
+
+	public void setMaxRetries(int maxRetries) {
+		this.maxRetries = maxRetries;
+	}
+
 	public static void main(String args[]){
 		System.out.println(new MoneyControlStockService().getCurrentPrice("http://www.moneycontrol.com/india/stockpricequote/refineries/indianoilcorporation/IOC"));
 	}
@@ -19,7 +27,7 @@ public class MoneyControlStockService implements StockService{
 	}
 	
 	private double getCurrentPrice(String singleURL, int retry){
-		if(retry == MAX_RETRIES){
+		if(retry == maxRetries){
 			return 0;
 		}
 		double d = 0;
@@ -64,5 +72,7 @@ public class MoneyControlStockService implements StockService{
 		//System.out.println(singleURL + " " + d);
 		return d;
 	}
+
+	
 	
 }

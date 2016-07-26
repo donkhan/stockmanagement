@@ -11,8 +11,25 @@ public class StockThread extends Thread implements Runnable {
     private String stockURL;
     private double stockPrice;
     private String stockName;
+    private int maxRetries;
 
-    public String getStockName() {
+    public String getStockURL() {
+		return stockURL;
+	}
+
+	public void setStockURL(String stockURL) {
+		this.stockURL = stockURL;
+	}
+
+	public int getMaxRetries() {
+		return maxRetries;
+	}
+
+	public void setMaxRetries(int maxRetries) {
+		this.maxRetries = maxRetries;
+	}
+
+	public String getStockName() {
         return stockName;
     }
 
@@ -20,9 +37,10 @@ public class StockThread extends Thread implements Runnable {
         this.stockName = stockName;
     }
 
-    public StockThread(String stockURL,String stockName){
+    public StockThread(String stockURL,String stockName,int maxRetries){
         this.stockURL = stockURL;
         this.stockName = stockName;
+        this.maxRetries = maxRetries;
     }
 
 
@@ -35,7 +53,8 @@ public class StockThread extends Thread implements Runnable {
     }
 
     public void run(){
-        StockService mcs = Global.getStockService(); 
+        StockService mcs = Global.getStockService();
+        mcs.setMaxRetries(maxRetries);
         stockPrice = mcs.getCurrentPrice(stockURL);
         System.out.println("Price of " + stockName + " " + stockPrice);
     }

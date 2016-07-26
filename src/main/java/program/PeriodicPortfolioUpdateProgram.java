@@ -76,6 +76,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 	private void doWork(final boolean force,String args[]){
 		long start = System.currentTimeMillis();
 		boolean fullReport = getBooleanValue(args,"fullreport");
+		int maxRetries = getIntegerValue(args,"maxretry");
 		String specificStock = getValue(args,"specificstock","None");
 		StockBuilder builder = new StockBuilder();
 		builder.setInputFile(getValue(args,"filepath",""));
@@ -84,7 +85,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		
 		double totalProfit = 0;
 		Map<String, Stock> stocks = builder.read(specificStock);
-		builder.updateStocks(stocks);
+		builder.updateStocks(stocks,maxRetries);
 		List<Stock> stockList = new ArrayList<Stock>();
 		Iterator<Stock> values = stocks.values().iterator();
 		while(values.hasNext()){

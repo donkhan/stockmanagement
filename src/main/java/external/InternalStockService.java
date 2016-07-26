@@ -16,5 +16,10 @@ public class InternalStockService implements StockService{
 		return 0;
 	}
 
+	public void setMaxRetries(int maxRetries) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }
