@@ -189,7 +189,8 @@ public class Stock {
 	}
 
 	public String toString(){
-		return  name + "  " + tradeList + "\n";
+		//return  name + "  " + tradeList + "\n";
+		return name + " " + totalQuantity;
 	}
 
 	public double getCurrentPrice() {
