@@ -2,7 +2,7 @@ package profit;
 
 import java.util.Calendar;
 
-public class ProfitCalendar implements Comparable<ProfitCalendar>{
+public abstract class ProfitCalendar<T> implements Comparable<T>{
 	
 	private Calendar calendar;
 	public ProfitCalendar(Calendar calendar, Double d) {
@@ -10,7 +10,6 @@ public class ProfitCalendar implements Comparable<ProfitCalendar>{
 		this.profit = d;
 		buyTrades = 0;
 		sellTrades = 0;
-		displayString = months[calendar.get(Calendar.MONTH)] + "-" + calendar.get(Calendar.YEAR);
 	}
 	
 	private Double profit;
@@ -33,9 +32,7 @@ public class ProfitCalendar implements Comparable<ProfitCalendar>{
 	public void setTotalSellAmount(double totalSellAmount) {
 		this.totalSellAmount = totalSellAmount;
 	}
-	public void setDisplayString(String displayString) {
-		this.displayString = displayString;
-	}
+
 	public double getTotalTurnOver() {
 		return totalTurnOver;
 	}
@@ -66,23 +63,6 @@ public class ProfitCalendar implements Comparable<ProfitCalendar>{
 	public void setBuyTrades(int buyTrades) {
 		this.buyTrades = buyTrades;
 	}
-	public int compareTo(ProfitCalendar o) {
-		Calendar c = o.calendar;
-		if(c.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)){
-			return c.get(Calendar.MONTH) - calendar.get(Calendar.MONTH);
-		}
-		return c.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
-		
-	}
-
-	private String displayString;
-	private static String months[] = new String[]{"Jan", "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-	public void print() {
-		System.out.println(displayString + "=" + profit + "," + getBuyTrades() + "," + getSellTrades());
-	}
 	
-	public String getDisplayString(){
-		return months[calendar.get(Calendar.MONTH)] + "-" + calendar.get(Calendar.YEAR);
-	}
-		
+	public abstract String getPrefix();
 }

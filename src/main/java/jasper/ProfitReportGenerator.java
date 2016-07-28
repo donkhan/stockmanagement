@@ -19,12 +19,12 @@ import profit.ProfitCalendar;
 
 public class ProfitReportGenerator {
 
-	public String generate(List<ProfitCalendar> list){
+	public String generate(List<ProfitCalendar> list,String fileName){
 		try{
-			InputStream inputStream = URLClassLoader.getSystemResourceAsStream("ProfitReport.jrxml");
+			InputStream inputStream = URLClassLoader.getSystemResourceAsStream(fileName);
 			JasperReport report = JasperCompileManager.compileReport(inputStream);
 			JasperPrint print = fill(report,list);
-			return pdf(print);
+			return pdf(print,list);
 		}catch(JRException jre){
 			jre.printStackTrace();
 		} 
@@ -38,8 +38,8 @@ public class ProfitReportGenerator {
 		return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 	}
 	
-	public String pdf(JasperPrint jasperPrint) throws JRException{
-		String fileName = FileNameGenerator.getProfitFile("html");
+	public String pdf(JasperPrint jasperPrint,List<ProfitCalendar> list) throws JRException{
+		String fileName = FileNameGenerator.getProfitFile("html",list.get(0).getPrefix());
 		JasperExportManager.exportReportToHtmlFile(jasperPrint, fileName);
 		return fileName;
 	}

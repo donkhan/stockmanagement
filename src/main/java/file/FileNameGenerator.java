@@ -16,8 +16,8 @@ public class FileNameGenerator {
 		return file;
 	}
 	
-	public static String getProfitFile(String extension){
-		String file = "profit-report" + "." +extension;
+	public static String getProfitFile(String extension,String prefix){
+		String file = prefix + "-profit-report" + "." +extension;
 		String dir = System.getProperty("java.io.tmpdir");
 		file = dir + System.getProperty("file.separator") + file;
 		System.out.println("Generated File Name " + file);

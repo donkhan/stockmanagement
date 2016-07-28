@@ -13,7 +13,7 @@ public abstract class AbstractProgram {
 	protected abstract void execute(final boolean force,final String args[]);
 	
 	protected void main(final boolean force, final String[] args){
-		if(force){
+		if(force || getTimerInterval() == -1){
 			execute(force,args);
 			return;
 		}

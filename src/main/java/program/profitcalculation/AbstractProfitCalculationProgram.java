@@ -1,34 +1,24 @@
-package program;
+package program.profitcalculation;
 
-import jasper.ProfitReportGenerator;
-
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import profit.ProfitCalendar;
+import program.AbstractProgram;
 import core.Stock;
 import core.StockBuilder;
 import core.Trade;
 
 
 
-public class ProfitCalculationProgram extends AbstractProgram{
+public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 	
-	public static void main(String args[]){
-		ProfitCalculationProgram cp = new ProfitCalculationProgram();
-		String arg[] = new String[]{"--force=true",args[0]};
-		cp.startExecute(arg);
-	}
-	
-
 	@Override
 	protected long getTimerInterval() {
-		return 10;
+		return -1;
 	}
 
 	@Override
@@ -45,8 +35,7 @@ public class ProfitCalculationProgram extends AbstractProgram{
 			List<Trade> trades = stock.getTradeList();
 			for(Trade trade : trades){
 				Calendar c = trade.getTransactionTime();
-				c.set(Calendar.DATE, 1); c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0);
-				c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0);
+				resetCalendar(c);
 				ProfitCalendar pc = null;
 				double tradeAmount = trade.getNetRate() * trade.getQuantity();
 				if(map.containsKey(c)){
@@ -54,7 +43,7 @@ public class ProfitCalculationProgram extends AbstractProgram{
 					pc.setBuyTrades(pc.getBuyTrades() + 1);
 
 				}else{
-					pc = new ProfitCalendar(c,0d);
+					pc = getProfitCalendar(c,0d);
 					map.put(c,pc);
 				}
 				if(trade.getTradeType().equals(Trade.SELL)){
@@ -68,24 +57,10 @@ public class ProfitCalculationProgram extends AbstractProgram{
 				pc.setTotalTurnOver(pc.getTotalTurnOver() + tradeAmount);
 			}
 		}
-		List<ProfitCalendar> list = new ArrayList<ProfitCalendar>();
-		
-		Iterator<Calendar> keyIterator = map.keySet().iterator();
-		while(keyIterator.hasNext()){
-			Calendar key = keyIterator.next();
-			list.add(map.get(key));
-		}
-		
-		Collections.sort(list);
-		prepareReport(list);
+		process(map);
 	}
 	
-	private void prepareReport(List<ProfitCalendar> profitCalendarList) {
-		ProfitReportGenerator gen = new ProfitReportGenerator();
-		gen.generate(profitCalendarList);
-	}	
-	
-	
-	
-	
+	protected abstract void process(Map<Calendar,ProfitCalendar> map);
+	protected abstract ProfitCalendar getProfitCalendar(Calendar c,Double d);
+	protected abstract void resetCalendar(Calendar c);
 }
