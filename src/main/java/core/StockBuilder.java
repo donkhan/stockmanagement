@@ -164,10 +164,19 @@ public class StockBuilder {
 	public void setWorkBook() {
 		try{
 			if(!inputFile.equals("")){
+				System.out.println("Reading File given as argument " + inputFile);
 				File inputWorkbook = new File(inputFile);
 				w = Workbook.getWorkbook(inputWorkbook);
 			}else{
-				w = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
+				String absolutePath = System.getProperty("user.dir") + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "Trade.xls";
+				File file = new File(absolutePath);
+				if(file.exists()){
+					System.out.println("Reading File in the Path " + file.getAbsolutePath());
+					w = Workbook.getWorkbook(file);
+				}else{
+					System.out.println("Reading File in the Bundle");
+					w = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
+				}
 			}
 		}catch(IOException ioe){
 			ioe.printStackTrace();
