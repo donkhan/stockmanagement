@@ -3,7 +3,7 @@ package profit;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MonthlyProfitCalendar extends ProfitCalendar<MonthlyProfitCalendar>{
+public class MonthlyProfitCalendar extends ProfitCalendar{
 	
 	public MonthlyProfitCalendar(Calendar calendar, Double d) {
 		super(calendar,d);
@@ -19,7 +19,7 @@ public class MonthlyProfitCalendar extends ProfitCalendar<MonthlyProfitCalendar>
 		return "Monthly-YearWise";
 	}
 
-	public int compareTo(MonthlyProfitCalendar o) {
+	public int compareTo(ProfitCalendarInterface o) {
 		Calendar c = o.getCalendar();
 		Calendar calendar = getCalendar();
 		if(c.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)){

@@ -1,12 +1,16 @@
 package program.profitcalculation;
 
+import jasper.ProfitReportGenerator;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import profit.ProfitCalendar;
+import profit.ProfitCalendarInterface;
 import program.AbstractProgram;
 import core.Stock;
 import core.StockBuilder;
@@ -27,7 +31,7 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 		builder.setInputFile(getValue(args,"filepath",""));
 		builder.setFullReport(true);
 		builder.setWorkBook();
-		Map<Calendar,ProfitCalendar> map = new HashMap<Calendar,ProfitCalendar>();
+		Map<Calendar,ProfitCalendarInterface> map = new HashMap<Calendar,ProfitCalendarInterface>();
 		Map<String, Stock> stocks = builder.read("None");
 		Iterator<Stock> values = stocks.values().iterator();
 		while(values.hasNext()){
@@ -36,7 +40,7 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 			for(Trade trade : trades){
 				Calendar c = trade.getTransactionTime();
 				resetCalendar(c);
-				ProfitCalendar pc = null;
+				ProfitCalendarInterface pc = null;
 				double tradeAmount = trade.getNetRate() * trade.getQuantity();
 				if(map.containsKey(c)){
 					pc = map.get(c);
@@ -60,7 +64,23 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 		process(map);
 	}
 	
-	protected abstract void process(Map<Calendar,ProfitCalendar> map);
-	protected abstract ProfitCalendar getProfitCalendar(Calendar c,Double d);
+	public void process(Map<Calendar,ProfitCalendarInterface> map){
+		List<ProfitCalendarInterface> list = new ArrayList<ProfitCalendarInterface>();
+		Iterator<Calendar> keyIterator = map.keySet().iterator();
+		while(keyIterator.hasNext()){
+			Calendar key = keyIterator.next();
+			list.add(map.get(key));
+		}
+		Collections.sort(list);
+		prepareReport(list);
+	}
+	
+	private void prepareReport(List<ProfitCalendarInterface> profitCalendarList) {
+		ProfitReportGenerator gen = new ProfitReportGenerator();
+		gen.generate(profitCalendarList,getReportFileName());
+	}
+	
+	protected abstract String getReportFileName();
+	protected abstract ProfitCalendarInterface getProfitCalendar(Calendar c,Double d);
 	protected abstract void resetCalendar(Calendar c);
 }

@@ -2,7 +2,7 @@ package profit;
 
 import java.util.Calendar;
 
-public abstract class ProfitCalendar<T> implements Comparable<T>{
+public abstract class ProfitCalendar implements ProfitCalendarInterface{
 	
 	private Calendar calendar;
 	public ProfitCalendar(Calendar calendar, Double d) {
@@ -63,6 +63,7 @@ public abstract class ProfitCalendar<T> implements Comparable<T>{
 	public void setBuyTrades(int buyTrades) {
 		this.buyTrades = buyTrades;
 	}
+	
 	
 	public abstract String getPrefix();
 }

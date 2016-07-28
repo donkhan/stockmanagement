@@ -2,17 +2,10 @@ package profit;
 
 import java.util.Calendar;
 
-public class YearlyProfitCalendar extends ProfitCalendar<YearlyProfitCalendar>{
+public class YearlyProfitCalendar extends ProfitCalendar{
 
 	public YearlyProfitCalendar(Calendar calendar, Double d) {
 		super(calendar, d);
-	}
-	
-	public int compareTo(YearlyProfitCalendar o) {
-		Calendar c = o.getCalendar();
-		Calendar myCalendar = getCalendar();
-		return c.get(Calendar.YEAR) - myCalendar.get(Calendar.YEAR);
-		
 	}
 	
 	public String getDisplayString(){
@@ -21,5 +14,11 @@ public class YearlyProfitCalendar extends ProfitCalendar<YearlyProfitCalendar>{
 
 	public String getPrefix(){
 		return "Yearly";
+	}
+
+	public int compareTo(ProfitCalendarInterface o) {
+		Calendar c = o.getCalendar();
+		Calendar myc = getCalendar();
+		return c.get(Calendar.YEAR) - myc.get(Calendar.YEAR);
 	}
 }

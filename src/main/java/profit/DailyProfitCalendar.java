@@ -3,13 +3,13 @@ package profit;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class DailyProfitCalendar extends ProfitCalendar<DailyProfitCalendar>{
+public class DailyProfitCalendar extends ProfitCalendar{
 	
 	public DailyProfitCalendar(Calendar calendar, Double d) {
 		super(calendar, d);
 	}
 	
-	public int compareTo(DailyProfitCalendar o) {
+	public int compareTo(ProfitCalendarInterface o) {
 		Calendar c = o.getCalendar();
 		Calendar myc = getCalendar();
 		if(c.get(Calendar.YEAR) == myc.get(Calendar.YEAR)){

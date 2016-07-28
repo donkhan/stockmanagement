@@ -1,15 +1,8 @@
 package program.profitcalculation;
 
-import jasper.ProfitReportGenerator;
-
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
-import profit.ProfitCalendar;
+import profit.ProfitCalendarInterface;
 import profit.YearlyProfitCalendar;
 
 public class YearlyProfitCalculationProgram extends AbstractProfitCalculationProgram{
@@ -19,24 +12,8 @@ public class YearlyProfitCalculationProgram extends AbstractProfitCalculationPro
 		dp.startExecute(args);
 	}
 	
-	public void process(Map<Calendar,ProfitCalendar> map){
-		List<ProfitCalendar> list = new ArrayList<ProfitCalendar>();
-		Iterator<Calendar> keyIterator = map.keySet().iterator();
-		while(keyIterator.hasNext()){
-			Calendar key = keyIterator.next();
-			list.add(map.get(key));
-		}
-		Collections.sort(list);
-		prepareReport(list);
-	}
-	
-	private void prepareReport(List<ProfitCalendar> profitCalendarList) {
-		ProfitReportGenerator gen = new ProfitReportGenerator();
-		gen.generate(profitCalendarList,"YearlyProfitReport.jrxml");
-	}
-
 	@Override
-	protected ProfitCalendar getProfitCalendar(Calendar c, Double d) {
+	protected ProfitCalendarInterface getProfitCalendar(Calendar c, Double d) {
 		return new YearlyProfitCalendar(c,d);
 	}
 
@@ -45,5 +22,10 @@ public class YearlyProfitCalculationProgram extends AbstractProfitCalculationPro
 		c.set(Calendar.DATE, 1); c.set(Calendar.HOUR_OF_DAY, 0); c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0);
 		c.set(Calendar.MONTH, 0);
+	}
+
+	@Override
+	protected String getReportFileName() {
+		return "YearlyProfitReport.jrxml";
 	}
 }
