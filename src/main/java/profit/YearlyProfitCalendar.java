@@ -12,10 +12,6 @@ public class YearlyProfitCalendar extends ProfitCalendar{
 		return "" +  getCalendar().get(Calendar.YEAR);
 	}
 
-	public String getPrefix(){
-		return "Yearly";
-	}
-
 	public int compareTo(ProfitCalendarInterface o) {
 		Calendar c = o.getCalendar();
 		Calendar myc = getCalendar();

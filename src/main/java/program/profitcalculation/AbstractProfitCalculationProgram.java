@@ -2,6 +2,7 @@ package program.profitcalculation;
 
 import jasper.ProfitReportGenerator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import program.AbstractProgram;
 import core.Stock;
 import core.StockBuilder;
 import core.Trade;
+import file.FileNameGenerator;
 
 
 
@@ -96,7 +98,7 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 	
 	private void prepareReport(List<ProfitCalendarInterface> profitCalendarList) {
 		ProfitReportGenerator gen = new ProfitReportGenerator();
-		gen.generate(profitCalendarList,getReportFileName());
+		gen.generate(profitCalendarList,getReportFileName(),getOutputFile());
 	}
 	
 	protected GregorianCalendar begin = new GregorianCalendar();
@@ -106,4 +108,13 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 	protected abstract ProfitCalendarInterface getProfitCalendar(Calendar c,Double d);
 	protected abstract void resetCalendar(Calendar c);
 	protected abstract void prepareCutOff(String[] args);
+	protected abstract String getReadableDate(Calendar calendar);
+	
+	protected String getOutputFile() {
+		String fileName = FileNameGenerator.getTmpDir() + 
+				getReadableDate(begin) + "to" + getReadableDate(end) + "-profit-report.html";
+		System.out.println(fileName);
+		return fileName;
+	}
+	
 }

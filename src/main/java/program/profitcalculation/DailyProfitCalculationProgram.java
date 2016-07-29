@@ -1,6 +1,7 @@
 package program.profitcalculation;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import profit.DailyProfitCalendar;
 import profit.ProfitCalendarInterface;
@@ -55,6 +56,13 @@ public class DailyProfitCalculationProgram extends AbstractProfitCalculationProg
 	protected String getReportFileName() {
 		return "DailyProfitReport.jrxml";
 	}
+
+	public String getReadableDate(Calendar c){
+		return  "" + c.get(Calendar.DATE) + "-"
+				+ c.getDisplayName(Calendar.MONTH, Calendar.ALL_STYLES, Locale.getDefault()) + "-" + c.get(Calendar.YEAR);
+	}
+	
+	
 
 
 	

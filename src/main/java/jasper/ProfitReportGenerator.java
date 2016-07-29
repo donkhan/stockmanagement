@@ -14,16 +14,15 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import profit.ProfitCalendarInterface;
-import file.FileNameGenerator;
 
 public class ProfitReportGenerator {
 
-	public String generate(List<ProfitCalendarInterface> list,String fileName){
+	public String generate(List<ProfitCalendarInterface> list,String fileName,String outputFile){
 		try{
 			InputStream inputStream = URLClassLoader.getSystemResourceAsStream(fileName);
 			JasperReport report = JasperCompileManager.compileReport(inputStream);
 			JasperPrint print = fill(report,list);
-			return pdf(print,list);
+			return pdf(print,list,outputFile);
 		}catch(JRException jre){
 			jre.printStackTrace();
 		} 
@@ -37,14 +36,9 @@ public class ProfitReportGenerator {
 		return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
 	}
 	
-	public String pdf(JasperPrint jasperPrint,List<ProfitCalendarInterface> list) throws JRException{
-		String prefix = "xyz";
-		if(list.size() > 0){
-			prefix = list.get(0).getPrefix();
-		}
-		String fileName = FileNameGenerator.getProfitFile("html",prefix);
-		JasperExportManager.exportReportToHtmlFile(jasperPrint, fileName);
-		return fileName;
+	public String pdf(JasperPrint jasperPrint,List<ProfitCalendarInterface> list,String outputFile) throws JRException{
+		JasperExportManager.exportReportToHtmlFile(jasperPrint, outputFile);
+		return outputFile;
 	}
 
 }

@@ -12,15 +12,11 @@ public class FileNameGenerator {
 				calendar.get(Calendar.YEAR) + "." +extension;
 		String dir = System.getProperty("java.io.tmpdir");
 		file = dir + System.getProperty("file.separator") + file;
-		System.out.println("Generated File Name " + file);
 		return file;
 	}
 	
-	public static String getProfitFile(String extension,String prefix){
-		String file = prefix + "-profit-report" + "." +extension;
+	public static String getTmpDir(){
 		String dir = System.getProperty("java.io.tmpdir");
-		file = dir + System.getProperty("file.separator") + file;
-		System.out.println("Generated File Name " + file);
-		return file;
+		return dir;
 	}
 }

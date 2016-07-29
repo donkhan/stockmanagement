@@ -64,6 +64,4 @@ public abstract class ProfitCalendar implements ProfitCalendarInterface{
 		this.buyTrades = buyTrades;
 	}
 	
-	
-	public abstract String getPrefix();
 }

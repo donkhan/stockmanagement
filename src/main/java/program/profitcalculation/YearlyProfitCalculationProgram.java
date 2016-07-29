@@ -32,7 +32,10 @@ public class YearlyProfitCalculationProgram extends AbstractProfitCalculationPro
 	@Override
 	protected void prepareCutOff(String[] args) {
 		begin.set(Calendar.YEAR,2000);
-		
+	}
+	
+	public String getReadableDate(Calendar c){
+		return  "" + c.get(Calendar.YEAR);
 	}
 	
 }

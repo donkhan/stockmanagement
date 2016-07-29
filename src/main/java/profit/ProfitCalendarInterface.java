@@ -17,7 +17,6 @@ public interface ProfitCalendarInterface extends Comparable<ProfitCalendarInterf
 	public void setTotalSellAmount(double d);
 	public double getTotalTurnOver();
 	public void setTotalTurnOver(double d);
-	public String getPrefix();
 	
 	public Calendar getCalendar();
 }

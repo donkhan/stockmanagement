@@ -1,6 +1,7 @@
 package program.profitcalculation;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import profit.MonthlyProfitCalendar;
 import profit.ProfitCalendarInterface;
@@ -44,6 +45,11 @@ public class MonthlyProfitCalculationProgram extends AbstractProfitCalculationPr
 		System.out.println("Begin " + begin.getTime());
 		System.out.println("End " + end.getTime());
 
+	}
+
+	
+	public String getReadableDate(Calendar c){
+		return  ""  + c.getDisplayName(Calendar.MONTH, Calendar.ALL_STYLES, Locale.getDefault()) + "-" + c.get(Calendar.YEAR);
 	}
 
 }
