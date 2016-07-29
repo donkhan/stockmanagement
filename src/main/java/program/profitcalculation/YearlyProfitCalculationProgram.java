@@ -1,7 +1,6 @@
 package program.profitcalculation;
 
 import java.util.Calendar;
-import java.util.List;
 
 import profit.ProfitCalendarInterface;
 import profit.YearlyProfitCalendar;
@@ -31,9 +30,9 @@ public class YearlyProfitCalculationProgram extends AbstractProfitCalculationPro
 	}
 
 	@Override
-	protected void filter(
-			List<ProfitCalendarInterface> list) {
+	protected void prepareCutOff(String[] args) {
+		begin.set(Calendar.YEAR,2000);
+		
 	}
-
 	
 }

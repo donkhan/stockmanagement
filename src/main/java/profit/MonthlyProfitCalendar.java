@@ -16,7 +16,7 @@ public class MonthlyProfitCalendar extends ProfitCalendar{
 	}
 		
 	public String getPrefix(){
-		return "Monthly-YearWise";
+		return "Monthly";
 	}
 
 	public int compareTo(ProfitCalendarInterface o) {

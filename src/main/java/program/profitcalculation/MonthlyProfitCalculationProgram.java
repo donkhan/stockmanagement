@@ -1,7 +1,6 @@
 package program.profitcalculation;
 
 import java.util.Calendar;
-import java.util.List;
 
 import profit.MonthlyProfitCalendar;
 import profit.ProfitCalendarInterface;
@@ -30,7 +29,21 @@ public class MonthlyProfitCalculationProgram extends AbstractProfitCalculationPr
 	}
 
 	@Override
-	protected void filter(
-			List<ProfitCalendarInterface> list) {
+	protected void prepareCutOff(String[] args) {
+		if(args.length == 1){
+			int year = this.getIntegerValue(args, "year");
+			begin.set(Calendar.YEAR,year);
+			end.set(Calendar.MONTH,year);
+		}		
+		resetCalendar(begin);
+		begin.set(Calendar.MONTH,0);
+		resetCalendar(end);
+		end.set(Calendar.MONTH,11);
+		end.add(Calendar.MONTH,1);
+		end.add(Calendar.MILLISECOND, -1);
+		System.out.println("Begin " + begin.getTime());
+		System.out.println("End " + end.getTime());
+
 	}
+
 }

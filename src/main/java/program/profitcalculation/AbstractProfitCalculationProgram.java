@@ -5,6 +5,7 @@ import jasper.ProfitReportGenerator;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +28,7 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 
 	@Override
 	protected void execute(boolean force,String args[]) {
+		prepareCutOff(args);
 		StockBuilder builder = new StockBuilder();
 		builder.setInputFile(getValue(args,"filepath",""));
 		builder.setFullReport(true);
@@ -77,17 +79,31 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 		prepareReport(list);
 	}
 	
+	private void filter(
+			List<ProfitCalendarInterface> list) {
+		Iterator<ProfitCalendarInterface> iterator = list.iterator();
+		while(iterator.hasNext()){
+			ProfitCalendarInterface pi = iterator.next();
+			if(remove(pi)) iterator.remove();
+		}
+	}
+	
+	private boolean remove(ProfitCalendarInterface pi) {
+		Calendar c = pi.getCalendar();
+		
+		return c.before(begin) || c.after(end);
+	}
 	
 	private void prepareReport(List<ProfitCalendarInterface> profitCalendarList) {
 		ProfitReportGenerator gen = new ProfitReportGenerator();
 		gen.generate(profitCalendarList,getReportFileName());
 	}
 	
-	
-	
-	protected abstract void filter(List<ProfitCalendarInterface> list);
+	protected GregorianCalendar begin = new GregorianCalendar();
+	protected GregorianCalendar end = new GregorianCalendar(); 
+
 	protected abstract String getReportFileName();
 	protected abstract ProfitCalendarInterface getProfitCalendar(Calendar c,Double d);
 	protected abstract void resetCalendar(Calendar c);
-	
+	protected abstract void prepareCutOff(String[] args);
 }
