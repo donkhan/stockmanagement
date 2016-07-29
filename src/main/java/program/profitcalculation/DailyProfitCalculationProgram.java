@@ -58,8 +58,9 @@ public class DailyProfitCalculationProgram extends AbstractProfitCalculationProg
 	}
 
 	public String getReadableDate(Calendar c){
+		System.out.println(c.getTime() + "   " + c.get(Calendar.MONTH));
 		return  "" + c.get(Calendar.DATE) + "-"
-				+ c.getDisplayName(Calendar.MONTH, Calendar.ALL_STYLES, Locale.getDefault()) + "-" + c.get(Calendar.YEAR);
+				+ (c.get(Calendar.MONTH)+1) + "-" + c.get(Calendar.YEAR);
 	}
 	
 	

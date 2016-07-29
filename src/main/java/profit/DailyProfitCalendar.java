@@ -24,6 +24,6 @@ public class DailyProfitCalendar extends ProfitCalendar{
 	
 	public String getDisplayString(){
 		Calendar myc = getCalendar();
-		return myc.get(Calendar.DATE) + "-" + myc.getDisplayName(Calendar.MONTH, Calendar.ALL_STYLES,Locale.getDefault()) + "-" + myc.get(Calendar.YEAR);
+		return myc.get(Calendar.DATE) + "-" + (myc.get(Calendar.MONTH)+1) + "-" + myc.get(Calendar.YEAR);
 	}
 }

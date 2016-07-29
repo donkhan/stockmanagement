@@ -11,7 +11,7 @@ public class MonthlyProfitCalendar extends ProfitCalendar{
 	
 	public String getDisplayString(){
 		Calendar calendar = getCalendar();
-		return calendar.getDisplayName(Calendar.MONTH, Calendar.ALL_STYLES, Locale.getDefault()) 
+		return (calendar.get(Calendar.MONTH)+1)
 				+ "-" + calendar.get(Calendar.YEAR);
 	}
 	

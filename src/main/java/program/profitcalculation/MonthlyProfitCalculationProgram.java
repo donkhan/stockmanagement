@@ -49,7 +49,7 @@ public class MonthlyProfitCalculationProgram extends AbstractProfitCalculationPr
 
 	
 	public String getReadableDate(Calendar c){
-		return  ""  + c.getDisplayName(Calendar.MONTH, Calendar.ALL_STYLES, Locale.getDefault()) + "-" + c.get(Calendar.YEAR);
+		return  ""  + (c.get(Calendar.MONTH)+1) + "-" + c.get(Calendar.YEAR);
 	}
 
 }

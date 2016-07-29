@@ -52,7 +52,7 @@ public class StockBuilder {
 	}
 
 	private void analyzeTrades(Map<String, Stock> stocks,String specificStock){
-		System.out.println("Going to Analyze trades " + w);
+		System.out.println("Going to Analyze trades ");
 		Global.printTaxDetails();
 		Sheet sheet = w.getSheet(0);
 		tradeSummary = new TradeSummary();

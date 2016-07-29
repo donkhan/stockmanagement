@@ -55,7 +55,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<finalName>uber-${artifactId}-${version}</finalName>
+					<finalName>stockmanagement</finalName>
 				</configuration>
 			</plugin>
 		</plugins>
