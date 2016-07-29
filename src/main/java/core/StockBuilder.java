@@ -183,7 +183,6 @@ public class StockBuilder {
 		}catch(BiffException bie){
 			bie.printStackTrace();
 		}
-		System.out.println(w);
 	}
 
 	private KotakCommissionCalculator kcc  = new KotakCommissionCalculator();

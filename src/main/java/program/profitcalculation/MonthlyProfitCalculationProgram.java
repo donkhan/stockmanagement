@@ -1,6 +1,7 @@
 package program.profitcalculation;
 
 import java.util.Calendar;
+import java.util.List;
 
 import profit.MonthlyProfitCalendar;
 import profit.ProfitCalendarInterface;
@@ -26,5 +27,10 @@ public class MonthlyProfitCalculationProgram extends AbstractProfitCalculationPr
 	@Override
 	protected String getReportFileName() {
 		return "MonthlyProfitReport.jrxml";
+	}
+
+	@Override
+	protected void filter(
+			List<ProfitCalendarInterface> list) {
 	}
 }

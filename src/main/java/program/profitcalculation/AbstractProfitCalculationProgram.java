@@ -53,10 +53,11 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 				if(trade.getTradeType().equals(Trade.SELL)){
 					pc.setProfit(pc.getProfit() + trade.getProfit());
 					pc.setSellTrades(pc.getSellTrades() + 1);
-					pc.setTotalBuyAmount(pc.getTotalBuyAmount() + tradeAmount);
+					pc.setTotalSellAmount(pc.getTotalSellAmount() + tradeAmount);
+					
 				}else{
 					pc.setBuyTrades(pc.getBuyTrades() + 1);
-					pc.setTotalSellAmount(pc.getTotalSellAmount() + tradeAmount);
+					pc.setTotalBuyAmount(pc.getTotalBuyAmount() + tradeAmount);
 				}
 				pc.setTotalTurnOver(pc.getTotalTurnOver() + tradeAmount);
 			}
@@ -72,15 +73,21 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 			list.add(map.get(key));
 		}
 		Collections.sort(list);
+		filter(list);
 		prepareReport(list);
 	}
+	
 	
 	private void prepareReport(List<ProfitCalendarInterface> profitCalendarList) {
 		ProfitReportGenerator gen = new ProfitReportGenerator();
 		gen.generate(profitCalendarList,getReportFileName());
 	}
 	
+	
+	
+	protected abstract void filter(List<ProfitCalendarInterface> list);
 	protected abstract String getReportFileName();
 	protected abstract ProfitCalendarInterface getProfitCalendar(Calendar c,Double d);
 	protected abstract void resetCalendar(Calendar c);
+	
 }

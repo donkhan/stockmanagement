@@ -38,7 +38,11 @@ public class ProfitReportGenerator {
 	}
 	
 	public String pdf(JasperPrint jasperPrint,List<ProfitCalendarInterface> list) throws JRException{
-		String fileName = FileNameGenerator.getProfitFile("html",list.get(0).getPrefix());
+		String prefix = "xyz";
+		if(list.size() > 0){
+			prefix = list.get(0).getPrefix();
+		}
+		String fileName = FileNameGenerator.getProfitFile("html",prefix);
 		JasperExportManager.exportReportToHtmlFile(jasperPrint, fileName);
 		return fileName;
 	}
