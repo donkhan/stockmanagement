@@ -52,8 +52,12 @@ public class JasperReportGenerator {
 	
 	public void generate(JasperPrint jasperPrint,String fileName) {
 		try {
-			JasperExportManager.exportReportToHtmlFile(jasperPrint, fileName);
-			JasperExportManager.exportReportToPdfFile(jasperPrint, fileName);
+			if(fileName.endsWith("html")) {
+				JasperExportManager.exportReportToHtmlFile(jasperPrint, fileName);
+			}
+			if(fileName.endsWith("pdf")) {
+				JasperExportManager.exportReportToPdfFile(jasperPrint, fileName);
+			}
 		}catch(JRException e){
 
 		}
