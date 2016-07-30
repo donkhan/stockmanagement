@@ -22,27 +22,12 @@ import core.TradeSummary;
 import file.FileNameGenerator;
 
 public class JasperReportGenerator {
-
-	public static void main(String[] args) throws JRException{
-		JasperReportGenerator gen = new JasperReportGenerator();
-		List<Stock> stocks = new ArrayList<Stock>();
-		Stock iocStock = new Stock();
-		iocStock.setName("IOC"); 
-		iocStock.setCurrentPrice(13);
-		iocStock.setBroker("Geojit");
-		Trade trade = new Trade(12);
-		trade.setName("IOC"); trade.setQuantity(5); trade.setTradeType("B"); trade.setGrossRate(193);
-		iocStock.addToTradeList(trade,new TradeSummary());
-		stocks.add(iocStock);
-		gen.generate(stocks,new TradeSummary(),new ExecutionSummary());
-	}
 	
-	public String generate(List<Stock> stockCollection,TradeSummary summary,ExecutionSummary eSummary){
+	public JasperReport generate(String reportFile){
 		try{
-			InputStream inputStream = URLClassLoader.getSystemResourceAsStream("StockPeriodicReport.jrxml");
+			InputStream inputStream = URLClassLoader.getSystemResourceAsStream(reportFile);
 			JasperReport report = JasperCompileManager.compileReport(inputStream);
-			JasperPrint print = fill(report,stockCollection,summary,eSummary);
-			return pdf(print);
+			return report;
 		}catch(JRException jre){
 			jre.printStackTrace();
 		} 
@@ -51,20 +36,27 @@ public class JasperReportGenerator {
 	
 	
 	public JasperPrint fill(JasperReport jasperReport,Collection<Stock> stockCollection,
-			TradeSummary summary,ExecutionSummary eSummary) throws JRException{
+			TradeSummary summary,ExecutionSummary eSummary) {
 		JRBeanCollectionDataSource dataSource =   new JRBeanCollectionDataSource(stockCollection);
 		Map<String,Object> parameters = new HashMap<String,Object>();
 		parameters.put("TotalProfit", new Double(summary.getTotalProfit()));
 		parameters.put("tradeSummary", summary);
 		parameters.put("executionSummary", eSummary);
+		try {
+			return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+		}catch(JRException jre){
 
-		return JasperFillManager.fillReport(jasperReport, parameters, dataSource);
+		}
+		return null;
 	}
 	
-	public String pdf(JasperPrint jasperPrint) throws JRException{
-		String fileName = FileNameGenerator.getFileByTodaysDate("html");
-		JasperExportManager.exportReportToHtmlFile(jasperPrint, fileName);
-		return fileName;
+	public void generate(JasperPrint jasperPrint,String fileName) {
+		try {
+			JasperExportManager.exportReportToHtmlFile(jasperPrint, fileName);
+			JasperExportManager.exportReportToPdfFile(jasperPrint, fileName);
+		}catch(JRException e){
+
+		}
 	}
 
 }

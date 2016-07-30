@@ -79,6 +79,8 @@ public class TradeListingProgram extends AbstractProgram{
 	
 	private void prepareReport(List<Trade> trades) {
 		TradeListingGenerator gen = new TradeListingGenerator();
-		gen.generate(trades,"TradeListing.jrxml",FileNameGenerator.getTmpDir() + "Trades.pdf");
+		String outputFile = FileNameGenerator.getTmpDir() + "Trades.pdf";
+		gen.generate(trades,"TradeListing.jrxml",outputFile);
+		System.out.println("Output File " + outputFile);
 	}
 }

@@ -1,5 +1,6 @@
 package program;
 
+import file.FileNameGenerator;
 import jasper.JasperReportGenerator;
 
 import java.text.DateFormat;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 import mail.Mailer;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 import util.InternetService;
 import core.ExecutionSummary;
 import core.Stock;
@@ -116,8 +119,12 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			TradeSummary tradeSummary, ExecutionSummary executionSummary,boolean sendmail) {
 		Collections.sort(stockList,new StockSorter());
 		JasperReportGenerator gen = new JasperReportGenerator();
-		String generatedFileName = gen.generate(stockList,tradeSummary,executionSummary);
-		
+		String generatedFileName = FileNameGenerator.getTmpDir() + "PeriodicReport.pdf";
+
+		JasperReport report = gen.generate("StockPeriodicReport.jrxml");
+		JasperPrint print = gen.fill(report,stockList,tradeSummary,executionSummary);
+		gen.generate(print,generatedFileName);
+
 		if(generatedFileName != null && sendmail){
 			Mailer mailer = new Mailer(args);
 			StringBuffer subject = new StringBuffer("");
@@ -130,5 +137,6 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 				System.err.println("Unable to send email");
 			}
 		}
+		System.out.println(generatedFileName);
 	}
 }
