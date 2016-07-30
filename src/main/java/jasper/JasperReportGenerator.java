@@ -2,10 +2,8 @@ package jasper;
 
 import java.io.InputStream;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
@@ -17,15 +15,14 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import core.ExecutionSummary;
 import core.Stock;
-import core.Trade;
 import core.TradeSummary;
-import file.FileNameGenerator;
 
 public class JasperReportGenerator {
 	
 	public JasperReport generate(String reportFile){
 		try{
 			InputStream inputStream = URLClassLoader.getSystemResourceAsStream(reportFile);
+			//InputStream inputStream = new FileInputStream("src/main/resources/StockPeriodicreport.jrxml");
 			JasperReport report = JasperCompileManager.compileReport(inputStream);
 			return report;
 		}catch(JRException jre){

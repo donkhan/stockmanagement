@@ -27,7 +27,7 @@ public class TradeListingProgram extends AbstractProgram{
 	private GregorianCalendar begin = new GregorianCalendar();
 	private GregorianCalendar end  = new GregorianCalendar();
 	
-	protected void prepareCutOff(String[] args) {
+	protected void prepareCutOff() {
 		resetCalendar(begin); resetCalendar(end);
 		begin.set(Calendar.DATE, 1);end.set(Calendar.DATE, 1);
 		end.add(Calendar.MONTH,1); end.add(Calendar.MILLISECOND, -1);
@@ -41,10 +41,15 @@ public class TradeListingProgram extends AbstractProgram{
 	}
 
 	@Override
-	protected void execute(boolean force, String[] args) {
-		prepareCutOff(args);
+	public void execute(boolean force, String[] args) {
+		List<Trade> allTrades = build(getValue(args,"filepath",""));
+		prepareReport(allTrades);
+	}
+	
+	public List<Trade> build(String filePath){
+		prepareCutOff();
 		StockBuilder builder = new StockBuilder();
-		builder.setInputFile(getValue(args,"filepath",""));
+		builder.setInputFile(filePath);
 		builder.setFullReport(true);
 		builder.setWorkBook();
 		Map<String, Stock> stocks = builder.read("None");
@@ -56,7 +61,7 @@ public class TradeListingProgram extends AbstractProgram{
 		}
 		filter(allTrades);
 		Collections.sort(allTrades);
-		prepareReport(allTrades);
+		return allTrades;
 	}
 	
 	private void filter(List<Trade> list) {

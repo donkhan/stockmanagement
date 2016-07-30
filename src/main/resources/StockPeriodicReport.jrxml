@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2016-07-18T15:04:59 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" pageWidth="300" pageHeight="842" columnWidth="300" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8e4a5205-2205-4d4b-8419-3079dc5058a1">
+<!-- 2016-07-30T18:58:17 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="jasper_report_template" pageWidth="1000" pageHeight="842" columnWidth="300" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8e4a5205-2205-4d4b-8419-3079dc5058a1">
 	<style name="profitStyle" forecolor="#FF0000" isBold="true">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[new Boolean($F{average} < $F{currentPrice})]]></conditionExpression>
@@ -43,78 +43,78 @@
 		<initialValueExpression><![CDATA[new Double(0)]]></initialValueExpression>
 	</variable>
 	<title>
-		<band height="100" splitType="Stretch">
+		<band height="165" splitType="Stretch">
 			<rectangle>
-				<reportElement key="third.rectangle" x="-50" y="0" width="320" height="100" backcolor="#FFAFAF" uuid="ea8e63d5-3d75-476c-b5bf-9d887c892cbf"/>
+				<reportElement key="third.rectangle" x="195" y="3" width="420" height="115" backcolor="#FFAFAF" uuid="ea8e63d5-3d75-476c-b5bf-9d887c892cbf"/>
 				<graphicElement>
 					<pen lineWidth="4.0"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="10" width="100" height="15" uuid="4adaff10-924d-451e-8c6c-10351a56d0f8"/>
+				<reportElement x="240" y="10" width="100" height="15" uuid="4adaff10-924d-451e-8c6c-10351a56d0f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Profit]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="10" width="100" height="15" uuid="1e538d3d-9634-4716-b7cc-dbd21141ff32"/>
+				<reportElement x="350" y="10" width="100" height="15" uuid="1e538d3d-9634-4716-b7cc-dbd21141ff32"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($P{tradeSummary}.getTotalProfit())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="25" width="100" height="15" uuid="9398757a-14e5-4fd7-88e3-20ed4efb8716"/>
+				<reportElement x="240" y="30" width="100" height="15" uuid="9398757a-14e5-4fd7-88e3-20ed4efb8716"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Investment]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="25" width="100" height="15" uuid="39aa86c9-968b-4102-92de-792a8c673809"/>
+				<reportElement x="350" y="30" width="100" height="15" uuid="39aa86c9-968b-4102-92de-792a8c673809"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($V{totalInvestment})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="40" width="100" height="15" uuid="236e4220-a68d-4509-a4e9-7d22448dd92a"/>
+				<reportElement x="240" y="50" width="100" height="15" uuid="236e4220-a68d-4509-a4e9-7d22448dd92a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Market Value]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="40" width="100" height="15" uuid="4e6c5595-4c6e-431c-b0f3-a1776d08bf6e"/>
+				<reportElement x="350" y="46" width="100" height="15" uuid="4e6c5595-4c6e-431c-b0f3-a1776d08bf6e"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($V{totalMarketValue})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="55" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
+				<reportElement x="240" y="70" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Imaginary Loss]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="55" width="100" height="15" uuid="0f7da647-0f43-491a-8dc5-4da63b662f36"/>
+				<reportElement x="350" y="70" width="100" height="15" uuid="0f7da647-0f43-491a-8dc5-4da63b662f36"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($V{totalMarketValue}-$V{totalInvestment})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="70" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
+				<reportElement x="240" y="90" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Next Schedule]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="70" width="100" height="15" uuid="0f7da647-0f43-491a-8dc5-4da63b662f36"/>
+				<reportElement x="350" y="90" width="100" height="15" uuid="0f7da647-0f43-491a-8dc5-4da63b662f36"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -126,7 +126,7 @@
 		<band height="23" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="3" width="90" height="15" uuid="2f341ed9-0007-4c16-969a-d9e39f92d415"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Name]]></text>
@@ -178,7 +178,7 @@
 	<detail>
 		<band height="23" splitType="Stretch">
 			<textField>
-				<reportElement style="profitStyle" x="0" y="3" width="90" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
+				<reportElement style="profitStyle" x="20" y="3" width="70" height="15" uuid="564b71d4-4204-4b22-95cd-fffa7d097f43"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
@@ -229,78 +229,78 @@
 		</band>
 	</detail>
 	<summary>
-		<band height="100" splitType="Stretch">
+		<band height="203" splitType="Stretch">
 			<rectangle>
-				<reportElement key="third.rectangle" x="-50" y="0" width="320" height="100" backcolor="#FFAFAF" uuid="a1657f4a-2a1b-4c86-8332-d998e55a94f8"/>
+				<reportElement key="third.rectangle" x="220" y="55" width="320" height="125" backcolor="#FFAFAF" uuid="a1657f4a-2a1b-4c86-8332-d998e55a94f8"/>
 				<graphicElement>
 					<pen lineWidth="4.0"/>
 				</graphicElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="10" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
+				<reportElement x="260" y="70" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Turn Over]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="10" width="100" height="15" uuid="2b44b307-e780-43f9-af24-1a9a65de2639"/>
+				<reportElement x="370" y="70" width="100" height="15" uuid="2b44b307-e780-43f9-af24-1a9a65de2639"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new DecimalFormat("#,###,###,##0.00").format($P{tradeSummary}.getTotalTurnOver())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="25" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
+				<reportElement x="260" y="90" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Buy Trades]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="25" width="100" height="15" uuid="d33baf8c-9a6b-4224-b275-eddc7d94edb9"/>
+				<reportElement x="370" y="90" width="100" height="15" uuid="d33baf8c-9a6b-4224-b275-eddc7d94edb9"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{tradeSummary}.getNoOfBuyTrades()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="40" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
+				<reportElement x="260" y="110" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Sell Trades]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="40" width="100" height="15" uuid="761f6d98-fe18-4684-8b4c-01593a135560"/>
+				<reportElement x="370" y="110" width="100" height="15" uuid="761f6d98-fe18-4684-8b4c-01593a135560"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{tradeSummary}.getNoOfSellTrades()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="55" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
+				<reportElement x="260" y="130" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Time]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="55" width="100" height="15" uuid="0f7da647-0f43-491a-8dc5-4da63b662f36"/>
+				<reportElement x="370" y="130" width="100" height="15" uuid="0f7da647-0f43-491a-8dc5-4da63b662f36"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{executionSummary}.getExecutionTime()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="70" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
+				<reportElement x="260" y="150" width="100" height="15" uuid="37572be7-76ba-4b95-a628-0a1e015ad4f8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Execution Time]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="100" y="70" width="100" height="15" uuid="0f7da647-0f43-491a-8dc5-4da63b662f36"/>
+				<reportElement x="370" y="150" width="100" height="15" uuid="0f7da647-0f43-491a-8dc5-4da63b662f36"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>

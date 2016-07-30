@@ -23,7 +23,7 @@ import core.TradeSummary;
 import file.FileCleaner;
 import file.FileNameGenerator;
 
-public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
+public class StockListingProgram extends AbstractProgram{
 
 	private String[] args;
 	
@@ -36,7 +36,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 	}
 
 	public static void main(String[] args){
-		PeriodicPortfolioUpdateProgram main = new PeriodicPortfolioUpdateProgram();
+		StockListingProgram main = new StockListingProgram();
 		main.setArgs(args);
 		main.startExecute(args);
 	}
@@ -49,30 +49,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 	public void execute(final boolean force,String args[]){
 		GregorianCalendar currentTime = new GregorianCalendar();
 		System.out.println("Pass started at " + currentTime.getTime());
-		
-		if(force){
-			doWork(force,args);
-			return;
-		}
-		/*
-		if(!InternetService.up()){
-			System.err.println("Internet is not Up.");
-			return;
-		}
-		*/
-		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17 && currentTime.get(Calendar.HOUR_OF_DAY) < 20){
-			doWork(force,args);
-		}
-		
-		if(currentTime.get(Calendar.HOUR_OF_DAY) > 17  || currentTime.get(Calendar.HOUR_OF_DAY) < 2){
-			System.out.println("Since time crossed 5 PM Markets would have been closed. Hence not running this time");
-			//return;
-		}
-		if(currentTime.get(Calendar.DAY_OF_WEEK) == 7 ||  currentTime.get(Calendar.DAY_OF_WEEK) == 1){
-			System.out.println("Won't Run on Sat or Sun");
-			//return;
-		}
-		//doWork(force,args);
+		doWork(force,args);
 	}
 	
 	private void doWork(final boolean force,String args[]){
@@ -81,11 +58,20 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		int maxRetries = getIntegerValue(args,"maxretry");
 		String specificStock = getValue(args,"specificstock","None");
 		StockBuilder builder = new StockBuilder();
-		builder.setInputFile(getValue(args,"filepath",""));
+		Double totalProfit = 0d;
+		List<Stock> stockList = build(builder,totalProfit,fullReport,maxRetries,specificStock,getValue(args,"filepath",""));
+		TradeSummary tradeSummary = builder.getTradeSummary();
+		tradeSummary.setTotalProfit(totalProfit);
+		prepareReport(stockList,tradeSummary,prepareExecutionSummary(tradeSummary,start),getBooleanValue(args,"sendmail"));
+	}
+	
+	public List<Stock> build(StockBuilder builder,
+			Double totalProfit,boolean fullReport, 
+			int maxRetries, String specificStock,String inputFile){
+		builder.setInputFile(inputFile);
 		builder.setFullReport(fullReport);
 		builder.setWorkBook();
 		
-		double totalProfit = 0;
 		Map<String, Stock> stocks = builder.read(specificStock);
 		builder.updateStocks(stocks,maxRetries);
 		List<Stock> stockList = new ArrayList<Stock>();
@@ -97,10 +83,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			}
 			totalProfit += stock.getProfitRealised();
 		}
-		
-		TradeSummary tradeSummary = builder.getTradeSummary();
-		tradeSummary.setTotalProfit(totalProfit);
-		prepareReport(stockList,tradeSummary,prepareExecutionSummary(tradeSummary,start),getBooleanValue(args,"sendmail"));
+		return stockList;
 	}
 
 	private ExecutionSummary prepareExecutionSummary(TradeSummary tradeSummary, long start) {
@@ -120,7 +103,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		JasperReportGenerator gen = new JasperReportGenerator();
 		String generatedFileName = FileNameGenerator.getTmpDir() + "PeriodicReport.pdf";
 
-		JasperReport report = gen.generate("StockPeriodicReport.jrxml");
+		JasperReport report = gen.generate("StockListing.jrxml");
 		JasperPrint print = gen.fill(report,stockList,tradeSummary,executionSummary);
 		gen.generate(print,generatedFileName);
 
