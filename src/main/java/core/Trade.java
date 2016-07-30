@@ -2,11 +2,11 @@ package core;
 import java.util.Calendar;
 
 
-public class Trade {
+public class Trade implements Comparable<Trade>{
 
 	private int id;
 	private long quantity;
-	private double grossrate;
+	private double grossRate;
 	private double netRate;
 
 	private boolean soldOff = false;
@@ -88,11 +88,11 @@ public class Trade {
 	public void setQuantity(long quantity) {
 		this.quantity = quantity;
 	}
-	public double getGrossrate() {
-		return grossrate;
+	public double getGrossRate() {
+		return grossRate;
 	}
-	public void setGrossrate(double grossrate) {
-		this.grossrate = grossrate;
+	public void setGrossRate(double grossrate) {
+		this.grossRate = grossrate;
 	}
 
 
@@ -162,6 +162,10 @@ public class Trade {
 
 	public void setProfit(double profit) {
 		this.profit = profit;
+	}
+
+	public int compareTo(Trade t) {
+		return (int)(t.getTransactionTime().getTimeInMillis() - getTransactionTime().getTimeInMillis());
 	}
 	
 }

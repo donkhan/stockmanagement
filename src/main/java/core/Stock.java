@@ -85,7 +85,7 @@ public class Stock {
         if(trade.getTradeType().equals(Trade.RIGHTS)){
         	unitExtraCost = 0;
         }
-    	double netRate = trade.getGrossrate() + unitExtraCost;
+    	double netRate = trade.getGrossRate() + unitExtraCost;
         trade.setNetRate(netRate);
         printNetRate(trade,unitExtraCost);
         double price = netRate * trade.getQuantity();
@@ -97,7 +97,7 @@ public class Stock {
 
     private void handleSell(Trade trade,boolean real,TradeSummary summary){
         double unitExtraCost = trade.getExtraCost()/trade.getQuantity();
-        double netRate = trade.getGrossrate() - unitExtraCost;
+        double netRate = trade.getGrossRate() - unitExtraCost;
         trade.setNetRate(netRate);
         printNetRate(trade,unitExtraCost);
         if(real) {
@@ -212,7 +212,7 @@ public class Stock {
 		Trade imaginaryTrade = new Trade(12);
 		imaginaryTrade.setQuantity(this.getTotalQuantity());
 		imaginaryTrade.setTradeType("S");
-		imaginaryTrade.setGrossrate(getCurrentPrice());
+		imaginaryTrade.setGrossRate(getCurrentPrice());
         imaginaryTrade.setBroker(getBroker());
         imaginaryTrade.setTransactionTime(new GregorianCalendar());
         imaginaryTrade.setName(getName());

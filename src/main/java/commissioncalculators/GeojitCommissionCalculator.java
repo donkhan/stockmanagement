@@ -46,8 +46,8 @@ public class GeojitCommissionCalculator extends SEBICommissionCalculator impleme
 
 
 	public void calculateCommission(Trade trade) {
-		double transactionAmount = trade.getQuantity() * trade.getGrossrate();
-		setCommission(trade,transactionAmount,trade.getGrossrate(),trade.getQuantity());
+		double transactionAmount = trade.getQuantity() * trade.getGrossRate();
+		setCommission(trade,transactionAmount,trade.getGrossRate(),trade.getQuantity());
 	}
 
 

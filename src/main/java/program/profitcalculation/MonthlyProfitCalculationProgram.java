@@ -1,7 +1,6 @@
 package program.profitcalculation;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import profit.MonthlyProfitCalendar;
 import profit.ProfitCalendarInterface;

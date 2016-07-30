@@ -2,7 +2,6 @@ package program.profitcalculation;
 
 import jasper.ProfitReportGenerator;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -92,7 +91,6 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 	
 	private boolean remove(ProfitCalendarInterface pi) {
 		Calendar c = pi.getCalendar();
-		
 		return c.before(begin) || c.after(end);
 	}
 	

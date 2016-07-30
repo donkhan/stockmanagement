@@ -195,14 +195,14 @@ public class StockBuilder {
 		trade.setName(sheet.getCell(0,index).getContents());
 		trade.setTradeType(sheet.getCell(2, index).getContents());
 		trade.setQuantity(Long.parseLong(sheet.getCell(4, index).getContents()));
-		trade.setGrossrate(Double.parseDouble(sheet.getCell(3, index).getContents()));
+		trade.setGrossRate(Double.parseDouble(sheet.getCell(3, index).getContents()));
 		String broker = sheet.getCell(6, index).getContents();
 		trade.setBroker(broker);
 		
 		if(Global.debug){
             System.out.println("Name " + trade.getName() + " Quantity " + trade.getQuantity() + " "
                     + (trade.getTradeType().equals(Trade.SELL) ? "SELL" : "BUY") + "  "+ trade.getTransactionTime().getTime()  + " " + trade.getBroker());
-            System.out.println("Gross Rate " + trade.getGrossrate());
+            System.out.println("Gross Rate " + trade.getGrossRate());
         }
 		
 		CommissionCalculator cc = getCommissionCalculator(broker);

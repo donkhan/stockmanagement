@@ -7,7 +7,7 @@ public class MoneyPalmCommissionCalculator implements CommissionCalculator{
 
 
 	public void calculateCommission(Trade trade) {
-		double totalCommission = trade.getGrossrate() * .0014;
+		double totalCommission = trade.getGrossRate() * .0014;
 		trade.setExtraCost(totalCommission);
 		return;
 		

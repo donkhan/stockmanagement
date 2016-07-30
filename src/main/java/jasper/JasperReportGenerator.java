@@ -31,7 +31,7 @@ public class JasperReportGenerator {
 		iocStock.setCurrentPrice(13);
 		iocStock.setBroker("Geojit");
 		Trade trade = new Trade(12);
-		trade.setName("IOC"); trade.setQuantity(5); trade.setTradeType("B"); trade.setGrossrate(193);
+		trade.setName("IOC"); trade.setQuantity(5); trade.setTradeType("B"); trade.setGrossRate(193);
 		iocStock.addToTradeList(trade,new TradeSummary());
 		stocks.add(iocStock);
 		gen.generate(stocks,new TradeSummary(),new ExecutionSummary());
