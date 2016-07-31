@@ -113,28 +113,20 @@ public class TradeListingProgram extends AbstractProgram{
 		document.add(paragraph);
 	
 		PdfPTable table = new PdfPTable(6);
-		table.addCell("Time");
-		table.addCell("Script");
-		table.addCell("Type");
-		table.addCell("Quantity");
-		table.addCell("Gross Rate");
-		table.addCell("Net Rate");
-		
+		String headers[] = new String[]{"Date","Script","Type","Quantity","Gross Rate","Net Rate"};
+		addHeaders(table,headers);
+
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 		for(Trade trade : trades){
-			PdfPCell time = new PdfPCell(new Paragraph(df.format(trade.getTransactionTime().getTime())));
-			PdfPCell name = new PdfPCell(new Paragraph(trade.getName()));
-			PdfPCell type = new PdfPCell(new Paragraph(trade.getTradeType()));
-			PdfPCell quantity = new PdfPCell(new Paragraph(""+trade.getQuantity()));
-			PdfPCell grossRate = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(trade.getGrossRate())));
-			PdfPCell netRate = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(trade.getNetRate())));
-		
-			table.addCell(time);
-			table.addCell(name);
-			table.addCell(type);
-			table.addCell(quantity);
-			table.addCell(grossRate);
-			table.addCell(netRate);
+			List<Object> row = new ArrayList<Object>();
+			row.add(df.format(trade.getTransactionTime().getTime()));
+			row.add(trade.getName());
+			row.add(trade.getTradeType());
+			row.add(trade.getQuantity());
+			row.add(trade.getGrossRate());
+			row.add(trade.getNetRate());
+			
+			addRow(row, table);
 		}
 		document.add(table);
 	}

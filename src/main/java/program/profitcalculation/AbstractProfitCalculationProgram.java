@@ -3,11 +3,9 @@ package program.profitcalculation;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,7 +18,6 @@ import program.AbstractProgram;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -129,31 +126,20 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 		document.add(paragraph);
 	
 		PdfPTable table = new PdfPTable(6);
-		table.addCell("Date");
-		table.addCell("Buy Trades");
-		table.addCell("Sell Trades");
-		table.addCell("Buy Amount");
-		table.addCell("Sell Amount");
-		table.addCell("Profit");
+		String headers[] = new String[]{"Date","Buy Trades","Sell Trades","Buy Amount","Sell Amount","Profit"};
+		addHeaders(table,headers);
 	
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 		
 		for(ProfitCalendarInterface pi : profitCalendarList){
-			Date d = pi.getCalendar().getTime();
-			PdfPCell date = new PdfPCell(new Paragraph(df.format(d)));
-			PdfPCell bt = new PdfPCell(new Paragraph(""+pi.getBuyTrades()));
-			PdfPCell st = new PdfPCell(new Paragraph(""+pi.getSellTrades()));
-
-			PdfPCell ba = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(pi.getTotalBuyAmount())));
-			PdfPCell sa = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(pi.getTotalBuyAmount())));
-			PdfPCell profit = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(pi.getProfit())));
-			
-			table.addCell(date);
-			table.addCell(bt);
-			table.addCell(st);
-			table.addCell(ba);
-			table.addCell(sa);
-			table.addCell(profit);
+			List<Object> row = new ArrayList<Object>();
+			row.add(df.format(pi.getCalendar().getTime()));
+			row.add(pi.getBuyTrades());
+			row.add(pi.getSellTrades());
+			row.add(pi.getTotalBuyAmount());
+			row.add(pi.getTotalSellAmount());
+			row.add(pi.getProfit());
+			addRow(row, table);
 		}
 		document.add(table);
 		

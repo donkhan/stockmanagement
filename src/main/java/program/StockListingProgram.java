@@ -103,25 +103,18 @@ public class StockListingProgram extends AbstractProgram{
 		paragraph.setSpacingAfter(10);
 		document.add(paragraph);
 	
-		PdfPTable table = new PdfPTable(5);
-		table.addCell("Script");
-		table.addCell("Quantity");
-		table.addCell("Average");
-		table.addCell("Market Rate");
-		table.addCell("UnRealized Profit/Loss");
-	
+		PdfPTable table = new PdfPTable(4);
+		String headers[] = new String[]{"Script","Quantity","Average","Market Rate"};
+		addHeaders(table,headers);
 		for(Stock stock : stocks){
-			PdfPCell name = new PdfPCell(new Paragraph(stock.getName()));
-			PdfPCell quantity = new PdfPCell(new Paragraph(""+stock.getTotalQuantity()));
-			PdfPCell average = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(stock.getAverage())));
-			PdfPCell marketRate = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(stock.getCurrentPrice())));
-			PdfPCell unRealisedGainLoss = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(stock.getImaginaryProfit())));
-			table.addCell(name);
-			table.addCell(quantity);
-			table.addCell(average);
-			table.addCell(marketRate);
-			table.addCell(unRealisedGainLoss);
+			List<Object> row = new ArrayList<Object>();
+			row.add(stock.getName());
+			row.add(stock.getTotalQuantity());
+			row.add(stock.getAverage());
+			row.add(stock.getCurrentPrice());
+			addRow(row,table);
 		}
+		
 		document.add(table);
 	}
 	
