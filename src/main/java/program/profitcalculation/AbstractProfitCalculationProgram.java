@@ -17,7 +17,6 @@ import program.AbstractProgram;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -121,15 +120,16 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 	}
 	
 	public void appendToDocument(Document document,List<ProfitCalendarInterface> profitCalendarList)  throws DocumentException{
-		Paragraph paragraph = new Paragraph("Profit");
-		paragraph.setSpacingAfter(10);
-		document.add(paragraph);
+		addSectionHeader(document,"Profit Details");
 	
 		PdfPTable table = new PdfPTable(6);
 		String headers[] = new String[]{"Date","Buy Trades","Sell Trades","Buy Amount","Sell Amount","Profit"};
 		addHeaders(table,headers);
 	
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+		
+		long bt = 0L,st = 0L;
+		double ba = 0d,sa = 0d,p = 0d;
 		
 		for(ProfitCalendarInterface pi : profitCalendarList){
 			List<Object> row = new ArrayList<Object>();
@@ -139,8 +139,14 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 			row.add(pi.getTotalBuyAmount());
 			row.add(pi.getTotalSellAmount());
 			row.add(pi.getProfit());
+			bt += pi.getBuyTrades(); st += pi.getSellTrades();
+			ba += pi.getTotalBuyAmount(); sa += pi.getTotalSellAmount();
+			p += pi.getProfit();
 			addRow(row, table);
 		}
+		List<Object> totalRow = new ArrayList<Object>();
+		totalRow.add("Total");totalRow.add(bt);totalRow.add(st); totalRow.add(ba); totalRow.add(sa); totalRow.add(p);
+		addRow(totalRow,table);
 		document.add(table);
 		
 	}

@@ -54,7 +54,7 @@ public class StockBuilder {
 	private void analyzeTrades(Map<String, Stock> stocks,String specificStock){
 		System.out.println("Going to Analyze trades ");
 		Global.printTaxDetails();
-		Sheet sheet = w.getSheet(0);
+		Sheet sheet = workBook.getSheet(0);
 		tradeSummary = new TradeSummary();
 		int noOfTrades = sheet.getRows();
 		tradeSummary.setNoOfTrades(noOfTrades);
@@ -77,7 +77,7 @@ public class StockBuilder {
 	public void updateStocks(Map<String, Stock> stocks,int maxRetries){
 		System.out.println("Going to update stocks with current Price");
 		String brokers [] = { "Kotak","Geojit","Money Palm"};
-		Sheet sheet = w.getSheet(1);
+		Sheet sheet = workBook.getSheet(1);
 		Iterator<Stock> stockIterator = stocks.values().iterator();
 		List<StockThread> list = new ArrayList<StockThread>();
 
@@ -152,7 +152,7 @@ public class StockBuilder {
 		return stocks;
 	}
 	
-	private Workbook w;
+	private Workbook workBook;
 	
 	public Map<String, Stock> readTrades(String specificStock) {
 		Map<String, Stock> stocks = new LinkedHashMap<String, Stock>();
@@ -160,22 +160,27 @@ public class StockBuilder {
 		return stocks;
 	}
 	
+	
+	public Workbook getWorkBook() {
+		return workBook;
+	}
+
 
 	public void setWorkBook() {
 		try{
 			if(!inputFile.equals("")){
 				System.out.println("Reading File given as argument " + inputFile);
 				File inputWorkbook = new File(inputFile);
-				w = Workbook.getWorkbook(inputWorkbook);
+				workBook = Workbook.getWorkbook(inputWorkbook);
 			}else{
 				String absolutePath = System.getProperty("user.dir") + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "Trade.xls";
 				File file = new File(absolutePath);
 				if(file.exists()){
 					System.out.println("Reading File in the Path " + file.getAbsolutePath());
-					w = Workbook.getWorkbook(file);
+					workBook = Workbook.getWorkbook(file);
 				}else{
 					System.out.println("Reading File in the Bundle");
-					w = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
+					workBook = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
 				}
 			}
 		}catch(IOException ioe){

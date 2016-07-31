@@ -1,7 +1,6 @@
 package util;
 
 import services.StockService;
-import external.InternalStockService;
 
 public class Global {
 
@@ -22,8 +21,8 @@ public class Global {
 	}
 	
 	public static StockService getStockService(){
-		//return new MoneyControlStockService();
-		return new InternalStockService();
+		return new external.MoneyControlStockService();
+		//return new InternalStockService();
 		
 	}
 }

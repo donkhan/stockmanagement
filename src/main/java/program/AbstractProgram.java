@@ -9,6 +9,9 @@ import java.util.TimerTask;
 import util.Global;
 
 import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -113,5 +116,11 @@ public abstract class AbstractProgram {
 			table.addCell(cell);
 		}
 	}
-	
+
+	protected void addSectionHeader(Document document,String title) throws DocumentException{
+		Paragraph p = new Paragraph("\n");
+		document.add(p);
+		Chunk chunk = new Chunk(title);
+		document.add(chunk);
+	}
 }

@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -16,8 +15,6 @@ import java.util.Map;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -108,15 +105,14 @@ public class TradeListingProgram extends AbstractProgram{
 	
 	
 	public void appendToDocument(Document document,List<Trade> trades) throws DocumentException{
-		Paragraph paragraph = new Paragraph("Trades");
-		paragraph.setSpacingAfter(10);
-		document.add(paragraph);
+		addSectionHeader(document,"Trade");
 	
-		PdfPTable table = new PdfPTable(6);
-		String headers[] = new String[]{"Date","Script","Type","Quantity","Gross Rate","Net Rate"};
+		PdfPTable table = new PdfPTable(7);
+		String headers[] = new String[]{"Date","Script","Type","Quantity","Gross Rate","Net Rate","Profit"};
 		addHeaders(table,headers);
 
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+		double tp = 0d;
 		for(Trade trade : trades){
 			List<Object> row = new ArrayList<Object>();
 			row.add(df.format(trade.getTransactionTime().getTime()));
@@ -125,9 +121,20 @@ public class TradeListingProgram extends AbstractProgram{
 			row.add(trade.getQuantity());
 			row.add(trade.getGrossRate());
 			row.add(trade.getNetRate());
-			
+			if(trade.getTradeType().equals(Trade.SELL)){
+				row.add(trade.getProfit());
+			}else{
+				row.add(" ");
+			}
+			tp += trade.getProfit();
 			addRow(row, table);
 		}
+		
+		List<Object> totalRow = new ArrayList<Object>();
+		totalRow.add("Total");totalRow.add("-");totalRow.add("-"); totalRow.add("-"); 
+		totalRow.add("-");totalRow.add("-"); totalRow.add(tp);
+		addRow(totalRow,table);
+		
 		document.add(table);
 	}
 }

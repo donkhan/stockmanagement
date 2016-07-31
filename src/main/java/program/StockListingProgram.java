@@ -99,22 +99,26 @@ public class StockListingProgram extends AbstractProgram{
 
 
 	public void appendToDocument(Document document,List<Stock> stocks) throws DocumentException{
-		Paragraph paragraph = new Paragraph("Stocks");
-		paragraph.setSpacingAfter(10);
-		document.add(paragraph);
-	
-		PdfPTable table = new PdfPTable(4);
-		String headers[] = new String[]{"Script","Quantity","Average","Market Rate"};
+		addSectionHeader(document,"Stocks");
+		PdfPTable table = new PdfPTable(5);
+		String headers[] = new String[]{"Script","Quantity","Average","Market Rate","Market Value"};
 		addHeaders(table,headers);
+		double totalValue = 0;
 		for(Stock stock : stocks){
 			List<Object> row = new ArrayList<Object>();
 			row.add(stock.getName());
 			row.add(stock.getTotalQuantity());
 			row.add(stock.getAverage());
 			row.add(stock.getCurrentPrice());
+			double value = stock.getCurrentPrice() * stock.getTotalQuantity();
+			totalValue += value;
+			row.add(value);
 			addRow(row,table);
 		}
 		
+		List<Object> row = new ArrayList<Object>();
+		row.add("Total"); row.add(""); row.add(""); row.add(""); row.add(totalValue);
+		addRow(row,table);
 		document.add(table);
 	}
 	
