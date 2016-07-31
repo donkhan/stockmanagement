@@ -3,6 +3,7 @@ package program;
 import jasper.JasperReportGenerator;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -11,6 +12,10 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 
 import mail.Mailer;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -138,4 +143,8 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 		}
 		System.out.println(generatedFileName);
 	}
+	
+	
 }
+
+

@@ -1,7 +1,11 @@
 package program;
 
-import jasper.TradeListingGenerator;
-
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -10,7 +14,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import profit.ProfitCalendarInterface;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import core.Stock;
 import core.StockBuilder;
 import core.Trade;
@@ -43,7 +53,21 @@ public class TradeListingProgram extends AbstractProgram{
 	@Override
 	public void execute(boolean force, String[] args) {
 		List<Trade> allTrades = build(getValue(args,"filepath",""));
-		prepareReport(allTrades);
+		try {
+			OutputStream file = new FileOutputStream(FileNameGenerator.getTmpDir() + "TradeListing.pdf");
+			Document document = new Document();
+			PdfWriter.getInstance(document, file);
+			document.open();
+			appendToDocument(document,allTrades);
+			document.close();
+			file.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Trade> build(String filePath){
@@ -82,10 +106,36 @@ public class TradeListingProgram extends AbstractProgram{
 		c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0);
 	}
 	
-	private void prepareReport(List<Trade> trades) {
-		TradeListingGenerator gen = new TradeListingGenerator();
-		String outputFile = FileNameGenerator.getTmpDir() + "Trades.pdf";
-		gen.generate(trades,"TradeListing.jrxml",outputFile);
-		System.out.println("Output File " + outputFile);
+	
+	public void appendToDocument(Document document,List<Trade> trades) throws DocumentException{
+		Paragraph paragraph = new Paragraph("Trades");
+		paragraph.setSpacingAfter(10);
+		document.add(paragraph);
+	
+		PdfPTable table = new PdfPTable(6);
+		table.addCell("Time");
+		table.addCell("Script");
+		table.addCell("Type");
+		table.addCell("Quantity");
+		table.addCell("Gross Rate");
+		table.addCell("Net Rate");
+		
+		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+		for(Trade trade : trades){
+			PdfPCell time = new PdfPCell(new Paragraph(df.format(trade.getTransactionTime().getTime())));
+			PdfPCell name = new PdfPCell(new Paragraph(trade.getName()));
+			PdfPCell type = new PdfPCell(new Paragraph(trade.getTradeType()));
+			PdfPCell quantity = new PdfPCell(new Paragraph(""+trade.getQuantity()));
+			PdfPCell grossRate = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(trade.getGrossRate())));
+			PdfPCell netRate = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(trade.getNetRate())));
+		
+			table.addCell(time);
+			table.addCell(name);
+			table.addCell(type);
+			table.addCell(quantity);
+			table.addCell(grossRate);
+			table.addCell(netRate);
+		}
+		document.add(table);
 	}
 }

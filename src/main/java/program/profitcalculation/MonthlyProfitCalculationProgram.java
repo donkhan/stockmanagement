@@ -23,10 +23,7 @@ public class MonthlyProfitCalculationProgram extends AbstractProfitCalculationPr
 		c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0);
 	}
 	
-	@Override
-	protected String getReportFileName() {
-		return "MonthlyProfitReport.jrxml";
-	}
+	
 
 	@Override
 	protected void prepareCutOff(String[] args) {

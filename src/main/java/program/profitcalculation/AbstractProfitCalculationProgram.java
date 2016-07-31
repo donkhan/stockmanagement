@@ -1,10 +1,13 @@
 package program.profitcalculation;
 
-import jasper.ProfitReportGenerator;
-
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +16,14 @@ import java.util.Map;
 
 import profit.ProfitCalendarInterface;
 import program.AbstractProgram;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import core.Stock;
 import core.StockBuilder;
 import core.Trade;
@@ -29,6 +40,10 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 
 	@Override
 	protected void execute(boolean force,String args[]) {
+		prepareReport(process(buildMap(args)));
+	}
+	
+	public Map<Calendar,ProfitCalendarInterface> buildMap(String args[]){
 		prepareCutOff(args);
 		StockBuilder builder = new StockBuilder();
 		builder.setInputFile(getValue(args,"filepath",""));
@@ -65,10 +80,10 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 				pc.setTotalTurnOver(pc.getTotalTurnOver() + tradeAmount);
 			}
 		}
-		process(map);
+		return map;
 	}
 	
-	public void process(Map<Calendar,ProfitCalendarInterface> map){
+	public List<ProfitCalendarInterface> process(Map<Calendar,ProfitCalendarInterface> map){
 		List<ProfitCalendarInterface> list = new ArrayList<ProfitCalendarInterface>();
 		Iterator<Calendar> keyIterator = map.keySet().iterator();
 		while(keyIterator.hasNext()){
@@ -77,7 +92,7 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 		}
 		Collections.sort(list);
 		filter(list);
-		prepareReport(list);
+		return list;
 	}
 	
 	private void filter(
@@ -95,14 +110,61 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 	}
 	
 	private void prepareReport(List<ProfitCalendarInterface> profitCalendarList) {
-		ProfitReportGenerator gen = new ProfitReportGenerator();
-		gen.generate(profitCalendarList,getReportFileName(),getOutputFile());
+		try {
+			OutputStream file = new FileOutputStream(getOutputFile());
+			Document document = new Document();
+			PdfWriter.getInstance(document, file);
+			document.open();
+			appendToDocument(document,profitCalendarList);
+			document.close();
+			file.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
+	public void appendToDocument(Document document,List<ProfitCalendarInterface> profitCalendarList)  throws DocumentException{
+		Paragraph paragraph = new Paragraph("Profit");
+		paragraph.setSpacingAfter(10);
+		document.add(paragraph);
+	
+		PdfPTable table = new PdfPTable(6);
+		table.addCell("Date");
+		table.addCell("Buy Trades");
+		table.addCell("Sell Trades");
+		table.addCell("Buy Amount");
+		table.addCell("Sell Amount");
+		table.addCell("Profit");
+	
+		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+		
+		for(ProfitCalendarInterface pi : profitCalendarList){
+			Date d = pi.getCalendar().getTime();
+			PdfPCell date = new PdfPCell(new Paragraph(df.format(d)));
+			PdfPCell bt = new PdfPCell(new Paragraph(""+pi.getBuyTrades()));
+			PdfPCell st = new PdfPCell(new Paragraph(""+pi.getSellTrades()));
+
+			PdfPCell ba = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(pi.getTotalBuyAmount())));
+			PdfPCell sa = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(pi.getTotalBuyAmount())));
+			PdfPCell profit = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(pi.getProfit())));
+			
+			table.addCell(date);
+			table.addCell(bt);
+			table.addCell(st);
+			table.addCell(ba);
+			table.addCell(sa);
+			table.addCell(profit);
+		}
+		document.add(table);
+		
+	}
+
+
+
 	protected GregorianCalendar begin = new GregorianCalendar();
 	protected GregorianCalendar end = new GregorianCalendar(); 
 
-	protected abstract String getReportFileName();
+	
 	protected abstract ProfitCalendarInterface getProfitCalendar(Calendar c,Double d);
 	protected abstract void resetCalendar(Calendar c);
 	protected abstract void prepareCutOff(String[] args);
@@ -110,7 +172,7 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 	
 	protected String getOutputFile() {
 		String fileName = FileNameGenerator.getTmpDir() + 
-				getReadableDate(begin) + "to" + getReadableDate(end) + "-profit-report.html";
+				getReadableDate(begin) + "to" + getReadableDate(end) + "-profit-report.pdf";
 		System.out.println(fileName);
 		return fileName;
 	}

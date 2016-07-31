@@ -1,26 +1,25 @@
 package program;
 
-import jasper.JasperReportGenerator;
-
-import java.text.DateFormat;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import mail.Mailer;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import core.ExecutionSummary;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import core.Stock;
 import core.StockBuilder;
-import core.StockSorter;
-import core.TradeSummary;
-import file.FileCleaner;
 import file.FileNameGenerator;
 
 public class StockListingProgram extends AbstractProgram{
@@ -53,16 +52,27 @@ public class StockListingProgram extends AbstractProgram{
 	}
 	
 	private void doWork(final boolean force,String args[]){
-		long start = System.currentTimeMillis();
 		boolean fullReport = getBooleanValue(args,"fullreport");
 		int maxRetries = getIntegerValue(args,"maxretry");
 		String specificStock = getValue(args,"specificstock","None");
 		StockBuilder builder = new StockBuilder();
 		Double totalProfit = 0d;
 		List<Stock> stockList = build(builder,totalProfit,fullReport,maxRetries,specificStock,getValue(args,"filepath",""));
-		TradeSummary tradeSummary = builder.getTradeSummary();
-		tradeSummary.setTotalProfit(totalProfit);
-		prepareReport(stockList,tradeSummary,prepareExecutionSummary(tradeSummary,start),getBooleanValue(args,"sendmail"));
+		try {
+			OutputStream file = new FileOutputStream(FileNameGenerator.getTmpDir() + "StockListing.pdf");
+			Document document = new Document();
+			PdfWriter.getInstance(document, file);
+			document.open();
+			appendToDocument(document,stockList);
+			document.close();
+			file.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Stock> build(StockBuilder builder,
@@ -86,39 +96,33 @@ public class StockListingProgram extends AbstractProgram{
 		return stockList;
 	}
 
-	private ExecutionSummary prepareExecutionSummary(TradeSummary tradeSummary, long start) {
-		ExecutionSummary executionSummary = new ExecutionSummary();
-		GregorianCalendar currentTime = new GregorianCalendar();
-		executionSummary.setExecutionTime(currentTime.getTime());
-		currentTime.add(Calendar.MINUTE, getIntegerValue(this.args,"interval"));
-		executionSummary.setNextExecutionTime(currentTime.getTime());
-		long elapsed = System.currentTimeMillis() - start;
-		executionSummary.setTimeToExecute(elapsed);
-		return executionSummary;
-	}
 
-	private void prepareReport(List<Stock> stockList,
-			TradeSummary tradeSummary, ExecutionSummary executionSummary,boolean sendmail) {
-		Collections.sort(stockList,new StockSorter());
-		JasperReportGenerator gen = new JasperReportGenerator();
-		String generatedFileName = FileNameGenerator.getTmpDir() + "PeriodicReport.pdf";
 
-		JasperReport report = gen.generate("StockListing.jrxml");
-		JasperPrint print = gen.fill(report,stockList,tradeSummary,executionSummary);
-		gen.generate(print,generatedFileName);
-
-		if(generatedFileName != null && sendmail){
-			Mailer mailer = new Mailer(args);
-			StringBuffer subject = new StringBuffer("");
-			subject.append("Investment Bulletin @ " + DateFormat.getDateTimeInstance().format(new Date()));
-			try{
-				mailer.mail(generatedFileName,subject);
-				FileCleaner fc = new FileCleaner();
-				fc.clean(generatedFileName);
-			}catch(Throwable t){
-				System.err.println("Unable to send email");
-			}
+	public void appendToDocument(Document document,List<Stock> stocks) throws DocumentException{
+		Paragraph paragraph = new Paragraph("Stocks");
+		paragraph.setSpacingAfter(10);
+		document.add(paragraph);
+	
+		PdfPTable table = new PdfPTable(5);
+		table.addCell("Script");
+		table.addCell("Quantity");
+		table.addCell("Average");
+		table.addCell("Market Rate");
+		table.addCell("UnRealized Profit/Loss");
+	
+		for(Stock stock : stocks){
+			PdfPCell name = new PdfPCell(new Paragraph(stock.getName()));
+			PdfPCell quantity = new PdfPCell(new Paragraph(""+stock.getTotalQuantity()));
+			PdfPCell average = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(stock.getAverage())));
+			PdfPCell marketRate = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(stock.getCurrentPrice())));
+			PdfPCell unRealisedGainLoss = new PdfPCell(new Paragraph(new DecimalFormat("#,###,###,##0.00").format(stock.getImaginaryProfit())));
+			table.addCell(name);
+			table.addCell(quantity);
+			table.addCell(average);
+			table.addCell(marketRate);
+			table.addCell(unRealisedGainLoss);
 		}
-		System.out.println(generatedFileName);
+		document.add(table);
 	}
+	
 }

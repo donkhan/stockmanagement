@@ -24,10 +24,7 @@ public class YearlyProfitCalculationProgram extends AbstractProfitCalculationPro
 		c.set(Calendar.MONTH, 0);
 	}
 
-	@Override
-	protected String getReportFileName() {
-		return "YearlyProfitReport.jrxml";
-	}
+	
 
 	@Override
 	protected void prepareCutOff(String[] args) {
