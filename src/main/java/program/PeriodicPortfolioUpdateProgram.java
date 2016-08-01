@@ -77,7 +77,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			System.out.println("Won't Run on Sat or Sun");
 			//return;
 		}
-		//doWork(force,args);
+		doWork(force,args);
 	}
 	
 	private void doWork(final boolean force,String args[]){

@@ -74,7 +74,7 @@ public class PartnershipReportProgram extends AbstractProgram{
 		DailyProfitCalculationProgram dpp = new DailyProfitCalculationProgram();
 		List<ProfitCalendarInterface> profitCalendarList = dpp.process(dpp.buildMap(new String[]{}));
 		readShareHolding(wb);
-		findStakeHoldersShare();		
+		findStakeHoldersShare();	
 		
 		for(StakeHolder stakeHolder : stakeHolders){
 			try {
