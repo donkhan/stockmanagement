@@ -133,6 +133,9 @@ public class Stock {
         }else{
             profit = (trade.getNetRate() - getAverage()) * trade.getQuantity();
         }
+        if(Global.debug){
+        	System.out.println("Trade Profit "  + profit);
+        }
         trade.setProfit(profit);
         appendProfit(profit);
     }
