@@ -1,7 +1,7 @@
 package commissioncalculators;
-import util.Global;
 import core.Stock;
 import core.Trade;
+import util.Global;
 
 
 public class GeojitCommissionCalculator extends SEBICommissionCalculator implements CommissionCalculator{

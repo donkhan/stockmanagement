@@ -1,9 +1,6 @@
 package program;
 
-import jasper.JasperReportGenerator;
-
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -13,13 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-
-import mail.Mailer;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 import core.ExecutionSummary;
 import core.Stock;
 import core.StockBuilder;
@@ -27,6 +17,10 @@ import core.StockSorter;
 import core.TradeSummary;
 import file.FileCleaner;
 import file.FileNameGenerator;
+import jasper.JasperReportGenerator;
+import mail.Mailer;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 

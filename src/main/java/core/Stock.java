@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import util.Global;
-
 import commissioncalculators.CommissionCalculator;
+import util.Global;
 
 
 public class Stock {

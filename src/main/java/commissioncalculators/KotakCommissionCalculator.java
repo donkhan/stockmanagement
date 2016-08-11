@@ -1,6 +1,6 @@
 package commissioncalculators;
-import util.Global;
 import core.Trade;
+import util.Global;
 
 
 public class KotakCommissionCalculator extends SEBICommissionCalculator implements CommissionCalculator{

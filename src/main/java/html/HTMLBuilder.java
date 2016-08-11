@@ -3,8 +3,8 @@ package html;
 import java.text.NumberFormat;
 import java.util.Map;
 
-import util.MathUtils;
 import core.Stock;
+import util.MathUtils;
 
 
 public class HTMLBuilder {
