@@ -78,7 +78,9 @@ public class PartnershipReportProgram extends AbstractProgram{
 		
 		for(StakeHolder stakeHolder : stakeHolders){
 			try {
-				OutputStream file = new FileOutputStream(FileNameGenerator.getTmpDir() + stakeHolder.getName() + "-PartnerShipReport.pdf");
+				String fileName = FileNameGenerator.getTmpDir() + stakeHolder.getName() + "-PartnerShipReport.pdf";
+				System.out.println(fileName);
+				OutputStream file = new FileOutputStream(fileName);
 				Document document = new Document();
 				PdfWriter.getInstance(document, file);
 				document.open();
@@ -115,6 +117,9 @@ public class PartnershipReportProgram extends AbstractProgram{
 			StakeHolderTransaction sht = new StakeHolderTransaction();
 			cell = sheet.getCell(1,i);
 			String date = cell.getContents();
+			if(date == null || "".equals(date)){
+				break;
+			}
 			StringTokenizer tokenizer = new StringTokenizer(date,"/");
 			Calendar gc = new GregorianCalendar();
 			gc.set(Calendar.MONTH, Integer.parseInt(tokenizer.nextToken())-1);
