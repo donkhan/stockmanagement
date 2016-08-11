@@ -1,6 +1,7 @@
 package program;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -117,7 +118,8 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram{
 			TradeSummary tradeSummary, ExecutionSummary executionSummary,boolean sendmail) {
 		Collections.sort(stockList,new StockSorter());
 		JasperReportGenerator gen = new JasperReportGenerator();
-		String generatedFileName = FileNameGenerator.getTmpDir() + "PeriodicReport.pdf";
+		String df = new SimpleDateFormat("yyyy-MM-dd-hh-mm").format(new Date());
+		String generatedFileName = FileNameGenerator.getTmpDir() + "PeriodicReport-" + df + ".pdf";
 
 		JasperReport report = gen.generate("StockPeriodicReport.jrxml");
 		JasperPrint print = gen.fill(report,stockList,tradeSummary,executionSummary);

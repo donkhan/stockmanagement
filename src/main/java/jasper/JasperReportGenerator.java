@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import core.ExecutionSummary;
+import core.Stock;
+import core.TradeSummary;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -13,9 +16,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import core.ExecutionSummary;
-import core.Stock;
-import core.TradeSummary;
 
 public class JasperReportGenerator {
 	
@@ -56,7 +56,7 @@ public class JasperReportGenerator {
 				JasperExportManager.exportReportToPdfFile(jasperPrint, fileName);
 			}
 		}catch(JRException e){
-
+			e.printStackTrace();
 		}
 	}
 
