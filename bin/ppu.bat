@@ -1,1 +1,1 @@
-java -classpath target\uber-StockManagement-0.0.1.jar program.PeriodicPortfolioUpdateProgram
+java -classpath target\stockmanagement.jar program.PeriodicPortfolioUpdateProgram

@@ -1,0 +1,1 @@
+java -classpath target\stockmanagement.jar program.PartnershipReportProgram
