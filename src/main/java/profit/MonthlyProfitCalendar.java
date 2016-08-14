@@ -1,7 +1,6 @@
 package profit;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 public class MonthlyProfitCalendar extends ProfitCalendar{
 	

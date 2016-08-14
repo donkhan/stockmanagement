@@ -51,7 +51,9 @@ public class TradeListingProgram extends AbstractProgram{
 	public void execute(boolean force, String[] args) {
 		List<Trade> allTrades = build(getValue(args,"filepath",""));
 		try {
-			OutputStream file = new FileOutputStream(FileNameGenerator.getTmpDir() + "TradeListing.pdf");
+			String outputFile = FileNameGenerator.getTmpDir() + "TradeListing.pdf";
+			OutputStream file = new FileOutputStream(outputFile);
+			System.out.println("Output File " + outputFile);
 			Document document = new Document();
 			PdfWriter.getInstance(document, file);
 			document.open();

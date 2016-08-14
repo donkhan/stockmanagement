@@ -63,7 +63,7 @@ public class MoneyControlStockService implements StockService{
 		}
 		if(d == 0.0d){
 			try{
-				Thread.currentThread().sleep(2*1000);
+				Thread.sleep(2*1000);
 			}catch(Exception e){
 				
 			}
