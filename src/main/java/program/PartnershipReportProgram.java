@@ -87,8 +87,8 @@ public class PartnershipReportProgram extends AbstractProgram{
 				addHeader(document,stakeHolder.getName());
 				addProfitDetails(document,trades,stakeHolder);
 				addInvestmentSummary(document,stocks,stakeHolder,cash);
-				tp.appendToDocument(document, trades);
 				dpp.appendToDocument(document, profitCalendarList);
+				tp.appendToDocument(document, trades);
 				sp.appendToDocument(document, stocks);
 				addFooter(document);
 				document.close();
