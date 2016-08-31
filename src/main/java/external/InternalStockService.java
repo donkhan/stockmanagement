@@ -10,9 +10,6 @@ import services.StockService;
 public class InternalStockService implements StockService{
 	
 	public double getCurrentPrice(String singleURL) {
-		if(singleURL.equals("http://www.moneycontrol.com/india/stockpricequote/steel-large/steelauthorityindia/SAI")){
-			return 47.5d;
-		}
 		return 0;
 	}
 
