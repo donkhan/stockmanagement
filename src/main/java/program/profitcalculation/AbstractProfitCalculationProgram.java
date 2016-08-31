@@ -58,8 +58,6 @@ public abstract class AbstractProfitCalculationProgram extends AbstractProgram{
 				double tradeAmount = trade.getNetRate() * trade.getQuantity();
 				if(map.containsKey(c)){
 					pc = map.get(c);
-					pc.setBuyTrades(pc.getBuyTrades() + 1);
-
 				}else{
 					pc = getProfitCalendar(c,0d);
 					map.put(c,pc);
