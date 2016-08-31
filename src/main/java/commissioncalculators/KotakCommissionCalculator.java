@@ -6,7 +6,8 @@ import util.Global;
 public class KotakCommissionCalculator extends SEBICommissionCalculator implements CommissionCalculator{
 
 	private void setCommission(Trade trade,double transactionAmount,double stockPrice,double quantity){
-		double commission = transactionAmount * .4/100;
+		double commission = transactionAmount * .49/100;
+		
 		if(commission <= 21){
 			commission = 21;
 		}
@@ -15,6 +16,9 @@ public class KotakCommissionCalculator extends SEBICommissionCalculator implemen
 			commission = _sebiMaxCommission;
 		}
 		
+		if(Global.debug){
+			System.out.println("Brokerage " + commission);
+		}
 		if(trade.getTradeType().equals("R")){
 			trade.setExtraCost(0);
 			return;
@@ -27,6 +31,10 @@ public class KotakCommissionCalculator extends SEBICommissionCalculator implemen
 		}
 		double serviceTaxOnBrokerage = serviceTaxOnBrokeragePercentage *commission / 100;
 		double stt = 4;
+		
+		if(Global.debug){
+			System.out.println("Service Tax On Brokerage " + serviceTaxOnBrokerage);
+		}
 		
 		extraCost += serviceTaxOnBrokerage;
 		extraCost += stt;
