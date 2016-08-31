@@ -87,9 +87,9 @@ public class PartnershipReportProgram extends AbstractProgram{
 				addHeader(document,stakeHolder.getName());
 				addProfitDetails(document,trades,stakeHolder);
 				addInvestmentSummary(document,stocks,stakeHolder,cash);
-				sp.appendToDocument(document, stocks);
 				tp.appendToDocument(document, trades);
 				dpp.appendToDocument(document, profitCalendarList);
+				sp.appendToDocument(document, stocks);
 				addFooter(document);
 				document.close();
 				file.close();
@@ -159,7 +159,7 @@ public class PartnershipReportProgram extends AbstractProgram{
 		int rows = sheet.getRows();
 		double cash = 0;
 		for(int i = 0;i<rows;i++){
-			Cell cell = sheet.getCell(1,i);
+			Cell cell = sheet.getCell(2,i);
 			cash += Double.parseDouble(cell.getContents());
 		}
 		System.out.println("Cash " + cash);
