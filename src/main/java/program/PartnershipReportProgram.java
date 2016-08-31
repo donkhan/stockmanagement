@@ -12,12 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import profit.ProfitCalendarInterface;
-import program.profitcalculation.DailyProfitCalculationProgram;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -27,6 +21,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import core.Dividend;
 import core.ProfitTransaction;
 import core.StakeHolder;
 import core.StakeHolderTransaction;
@@ -34,6 +29,11 @@ import core.Stock;
 import core.StockBuilder;
 import core.Trade;
 import file.FileNameGenerator;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import profit.ProfitCalendarInterface;
+import program.profitcalculation.DailyProfitCalculationProgram;
 
 
 public class PartnershipReportProgram extends AbstractProgram{
@@ -70,7 +70,14 @@ public class PartnershipReportProgram extends AbstractProgram{
 		Workbook wb = builder.getWorkBook();
 		double cash = findCash(wb);
 		TradeListingProgram tp = new TradeListingProgram();
+		DividendListingProgram dlp = new DividendListingProgram();
+		
 		List<Trade> trades = tp.build(getValue(args,"filepath",""));
+		List<Dividend> dividends = dlp.build(getValue(args,"filepath",""));
+		double totalDividend = dlp.getTotalDividend(dividends);
+		
+		
+		
 		DailyProfitCalculationProgram dpp = new DailyProfitCalculationProgram();
 		List<ProfitCalendarInterface> profitCalendarList = dpp.process(dpp.buildMap(new String[]{}));
 		readShareHolding(wb);
@@ -85,9 +92,10 @@ public class PartnershipReportProgram extends AbstractProgram{
 				PdfWriter.getInstance(document, file);
 				document.open();
 				addHeader(document,stakeHolder.getName());
-				addProfitDetails(document,trades,stakeHolder);
+				addProfitDetails(document,trades,stakeHolder,totalDividend);
 				addInvestmentSummary(document,stocks,stakeHolder,cash);
 				dpp.appendToDocument(document, profitCalendarList);
+				dlp.appendToDocument(document, dividends);
 				tp.appendToDocument(document, trades);
 				sp.appendToDocument(document, stocks);
 				addFooter(document);
@@ -214,18 +222,22 @@ public class PartnershipReportProgram extends AbstractProgram{
 	}
 
 	private void addProfitDetails(
-			Document document, List<Trade> trades, StakeHolder stakeHolder) throws DocumentException{
+			Document document, 
+			List<Trade> trades, 
+			StakeHolder stakeHolder,double totalDividend) throws DocumentException{
 		document.add(new Paragraph("\n"));
 		double totalProfit = 0d;
 		for(Trade t: trades){
 			totalProfit += t.getProfit();
 		}
+		totalProfit += totalDividend;
 		double shortTermCapitalGainTax = totalProfit * 10 /100;
 		double companyShare = totalProfit * 15 /100;
 		double netEquity = totalProfit - shortTermCapitalGainTax - companyShare;
 		
 		double share = netEquity * stakeHolder.getSharePercentage();
 				
+		
 		PdfPTable profitTable = new PdfPTable(2);
 		List<Object> row = new ArrayList<Object>();
 		row.add("Profit Made");

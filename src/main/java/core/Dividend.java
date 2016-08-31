@@ -30,7 +30,7 @@ public class Dividend implements Comparable<Dividend>{
 	}
 	
 	public String toString(){
-		return " " + getStock() + " " + getValue();
+		return " " + dividendPaidTime.getTime() + "  " + getStock() + " " + getValue();
 	}
 	
 }

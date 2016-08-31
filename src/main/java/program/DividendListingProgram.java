@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -20,7 +21,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import core.Dividend;
 import core.StockBuilder;
 import file.FileNameGenerator;
+import jxl.Cell;
 import jxl.Sheet;
+import util.Global;
 
 
 public class DividendListingProgram extends AbstractProgram{
@@ -45,10 +48,18 @@ public class DividendListingProgram extends AbstractProgram{
 	protected long getTimerInterval() {
 		return -1;
 	}
+	
+	public double getTotalDividend(	List<Dividend> allDividends){
+		double total = 0d;
+		for(Dividend d : allDividends){
+			total += d.getValue();
+		}
+		return total;
+	}
 
 	@Override
 	public void execute(boolean force, String[] args) {
-		List<Dividend> allTrades = build(getValue(args,"filepath",""));
+		List<Dividend> allDividends = build(getValue(args,"filepath",""));
 		try {
 			String outputFile = FileNameGenerator.getTmpDir() + "DividendListing.pdf";
 			OutputStream file = new FileOutputStream(outputFile);
@@ -56,7 +67,7 @@ public class DividendListingProgram extends AbstractProgram{
 			Document document = new Document();
 			PdfWriter.getInstance(document, file);
 			document.open();
-			appendToDocument(document,allTrades);
+			appendToDocument(document,allDividends);
 			document.close();
 			file.close();
 		} catch (FileNotFoundException e) {
@@ -76,20 +87,31 @@ public class DividendListingProgram extends AbstractProgram{
 		builder.setWorkBook();
 		List<Dividend> allDividends = new ArrayList<Dividend>();
 		Sheet sheet = builder.getWorkBook().getSheet(5);
-		int rows = sheet.getRows();
-		
 		filter(allDividends);
-		for(int index = 0;index<1;index++){
+		for(int index = 0;index< sheet.getRows();index++){
 			Dividend d = new Dividend();
-			GregorianCalendar gc = new GregorianCalendar();
-			//gc.setTimeInMillis(dr.getDate().getTime());
-			d.setDividendPaidTime(gc);
-			//d.setValue(Double.parseDouble(sheet.getCell(3, index).getContents()));
+			handleDividendDate(d,sheet.getCell(0,index));
+			d.setValue(Double.parseDouble(sheet.getCell(4, index).getContents()));
 			d.setStock(sheet.getCell(2, index).getContents());
-			System.out.println(d);
+			if(Global.debug){
+				System.out.println(d);
+			}
+			allDividends.add(d);
 		}
 		Collections.sort(allDividends);
 		return allDividends;
+	}
+	
+	private void handleDividendDate(Dividend dividend,Cell cell){
+		String content = cell.getContents();
+		
+		StringTokenizer tokenizer = new StringTokenizer(content,"/");
+		Calendar calendar = new GregorianCalendar();
+		calendar.set(Calendar.MONTH, Integer.parseInt(tokenizer.nextToken())-1);
+		calendar.set(Calendar.DATE, Integer.parseInt(tokenizer.nextToken()));
+		calendar.set(Calendar.YEAR, 2000+Integer.parseInt(tokenizer.nextToken()));
+		dividend.setDividendPaidTime(calendar);
+
 	}
 	
 	private void filter(List<Dividend> list) {
@@ -111,27 +133,26 @@ public class DividendListingProgram extends AbstractProgram{
 	}
 	
 	
-	public void appendToDocument(Document document,List<Dividend> trades) throws DocumentException{
-		addSectionHeader(document,"Trade");
+	public void appendToDocument(Document document,List<Dividend> dividends) throws DocumentException{
+		addSectionHeader(document,"Dividend");
 	
-		PdfPTable table = new PdfPTable(7);
+		PdfPTable table = new PdfPTable(3);
 		String headers[] = new String[]{"Date","Script","Dividend"};
 		addHeaders(table,headers);
 
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 		double tp = 0d;
-		for(Dividend trade : trades){
+		for(Dividend dividend : dividends){
 			List<Object> row = new ArrayList<Object>();
-			row.add(df.format(trade.getDividendPaidTime().getTime()));
-			row.add(trade.getStock());
-			row.add(trade.getValue());
-			tp += trade.getValue();
+			row.add(df.format(dividend.getDividendPaidTime().getTime()));
+			row.add(dividend.getStock());
+			row.add(dividend.getValue());
+			tp += dividend.getValue();
 			addRow(row, table);
 		}
-		
 		List<Object> totalRow = new ArrayList<Object>();
-		totalRow.add("Total");totalRow.add("-");totalRow.add("-"); totalRow.add("-"); 
-		totalRow.add("-");totalRow.add("-"); totalRow.add(tp);
+		totalRow.add("Total"); 
+		totalRow.add("-");totalRow.add(tp);
 		addRow(totalRow,table);
 		
 		document.add(table);
