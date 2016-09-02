@@ -98,6 +98,7 @@ public class DividendListingProgram extends AbstractProgram{
 			}
 			allDividends.add(d);
 		}
+		filter(allDividends);
 		Collections.sort(allDividends);
 		return allDividends;
 	}
