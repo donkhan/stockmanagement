@@ -87,7 +87,6 @@ public class DividendListingProgram extends AbstractProgram{
 		builder.setWorkBook();
 		List<Dividend> allDividends = new ArrayList<Dividend>();
 		Sheet sheet = builder.getWorkBook().getSheet(5);
-		filter(allDividends);
 		for(int index = 0;index< sheet.getRows();index++){
 			Dividend d = new Dividend();
 			handleDividendDate(d,sheet.getCell(0,index));
@@ -108,9 +107,10 @@ public class DividendListingProgram extends AbstractProgram{
 		
 		StringTokenizer tokenizer = new StringTokenizer(content,"/");
 		Calendar calendar = new GregorianCalendar();
-		calendar.set(Calendar.MONTH, Integer.parseInt(tokenizer.nextToken())-1);
 		calendar.set(Calendar.DATE, Integer.parseInt(tokenizer.nextToken()));
+		calendar.set(Calendar.MONTH, Integer.parseInt(tokenizer.nextToken())-1);
 		calendar.set(Calendar.YEAR, 2000+Integer.parseInt(tokenizer.nextToken()));
+		
 		dividend.setDividendPaidTime(calendar);
 
 	}
@@ -125,6 +125,11 @@ public class DividendListingProgram extends AbstractProgram{
 	
 	private boolean remove(Dividend dividend) {
 		Calendar c = dividend.getDividendPaidTime();
+		if(Global.debug){
+			System.out.println("BEGIN " + begin.getTime());
+			System.out.println("DIVIDEND " + dividend.getDividendPaidTime().getTime() + " " + dividend.getStock());
+			System.out.println("END " + end.getTime());
+		}
 		return c.before(begin) || c.after(end);
 	}
 
