@@ -1,7 +1,4 @@
 package core;
-import java.io.File;
-import java.io.IOException;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -15,10 +12,10 @@ import commissioncalculators.CommissionCalculator;
 import commissioncalculators.GeojitCommissionCalculator;
 import commissioncalculators.KotakCommissionCalculator;
 import commissioncalculators.MoneyPalmCommissionCalculator;
+import core.db.WorkBookManager;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
-import jxl.read.biff.BiffException;
 import thread.StockThread;
 import util.Global;
 
@@ -166,27 +163,7 @@ public class StockBuilder {
 
 
 	public void setWorkBook() {
-		try{
-			if(!inputFile.equals("")){
-				System.out.println("Reading File given as argument " + inputFile);
-				File inputWorkbook = new File(inputFile);
-				workBook = Workbook.getWorkbook(inputWorkbook);
-			}else{
-				String absolutePath = System.getProperty("user.dir") + File.separatorChar + "src" + File.separatorChar + "main" + File.separatorChar + "resources" + File.separatorChar + "Trade.xls";
-				File file = new File(absolutePath);
-				if(file.exists()){
-					System.out.println("Reading File in the Path " + file.getAbsolutePath());
-					workBook = Workbook.getWorkbook(file);
-				}else{
-					System.out.println("Reading File in the Bundle");
-					workBook = Workbook.getWorkbook(URLClassLoader.getSystemResourceAsStream("Trade.xls"));
-				}
-			}
-		}catch(IOException ioe){
-			ioe.printStackTrace();
-		}catch(BiffException bie){
-			bie.printStackTrace();
-		}
+		workBook = new WorkBookManager().getWorkBook(inputFile);
 	}
 
 	private KotakCommissionCalculator kcc  = new KotakCommissionCalculator();
