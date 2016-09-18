@@ -26,6 +26,7 @@ public class StockLowHighUpdatingProgram extends AbstractProgram{
 		Workbook workBook = new WorkBookManager().getWorkBook();
 		Sheet sheet = workBook.getSheet(1);
 		int rows = sheet.getRows();
+		rows = 2;
 		for(int i = 0;i<rows;i++){
 			String stockName = sheet.getCell(0, i).getContents();
 			String stockURL = sheet.getCell(1, i).getContents();
@@ -63,6 +64,8 @@ public class StockLowHighUpdatingProgram extends AbstractProgram{
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch(Throwable t){
+			
 		}
 	}
 	
