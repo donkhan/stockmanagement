@@ -1,13 +1,12 @@
 package program;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -28,9 +27,11 @@ public class StockLowHighUpdatingProgram extends AbstractProgram{
 		Sheet sheet = workBook.getSheet(1);
 		int rows = sheet.getRows();
 		for(int i = 0;i<rows;i++){
-			System.out.println(sheet.getCell(0, i).getContents() 
-					+ " " + sheet.getCell(1, i).getContents());
-			updateFile(sheet.getCell(1, i).getContents(),sheet.getCell(0, i).getContents());
+			String stockName = sheet.getCell(0, i).getContents();
+			String stockURL = sheet.getCell(1, i).getContents();
+			//System.out.println( stockName	+ " " + stockURL);
+			//	if(stockName.equals("RICO Auto"))
+			updateFile(stockURL,stockName);
 		}
 		
 		
@@ -41,7 +42,7 @@ public class StockLowHighUpdatingProgram extends AbstractProgram{
 		Calendar calendar = new GregorianCalendar();
 		try {
 			URL url = new URL(singleURL);
-			//InputStream is = new FileInputStream("xyz.html");
+			//InputStream is	 = new FileInputStream("src/main/resources/MoneyControlTestOutput.html");
 			InputStream is = url.openStream();
 			double low = 0;
 			double high = 0;
@@ -65,32 +66,35 @@ public class StockLowHighUpdatingProgram extends AbstractProgram{
 		}
 	}
 	
-	private void write(String name, double low, double high,Calendar calendar) {
+	private void write(String name, double low, double high,Calendar calendar) throws IOException {
 		String x = calendar.get(Calendar.DATE) + "-" 
 					+ (calendar.get(Calendar.MONTH)+1) + "-" + calendar.get(Calendar.YEAR);
-		String absolutePath = System.getProperty("user.dir") + File.separatorChar + "src" 
+		String filename = System.getProperty("user.dir") + File.separatorChar + "src" 
 					+ File.separatorChar + "main" + File.separatorChar + "resources" 
 					+ File.separatorChar + name + ".txt";
-		try {
-			
-			File file =new File(absolutePath);
-    		if(!file.exists()){
-    			file.createNewFile();
-    		}
-    		String data = x + "  " + low + "   " + high;
-    		FileWriter fileWriter = new FileWriter(absolutePath,true);
-    		BufferedWriter bufferWriter = new BufferedWriter(fileWriter);
-    		bufferWriter.newLine();
-    		bufferWriter.write(data);
-    		bufferWriter.flush();
-    		bufferWriter.close();
-    		fileWriter.close();
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		String content = x + "  " + low + "   " + high +"\r\n";
+		File file =new File(filename);
+		if(!file.exists()){
+			file.createNewFile();
+    	}
+		
+		long offset = 0;
+		RandomAccessFile r = new RandomAccessFile(new File(filename), "rw");
+		RandomAccessFile rtemp = new RandomAccessFile(new File(filename + "~"), "rw");
+		long fileSize = r.length();
+		FileChannel sourceChannel = r.getChannel();
+		FileChannel targetChannel = rtemp.getChannel();
+		sourceChannel.transferTo(offset, (fileSize - offset), targetChannel);
+		sourceChannel.truncate(offset);
+		r.seek(offset);
+		r.write(content.getBytes());
+		long newOffset = r.getFilePointer();
+		targetChannel.position(0L);
+		sourceChannel.transferFrom(targetChannel, newOffset, fileSize);
+		sourceChannel.close();
+		targetChannel.close();
+		
+		new File(filename + "~").delete();
 		
 	}
 
