@@ -1,5 +1,6 @@
 package program.profitcalculation;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -15,25 +16,19 @@ public class IndustryProfitCalculationProgram extends AbstractProfitCalculationP
 
 	@Override
 	protected ProfitCalendarInterface getProfitCalendar(Calendar c, Double d) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected void resetCalendar(Calendar c) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected void prepareCutOff(String[] args) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected String getReadableDate(Calendar calendar) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -43,6 +38,7 @@ public class IndustryProfitCalculationProgram extends AbstractProfitCalculationP
 		builder.setFullReport(true);
 		builder.setWorkBook();
 		String specificStock = getValue(args,"specificstock","None");
+		//specificStock = "RICO Auto";
 		Map<String, Stock> stocks = builder.read(specificStock);
 		Iterator<String> iterator = stocks.keySet().iterator();
 		while(iterator.hasNext()){
@@ -75,6 +71,7 @@ public class IndustryProfitCalculationProgram extends AbstractProfitCalculationP
 			return;
 		}
 		System.out.println(stock + " " + stock.getBroker());
+		DecimalFormat df = new DecimalFormat("#.##");
 		
 		int buyIndex = 0;
 		double totalProfit = 0;
@@ -85,12 +82,12 @@ public class IndustryProfitCalculationProgram extends AbstractProfitCalculationP
 				Trade bt = buyTrades.get(buyIndex);
 				
 				if(bt.getQuantity() > q){
-					System.out.println("(" + trade.getNetRate() +"-" + bt.getNetRate() + ")*" + q);
+					System.out.println("(" + df.format(trade.getNetRate()) +"-" + df.format(bt.getNetRate()) + ")*" + q);
 					sellProfit += (trade.getNetRate() - bt.getNetRate()) * q;
 					bt.setQuantity(bt.getQuantity() - q);
 					q = 0;
 				}else{
-					System.out.println("(" + trade.getNetRate() +"-" + bt.getNetRate() + ")*" + bt.getQuantity());
+					System.out.println("(" + df.format(trade.getNetRate()) +"-" + df.format(bt.getNetRate()) + ")*" + bt.getQuantity());
 					sellProfit += (trade.getNetRate() - bt.getNetRate()) * bt.getQuantity();
 					q -= bt.getQuantity();
 					bt.setQuantity(0);
@@ -99,14 +96,17 @@ public class IndustryProfitCalculationProgram extends AbstractProfitCalculationP
 					buyIndex = buyIndex + 1;
 				}
 			}
-			System.out.println("Sell Profit " + sellProfit);
+			System.out.println("Sell Profit " + df.format(sellProfit));
+			System.out.println("");
 			totalProfit += sellProfit;
 		}
 		
-		System.out.println("Total Profit " + totalProfit);
+		
+		System.out.println("Total Profit " + df.format(totalProfit));
 		System.out.println("-----------------------------");
 	}
 	
+
 	public static void main(String args[]){
 		IndustryProfitCalculationProgram cp = new IndustryProfitCalculationProgram();
 		cp.execute(false, args);
