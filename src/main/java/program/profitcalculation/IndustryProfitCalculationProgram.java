@@ -42,8 +42,8 @@ public class IndustryProfitCalculationProgram extends AbstractProfitCalculationP
 		builder.setInputFile(getValue(args,"filepath",""));
 		builder.setFullReport(true);
 		builder.setWorkBook();
-		
-		Map<String, Stock> stocks = builder.read("None");
+		String specificStock = getValue(args,"specificstock","None");
+		Map<String, Stock> stocks = builder.read(specificStock);
 		Iterator<String> iterator = stocks.keySet().iterator();
 		while(iterator.hasNext()){
 			try{
