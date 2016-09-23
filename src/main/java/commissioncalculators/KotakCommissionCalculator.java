@@ -30,7 +30,7 @@ public class KotakCommissionCalculator extends SEBICommissionCalculator implemen
 			System.out.println("Service Tax On Brokerage Percentage " + serviceTaxOnBrokeragePercentage);
 		}
 		double serviceTaxOnBrokerage = serviceTaxOnBrokeragePercentage *commission / 100;
-		double stt = 4;
+		double stt = 14;
 		
 		if(Global.debug){
 			System.out.println("Service Tax On Brokerage " + serviceTaxOnBrokerage);
