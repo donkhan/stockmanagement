@@ -229,8 +229,14 @@ public class StockBuilder {
 		if(cell != null) {
 			String content = cell.getContents();
 			if (content != null && !content.equals("")){
-				int buyTradeId = Integer.parseInt(content);
-				trade.setBuyTradeId(buyTradeId);
+				StringTokenizer tokenizer = new StringTokenizer(content,",");
+				List<Integer> buyTradeIds = new ArrayList<Integer>();
+				while(tokenizer.hasMoreTokens()){
+					String token = tokenizer.nextToken();
+					int buyTradeId = Integer.parseInt(token);
+					buyTradeIds.add(buyTradeId);
+				}
+				trade.setBuyTradeIds(buyTradeIds);
 			}
 		}
 	}

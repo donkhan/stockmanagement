@@ -116,6 +116,9 @@ public class TradeListingProgram extends AbstractProgram{
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 		double tp = 0d;
 		for(Trade trade : trades){
+			if(trade.getTradeType().equals(Trade.DELETED)){
+				continue;
+			}
 			List<Object> row = new ArrayList<Object>();
 			row.add(df.format(trade.getTransactionTime().getTime()));
 			row.add(trade.getName());

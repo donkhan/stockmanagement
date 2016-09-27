@@ -121,14 +121,17 @@ public class Stock {
 
     private void addProfitAndAdjustAverage(Trade trade){
         double profit = 0;
-        if(trade.getBuyTradeId() != 0){
-        	Trade buyTrade = getTrade(trade.getBuyTradeId());
-            profit = (trade.getNetRate() - buyTrade.getNetRate()) * trade.getQuantity();
-            double tradeCost = buyTrade.getNetRate() * trade.getQuantity();
-            double totalCost = getAverage() * (trade.getQuantity() + totalQuantity);
-            totalCost -= tradeCost;
-            double newAverage = totalCost / totalQuantity;
-            setAverage(newAverage);
+        List<Integer> buyTradeIds = trade.getBuyTradeIds();
+        if(buyTradeIds != null){
+        	for(int buyTradeId : buyTradeIds){
+        		Trade buyTrade = getTrade(buyTradeId);
+        		profit = (trade.getNetRate() - buyTrade.getNetRate()) * trade.getQuantity();
+        		double tradeCost = buyTrade.getNetRate() * trade.getQuantity();
+        		double totalCost = getAverage() * (trade.getQuantity() + totalQuantity);
+        		totalCost -= tradeCost;
+        		double newAverage = totalCost / totalQuantity;
+        		setAverage(newAverage);
+        	}
         }else{
             profit = (trade.getNetRate() - getAverage()) * trade.getQuantity();
         }

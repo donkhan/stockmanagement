@@ -62,7 +62,8 @@ public class IndustryProfitCalculationProgram extends AbstractProfitCalculationP
 			if(trade.getTradeType().equals(Trade.BUY) 
 					|| trade.getTradeType().equals(Trade.RIGHTS)) {
 				buyTrades.add(trade);
-			}else{
+			}
+			if(trade.getTradeType().equals(Trade.SELL)){
 				sellTrades.add(trade);
 			}
 		}
@@ -103,6 +104,7 @@ public class IndustryProfitCalculationProgram extends AbstractProfitCalculationP
 		
 		
 		System.out.println("Total Profit " + df.format(totalProfit));
+		System.out.println("Current Average " + stock.getAverage());
 		System.out.println("-----------------------------");
 	}
 	

@@ -1,5 +1,6 @@
 package core;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class Trade implements Comparable<Trade>{
@@ -51,18 +52,19 @@ public class Trade implements Comparable<Trade>{
 	private String tradeType;
 	private String broker;
 
-	private int buyTradeId;
+	private List<Integer> buyTradeIds;
 	
-	public int getBuyTradeId() {
-		return buyTradeId;
+	public List<Integer> getBuyTradeIds() {
+		return buyTradeIds;
 	}
 
-	public void setBuyTradeId(int buyTradeId) {
-		this.buyTradeId = buyTradeId;
+	public void setBuyTradeIds(List<Integer> buyTradeIds) {
+		this.buyTradeIds = buyTradeIds;
 	}
 
 	public static String BUY = "B";
 	public static String SELL = "S";
+	public static String DELETED = "D";
 	public static String RIGHTS = "R";
 	
 	public String getBroker() {
