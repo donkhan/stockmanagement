@@ -125,10 +125,11 @@ public class Stock {
         if(buyTradeIds != null){
         	for(int buyTradeId : buyTradeIds){
         		Trade buyTrade = getTrade(buyTradeId);
-        		profit = (trade.getNetRate() - buyTrade.getNetRate()) * trade.getQuantity();
-        		double tradeCost = buyTrade.getNetRate() * trade.getQuantity();
-        		double totalCost = getAverage() * (trade.getQuantity() + totalQuantity);
+        		profit += (trade.getNetRate() - buyTrade.getNetRate()) * buyTrade.getQuantity();
+        		double tradeCost = buyTrade.getNetRate() * buyTrade.getQuantity();
+        		double totalCost = getAverage() * (buyTrade.getQuantity() + totalQuantity);
         		totalCost -= tradeCost;
+        		buyTrade.setQuantity(buyTrade.getQuantity() - trade.getQuantity());
         		double newAverage = totalCost / totalQuantity;
         		setAverage(newAverage);
         	}
