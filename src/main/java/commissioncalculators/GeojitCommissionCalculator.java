@@ -28,7 +28,7 @@ public class GeojitCommissionCalculator extends SEBICommissionCalculator impleme
 			System.out.println("Service Tax On Brokerage Percentage " + serviceTaxOnBrokeragePercentage);
 		}
 		double serviceTaxOnBrokerage = serviceTaxOnBrokeragePercentage *commission / 100;
-		double stt = 4;
+		double stt = 14;
 		
 		extraCost += serviceTaxOnBrokerage;
 		extraCost += stt;
