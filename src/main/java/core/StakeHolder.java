@@ -44,5 +44,9 @@ public class StakeHolder {
 		this.sharePercentage = sharePercentage;
 	}
 	
+	public String toString(){
+		return "Name " + name + " Investment " + getTotalInvestment();
+	}
+	
 	
 }

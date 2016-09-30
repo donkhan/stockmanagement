@@ -68,19 +68,17 @@ public class PartnershipReportProgram extends AbstractProgram{
 		StockBuilder builder = new StockBuilder();
 		List<Stock> stocks = sp.build(builder, totalProfit, false, 12, "None", "");
 		Workbook wb = builder.getWorkBook();
-		double cash = findCash(wb);
+		double cash = findCash(wb,args);
 		TradeListingProgram tp = new TradeListingProgram();
 		DividendListingProgram dlp = new DividendListingProgram();
 		
-		List<Trade> trades = tp.build(getValue(args,"filepath",""));
-		List<Dividend> dividends = dlp.build(getValue(args,"filepath",""));
+		List<Trade> trades = tp.build(args);
+		List<Dividend> dividends = dlp.build(args);
 		double totalDividend = dlp.getTotalDividend(dividends);
 		
-		
-		
 		DailyProfitCalculationProgram dpp = new DailyProfitCalculationProgram();
-		List<ProfitCalendarInterface> profitCalendarList = dpp.process(dpp.buildMap(new String[]{}));
-		readShareHolding(wb);
+		List<ProfitCalendarInterface> profitCalendarList = dpp.process(dpp.buildMap(args));
+		readShareHolding(wb,args);
 		findStakeHoldersShare();	
 		
 		for(StakeHolder stakeHolder : stakeHolders){
@@ -91,7 +89,7 @@ public class PartnershipReportProgram extends AbstractProgram{
 				Document document = new Document();
 				PdfWriter.getInstance(document, file);
 				document.open();
-				addHeader(document,stakeHolder.getName());
+				addHeader(document,stakeHolder.getName(),args);
 				addProfitDetails(document,trades,stakeHolder,totalDividend);
 				addInvestmentSummary(document,stocks,stakeHolder,cash);
 				dpp.appendToDocument(document, profitCalendarList);
@@ -107,13 +105,24 @@ public class PartnershipReportProgram extends AbstractProgram{
 		}
 	}
 	
+	private void setArgs(String args[],Calendar cutOffDate){
+		int month = getIntegerValue(args, "month","-1");
+		int year = getIntegerValue(args, "year","-1");
+		if(month != -1){
+			cutOffDate.set(Calendar.MONTH, month);
+		}
+		if(year != -1){
+			cutOffDate.set(Calendar.YEAR, year);
+		}
+	}
 	
 	private Map<String,ProfitTransaction> profitTransactionReferences = new HashMap<String,ProfitTransaction>();
-	private void readShareHolding(Workbook wb) {
+	private void readShareHolding(Workbook wb,String[] args) {
 		Sheet sheet = wb.getSheet(2);
 		int rows = sheet.getRows();
 		Map<String,StakeHolder> map = new HashMap<String,StakeHolder>();
-		
+		Calendar cutOffDate = new GregorianCalendar();
+		setArgs(args,cutOffDate);
 		for(int i = 1;i<rows;i++){
 			Cell cell = sheet.getCell(0,i);
 			String name = cell.getContents();
@@ -133,14 +142,23 @@ public class PartnershipReportProgram extends AbstractProgram{
 			gc.set(Calendar.MONTH, Integer.parseInt(tokenizer.nextToken())-1);
 			gc.set(Calendar.DATE, Integer.parseInt(tokenizer.nextToken()));
 			gc.set(Calendar.YEAR, Integer.parseInt(tokenizer.nextToken()));
+			if(gc.after(cutOffDate)) {
+				continue;
+			}
 			sht.setTransactionDate(gc);
 			sht.setAmount(Double.parseDouble(sheet.getCell(2, i).getContents()));
 			sh.add(sht);
 		}
 		
+		//readProfitSharingTransactionInformation(sheet,wb);
+		
+		stakeHolders = map.values();
+	}
+	
+	private void readProfitSharingTransactionInformation(Sheet sheet,Workbook wb){
 		Calendar today = new GregorianCalendar();
 		sheet = wb.getSheet(4);
-		rows = sheet.getRows();
+		int rows = sheet.getRows();
 		
 		for(int i = 0;i<rows;i++){
 			Cell cell = sheet.getCell(1,i);
@@ -159,16 +177,32 @@ public class PartnershipReportProgram extends AbstractProgram{
 				profitTransactionReferences.put(name,pt);
 			}
 		}
-		stakeHolders = map.values();
 	}
 
-	private double findCash(Workbook wb) {
+	private double findCash(Workbook wb,String[] args) {
+		int month = getIntegerValue(args, "month","-1");
+		int year = getIntegerValue(args, "year","-1");
+		Calendar calendar = new GregorianCalendar();
+		if(month == -1){
+			month = calendar.get(Calendar.MONTH)+1;
+		}else{
+			month = month + 1;
+		}
+		if(year == -1){
+			year = calendar.get(Calendar.YEAR);
+		}
 		Sheet sheet = wb.getSheet(3);
 		int rows = sheet.getRows();
 		double cash = 0;
 		for(int i = 0;i<rows;i++){
 			Cell cell = sheet.getCell(2,i);
-			cash += Double.parseDouble(cell.getContents());
+			String dc = sheet.getCell(0, i).getContents();
+			StringTokenizer tokenizer = new StringTokenizer(dc,"-");
+			int mm = Integer.parseInt(tokenizer.nextToken());
+			int yy = Integer.parseInt(tokenizer.nextToken());
+			if(mm == month && year == yy){
+				cash += Double.parseDouble(cell.getContents());
+			}
 		}
 		System.out.println("Cash " + cash);
 		return cash;
@@ -265,6 +299,7 @@ public class PartnershipReportProgram extends AbstractProgram{
 		row.add(share);
 		addRow(row,profitTable);
 		
+		/*
 		row = new ArrayList<Object>();
 		row.add("Credited On");
 		ProfitTransaction pt = profitTransactionReferences.get(stakeHolder.getName());
@@ -283,6 +318,7 @@ public class PartnershipReportProgram extends AbstractProgram{
 		}else{
 			row.add(pt.getReferenceId());
 		}
+		*/
 		
 		addRow(row,profitTable);
 		document.add(profitTable);
@@ -290,11 +326,20 @@ public class PartnershipReportProgram extends AbstractProgram{
 
 	
 
-	private void addHeader(Document document, String stakeHolder)  throws DocumentException{
+	private void addHeader(Document document, String stakeHolder,String args[])  throws DocumentException{
 		GregorianCalendar gc = new GregorianCalendar();
-		String month = (gc.get(Calendar.MONTH) + 1) + "-" + gc.get(Calendar.YEAR); 
+		int month = getIntegerValue(args, "month","-1");
+		int year = getIntegerValue(args, "year","-1");
+		if(month != -1){
+			gc.set(Calendar.MONTH, month);
+		}
+		if(year != -1){
+			gc.set(Calendar.YEAR, year);
+		}
+		String monthYearToPrint = (gc.get(Calendar.MONTH) + 1) + "-" + gc.get(Calendar.YEAR);
+		
 		Font font = new Font(FontFamily.TIMES_ROMAN, 10, Font.BOLD, new BaseColor(0, 0, 0)); 
-		Paragraph header = new Paragraph("Dear " + stakeHolder + "\n\nKindly go through the Monthly Report for " + month);
+		Paragraph header = new Paragraph("Dear " + stakeHolder + "\n\nKindly go through the Monthly Report for " + monthYearToPrint);
 		header.setFont(font);
 		document.add(header);
 	}

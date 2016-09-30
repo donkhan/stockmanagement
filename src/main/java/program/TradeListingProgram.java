@@ -47,13 +47,27 @@ public class TradeListingProgram extends AbstractProgram{
 		return -1;
 	}
 
+	private void setArgs(String args[]){
+		int month = getIntegerValue(args, "month","-1");
+		int year = getIntegerValue(args, "year","-1");
+		if(month != -1){
+			begin.set(Calendar.MONTH, month);
+			end.set(Calendar.MONTH, month);
+			System.out.println(begin.getTime() + "  " + end.getTime());
+		}
+		if(year != -1){
+			begin.set(Calendar.YEAR, year);
+			end.set(Calendar.YEAR, year);
+			
+		}
+	}
+	
 	@Override
 	public void execute(boolean force, String[] args) {
-		List<Trade> allTrades = build(getValue(args,"filepath",""));
+		List<Trade> allTrades = build(args);
 		try {
 			String outputFile = FileNameGenerator.getTmpDir() + "TradeListing.pdf";
 			OutputStream file = new FileOutputStream(outputFile);
-			System.out.println("Output File " + outputFile);
 			Document document = new Document();
 			PdfWriter.getInstance(document, file);
 			document.open();
@@ -69,7 +83,9 @@ public class TradeListingProgram extends AbstractProgram{
 		}
 	}
 	
-	public List<Trade> build(String filePath){
+	public List<Trade> build(String args[]){
+		String filePath = getValue(args,"filepath","");
+		setArgs(args);
 		prepareCutOff();
 		StockBuilder builder = new StockBuilder();
 		builder.setInputFile(filePath);

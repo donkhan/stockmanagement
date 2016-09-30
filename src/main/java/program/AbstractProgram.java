@@ -75,6 +75,11 @@ public abstract class AbstractProgram {
 		return Integer.parseInt(v);
 	}
 	
+	protected int getIntegerValue(String args[],String arg,String defaultValue){
+		String v = getValue(args,arg,defaultValue);
+		return Integer.parseInt(v);
+	}
+	
 	protected boolean getBooleanValue(String args[],String arg){
 		String v = getValue(args,arg,"false");
 		return Boolean.parseBoolean(v);
@@ -123,4 +128,6 @@ public abstract class AbstractProgram {
 		Chunk chunk = new Chunk(title);
 		document.add(chunk);
 	}
+	
+	
 }

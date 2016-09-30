@@ -59,7 +59,7 @@ public class DividendListingProgram extends AbstractProgram{
 
 	@Override
 	public void execute(boolean force, String[] args) {
-		List<Dividend> allDividends = build(getValue(args,"filepath",""));
+		List<Dividend> allDividends = build(args);
 		try {
 			String outputFile = FileNameGenerator.getTmpDir() + "DividendListing.pdf";
 			OutputStream file = new FileOutputStream(outputFile);
@@ -79,7 +79,9 @@ public class DividendListingProgram extends AbstractProgram{
 		}
 	}
 	
-	public List<Dividend> build(String filePath){
+	public List<Dividend> build(String[] args){
+		setArgs(args);
+		String filePath = getValue(args,"filepath","");
 		prepareCutOff();
 		StockBuilder builder = new StockBuilder();
 		builder.setInputFile(filePath);
@@ -138,6 +140,21 @@ public class DividendListingProgram extends AbstractProgram{
 		c.set(Calendar.SECOND, 0); c.set(Calendar.MILLISECOND, 0);
 	}
 	
+	
+	private void setArgs(String args[]){
+		int month = getIntegerValue(args, "month","-1");
+		int year = getIntegerValue(args, "year","-1");
+		if(month != -1){
+			begin.set(Calendar.MONTH, month);
+			end.set(Calendar.MONTH, month);
+			System.out.println(begin.getTime() + "  " + end.getTime());
+		}
+		if(year != -1){
+			begin.set(Calendar.YEAR, year);
+			end.set(Calendar.YEAR, year);
+			
+		}
+	}
 	
 	public void appendToDocument(Document document,List<Dividend> dividends) throws DocumentException{
 		addSectionHeader(document,"Dividend");
