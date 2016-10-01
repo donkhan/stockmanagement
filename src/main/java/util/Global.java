@@ -22,7 +22,7 @@ public class Global {
 	}
 	
 	public static StockService getStockService(){
-		return new external.MoneyControlStockService();
-		//return new external.InternalStockService();
+		//return new external.MoneyControlStockService();
+		return new external.InternalStockService();
 	}
 }
