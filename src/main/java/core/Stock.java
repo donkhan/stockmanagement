@@ -100,7 +100,6 @@ public class Stock {
         trade.setNetRate(netRate);
         printNetRate(trade,unitExtraCost);
         if(real) {
-            totalQuantity -= trade.getQuantity();
         	addProfitAndAdjustAverage(trade);
             summary.incrementSellTrade();
             summary.incrementTurnOver(trade.getNetRate() * trade.getQuantity());
@@ -125,16 +124,18 @@ public class Stock {
         if(buyTradeIds != null){
         	for(int buyTradeId : buyTradeIds){
         		Trade buyTrade = getTrade(buyTradeId);
-        		profit += (trade.getNetRate() - buyTrade.getNetRate()) * buyTrade.getQuantity();
-        		double tradeCost = buyTrade.getNetRate() * buyTrade.getQuantity();
-        		double totalCost = getAverage() * (buyTrade.getQuantity() + totalQuantity);
-        		totalCost -= tradeCost;
-        		buyTrade.setQuantity(buyTrade.getQuantity() - trade.getQuantity());
-        		double newAverage = totalCost / totalQuantity;
+        		long quantity = trade.getQuantity();
+        		if(quantity > buyTrade.getQuantity()){
+        			quantity = buyTrade.getQuantity();
+        		}
+        		profit = (trade.getNetRate() - buyTrade.getNetRate()) * quantity;
+        		double newAverage = ((totalQuantity * getAverage()) - (buyTrade.getNetRate() * quantity))/ (totalQuantity - quantity);
+        		totalQuantity -= quantity;
         		setAverage(newAverage);
         	}
         }else{
             profit = (trade.getNetRate() - getAverage()) * trade.getQuantity();
+            totalQuantity -= trade.getQuantity();
         }
         if(Global.debug){
         	System.out.println("Trade Profit "  + profit);
