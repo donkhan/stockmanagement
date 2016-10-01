@@ -170,4 +170,19 @@ public class Trade implements Comparable<Trade>{
 		return (int)(t.getTransactionTime().getTimeInMillis() - getTransactionTime().getTimeInMillis());
 	}
 	
+	private String referenceRate = "";
+
+
+	public String getReferenceRate() {
+		return referenceRate;
+	}
+
+
+	public void setReferenceRate(String referenceRate) {
+		this.referenceRate = referenceRate;
+	}
+
+
+	
+	
 }

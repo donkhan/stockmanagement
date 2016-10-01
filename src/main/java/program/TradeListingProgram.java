@@ -126,7 +126,7 @@ public class TradeListingProgram extends AbstractProgram{
 		addSectionHeader(document,"Trade");
 	
 		PdfPTable table = new PdfPTable(7);
-		String headers[] = new String[]{"Date","Script","Type","Quantity","Gross Rate","Net Rate","Profit"};
+		String headers[] = new String[]{"Date","Script","Type","Quantity","Net Rate","Profit","Ref"};
 		addHeaders(table,headers);
 
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
@@ -140,13 +140,13 @@ public class TradeListingProgram extends AbstractProgram{
 			row.add(trade.getName());
 			row.add(trade.getTradeType());
 			row.add(trade.getQuantity());
-			row.add(trade.getGrossRate());
 			row.add(trade.getNetRate());
 			if(trade.getTradeType().equals(Trade.SELL)){
 				row.add(trade.getProfit());
 			}else{
 				row.add(" ");
 			}
+			row.add(trade.getReferenceRate());
 			tp += trade.getProfit();
 			addRow(row, table);
 		}

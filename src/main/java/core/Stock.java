@@ -6,6 +6,7 @@ import java.util.List;
 
 import commissioncalculators.CommissionCalculator;
 import util.Global;
+import util.MathUtils;
 
 
 public class Stock {
@@ -129,13 +130,16 @@ public class Stock {
         			quantity = buyTrade.getQuantity();
         		}
         		profit = (trade.getNetRate() - buyTrade.getNetRate()) * quantity;
+        		trade.setReferenceRate(trade.getReferenceRate() + " " + quantity+"@"+MathUtils.Round(buyTrade.getNetRate(),1));
         		double newAverage = ((totalQuantity * getAverage()) - (buyTrade.getNetRate() * quantity))/ (totalQuantity - quantity);
         		totalQuantity -= quantity;
         		setAverage(newAverage);
+        		
         	}
         }else{
             profit = (trade.getNetRate() - getAverage()) * trade.getQuantity();
             totalQuantity -= trade.getQuantity();
+            trade.setReferenceRate(""+MathUtils.Round(getAverage(),2));
         }
         if(Global.debug){
         	System.out.println("Trade Profit "  + profit);
