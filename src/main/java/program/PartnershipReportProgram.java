@@ -66,7 +66,7 @@ public class PartnershipReportProgram extends AbstractProgram{
 		StockListingProgram sp = new StockListingProgram();
 		Double totalProfit = 0d;
 		StockBuilder builder = new StockBuilder();
-		List<Stock> stocks = sp.build(builder, totalProfit, false, 12, "None", "");
+		List<Stock> stocks = sp.build(builder, totalProfit, false, 12, "None", "",getValue(args, "mode", "real"));
 		Workbook wb = builder.getWorkBook();
 		double cash = findCash(wb,args);
 		TradeListingProgram tp = new TradeListingProgram();

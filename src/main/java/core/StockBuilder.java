@@ -23,7 +23,16 @@ public class StockBuilder {
 	
 	private String inputFile;
 	private boolean fullReport;
+	private String mode;
 	
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
 
 	public boolean isFullReport() {
 		return fullReport;
@@ -85,7 +94,7 @@ public class StockBuilder {
 				continue;
 			}
 			String url = getURL(sheet, stockName);
-			StockThread st = new StockThread(url,stockName,maxRetries);
+			StockThread st = new StockThread(url,stockName,maxRetries,mode);
 			st.start();
 			list.add(st);
 		}

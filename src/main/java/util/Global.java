@@ -1,6 +1,5 @@
 package util;
 
-import external.InternalStockService;
 import services.StockService;
 
 public class Global {
@@ -21,8 +20,11 @@ public class Global {
 		}
 	}
 	
-	public static StockService getStockService(){
-		//return new external.MoneyControlStockService();
-		return new external.InternalStockService();
+	public static StockService getStockService(String mode){
+		if("local".equals(mode)){
+			return new external.InternalStockService();
+		}
+		return new external.MoneyControlStockService();
+		
 	}
 }

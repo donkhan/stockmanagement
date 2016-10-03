@@ -54,7 +54,8 @@ public class StockListingProgram extends AbstractProgram{
 		String specificStock = getValue(args,"specificstock","None");
 		StockBuilder builder = new StockBuilder();
 		Double totalProfit = 0d;
-		List<Stock> stockList = build(builder,totalProfit,fullReport,maxRetries,specificStock,getValue(args,"filepath",""));
+		List<Stock> stockList = build(builder,totalProfit,fullReport,maxRetries,specificStock,getValue(args,"filepath",""),
+				getValue(args,"mode","real"));
 		try {
 			OutputStream file = new FileOutputStream(FileNameGenerator.getTmpDir() + "StockListing.pdf");
 			Document document = new Document();
@@ -74,10 +75,11 @@ public class StockListingProgram extends AbstractProgram{
 	
 	public List<Stock> build(StockBuilder builder,
 			Double totalProfit,boolean fullReport, 
-			int maxRetries, String specificStock,String inputFile){
+			int maxRetries, String specificStock,String inputFile,String mode){
 		builder.setInputFile(inputFile);
 		builder.setFullReport(fullReport);
 		builder.setWorkBook();
+		builder.setMode(mode);
 		
 		Map<String, Stock> stocks = builder.read(specificStock);
 		builder.updateStocks(stocks,maxRetries);

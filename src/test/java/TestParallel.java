@@ -15,7 +15,7 @@ public class TestParallel {
                 "http://www.moneycontrol.com/india/stockpricequote/infrastructure-general/gmrinfrastructure/GI27"};
         List<StockThread> list = new ArrayList<StockThread>();
         for(int i = 0;i<stocks.length;i++) {
-            StockThread st = new StockThread(stocks[i],"",20);
+            StockThread st = new StockThread(stocks[i],"",20,"real");
             st.start();
         }
 
