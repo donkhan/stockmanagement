@@ -131,10 +131,12 @@ public class Stock {
         		}
         		profit = (trade.getNetRate() - buyTrade.getNetRate()) * quantity;
         		trade.setReferenceRate(trade.getReferenceRate() + " " + quantity+"@"+MathUtils.Round(buyTrade.getNetRate(),1));
-        		double newAverage = ((totalQuantity * getAverage()) - (buyTrade.getNetRate() * quantity))/ (totalQuantity - quantity);
-        		totalQuantity -= quantity;
-        		setAverage(newAverage);
-        		
+        		long remainingQuantity = totalQuantity - quantity;
+        		if(remainingQuantity != 0){
+        			double newAverage = ((totalQuantity * getAverage()) - (buyTrade.getNetRate() * quantity))/ (totalQuantity - quantity);
+        			setAverage(newAverage);
+        		}
+        		totalQuantity = (int)remainingQuantity;
         	}
         }else{
             profit = (trade.getNetRate() - getAverage()) * trade.getQuantity();
