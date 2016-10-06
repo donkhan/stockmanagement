@@ -52,7 +52,14 @@ public class IndiviualStockTrackingProgram extends AbstractProgram{
 				+ File.separatorChar + passedStock +  "-" + d + ".txt";
 
 		
-		StockThread thread = new StockThread(passedStock,stockURL,3,"remote");
+		StockThread thread = new StockThread(stockURL,passedStock,3,"remote");
+		thread.start();
+		try {
+			thread.join();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		double price = thread.getStockPrice();
 		
 		DateFormat format = new SimpleDateFormat("HH:mm:ss");
