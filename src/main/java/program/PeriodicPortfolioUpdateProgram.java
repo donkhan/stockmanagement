@@ -148,16 +148,17 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram {
 	
 	private void appendToDocument(Document document,TradeSummary tradeSummary) throws DocumentException{
 		NumberFormat format = new DecimalFormat("#,###,###,##0.00");
+		NumberFormat xformat = new DecimalFormat("#,###,###,##0");
 		document.add(new Paragraph("Total Turn Over : " + format.format(tradeSummary.getTotalTurnOver())));
-		document.add(new Paragraph("Total Buys : " + format.format(tradeSummary.getNoOfBuyTrades())));
-		document.add(new Paragraph("Total Sells : " + format.format(tradeSummary.getNoOfSellTrades())));
+		document.add(new Paragraph("Total Buys : " + xformat.format(tradeSummary.getNoOfBuyTrades())));
+		document.add(new Paragraph("Total Sells : " + xformat.format(tradeSummary.getNoOfSellTrades())));
 		
 	}
 	
 	private void appendToDocument(Document document,List<Stock> stocks,TradeSummary tradeSummary) throws DocumentException{
-		PdfPTable table = new PdfPTable(9);
-		String headers[] = new String[]{"Name","#","Avg","Mkt","Ivt","Cur","Gain","Realized Profit","Look"};
-		table.setWidths(new float[]{12f,5f,12f,12f,13f,13f,13f,13f,8f});
+		PdfPTable table = new PdfPTable(10);
+		String headers[] = new String[]{"Name","#","Avg","Mkt","Ivt","Cur","Gain","Realized Profit","Look","B"};
+		table.setWidths(new float[]{12f,7f,12f,12f,13f,13f,13f,13f,7f,3f});
 		addHeaders(table,headers);
 		NumberFormat format = new DecimalFormat("#,###,###,##0.00");
 		NumberFormat xformat = new DecimalFormat("#,###,###,##0");
@@ -187,6 +188,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram {
 			row.add(format.format(stock.getTotalQuantity() * (stock.getCurrentPrice() - stock.getAverage())));
 			row.add(format.format(stock.getProfitRealised()));
 			row.add(stock.getLookOutTrades());
+			row.add(""+stock.getBroker().charAt(0));
 			addRow(row, table,stock.getAverage() > stock.getCurrentPrice() ? BaseColor.RED : BaseColor.ORANGE);
 		}
 		
