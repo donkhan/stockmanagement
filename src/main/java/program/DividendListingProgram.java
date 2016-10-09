@@ -141,7 +141,7 @@ public class DividendListingProgram extends AbstractProgram{
 	}
 	
 	
-	private void setArgs(String args[]){
+	public void setArgs(String args[]){
 		int month = getIntegerValue(args, "month","-1");
 		int year = getIntegerValue(args, "year","-1");
 		if(month != -1){

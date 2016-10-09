@@ -31,8 +31,8 @@ public class TradeListingProgram extends AbstractProgram{
 		cp.startExecute(args);
 	}
 	
-	private GregorianCalendar begin = new GregorianCalendar();
-	private GregorianCalendar end  = new GregorianCalendar();
+	private Calendar begin = new GregorianCalendar();
+	private Calendar end  = new GregorianCalendar();
 	
 	protected void prepareCutOff() {
 		resetCalendar(begin); resetCalendar(end);
@@ -47,7 +47,7 @@ public class TradeListingProgram extends AbstractProgram{
 		return -1;
 	}
 
-	private void setArgs(String args[]){
+	public void setArgs(String args[]){
 		int month = getIntegerValue(args, "month","-1");
 		int year = getIntegerValue(args, "year","-1");
 		if(month != -1){
@@ -84,14 +84,35 @@ public class TradeListingProgram extends AbstractProgram{
 	}
 	
 	public List<Trade> build(String args[]){
-		String filePath = getValue(args,"filepath","");
 		setArgs(args);
 		prepareCutOff();
+		return fetchTrades(args);
+	}
+	
+	public Calendar getBegin() {
+		return begin;
+	}
+
+	public void setBegin(Calendar begin) {
+		this.begin = begin;
+	}
+
+	public Calendar getEnd() {
+		return end;
+	}
+
+	public void setEnd(Calendar end) {
+		this.end = end;
+	}
+
+	public List<Trade> fetchTrades(String args[]){
+		String filePath = getValue(args,"filepath","");
 		StockBuilder builder = new StockBuilder();
 		builder.setInputFile(filePath);
 		builder.setFullReport(true);
 		builder.setWorkBook();
-		Map<String, Stock> stocks = builder.read("None");
+		String stockName = "None";
+		Map<String, Stock> stocks = builder.read(stockName);
 		Iterator<Stock> values = stocks.values().iterator();
 		List<Trade> allTrades = new ArrayList<Trade>();
 		while(values.hasNext()){

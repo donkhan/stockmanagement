@@ -125,7 +125,7 @@ public class Trade implements Comparable<Trade>{
 	public String toString(){
 		double cost = getNetRate() * getQuantity();
 		return id + ":" + getTradeTypeSymbol() + " " + quantity
-				+ " " + name +  " " + cost;
+				+ " " + name +  " " + cost + "  @" + getTransactionTime().getTime();
 	}
 	
 	public void print(){
@@ -167,7 +167,7 @@ public class Trade implements Comparable<Trade>{
 	}
 
 	public int compareTo(Trade t) {
-		return (int)(t.getTransactionTime().getTimeInMillis() - getTransactionTime().getTimeInMillis());
+		return t.getTransactionTime().after(getTransactionTime()) ? 1 : -1;
 	}
 	
 	private String referenceRate = "";

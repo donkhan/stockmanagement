@@ -34,15 +34,7 @@ import file.FileNameGenerator;
 
 public class PeriodicPortfolioUpdateProgram extends AbstractProgram {
 
-	private String[] args;
-
-	public String[] getArgs() {
-		return args;
-	}
-
-	public void setArgs(String[] args) {
-		this.args = args;
-	}
+	
 
 	public static void main(String[] args) {
 		PeriodicPortfolioUpdateProgram main = new PeriodicPortfolioUpdateProgram();
@@ -51,7 +43,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram {
 	}
 
 	public long getTimerInterval() {
-		return getIntegerValue(this.args, "interval") * 60 * 1000;
+		return getIntegerValue(getArgs(), "interval") * 60 * 1000;
 	}
 
 	public void execute(final boolean force, String args[]) {
@@ -115,7 +107,7 @@ public class PeriodicPortfolioUpdateProgram extends AbstractProgram {
 		ExecutionSummary executionSummary = new ExecutionSummary();
 		GregorianCalendar currentTime = new GregorianCalendar();
 		executionSummary.setExecutionTime(currentTime.getTime());
-		currentTime.add(Calendar.MINUTE, getIntegerValue(this.args, "interval"));
+		currentTime.add(Calendar.MINUTE, getIntegerValue(getArgs(), "interval"));
 		executionSummary.setNextExecutionTime(currentTime.getTime());
 		long elapsed = System.currentTimeMillis() - start;
 		executionSummary.setTimeToExecute(elapsed);

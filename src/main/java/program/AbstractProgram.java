@@ -23,6 +23,16 @@ public abstract class AbstractProgram {
 	protected abstract long getTimerInterval();
 	protected abstract void execute(final boolean force,final String args[]);
 	
+	private String[] args;
+
+	public String[] getArgs() {
+		return args;
+	}
+
+	public void setArgs(String[] args) {
+		this.args = args;
+	}
+	
 	protected void main(final boolean force, final String[] args){
 		if(force || getTimerInterval() == -1){
 			execute(force,args);
