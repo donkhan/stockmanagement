@@ -37,7 +37,9 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		main.startExecute(args);
 	}
 	
-	double balance = 0;
+	private double balance = 0;
+	private final Map<String,List<LedgerEntry>> ledgerMap = new HashMap<String,List<LedgerEntry>>();
+	
 	@Override
 	protected void execute(boolean force, String[] args) {
 		TradeListingProgram tp = new TradeListingProgram();
@@ -46,7 +48,7 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		tp.setBegin(begin);
 		List<Trade> trades = tp.build(args);
 		Collections.sort(trades);
-		Map<String,List<LedgerEntry>> ledgerMap = new HashMap<String,List<LedgerEntry>>();
+		
 		
 		PayInPayOutListingProgram cp = new PayInPayOutListingProgram();
 		List<LedgerEntry> normalLedgerEntries = cp.build(args);
@@ -57,11 +59,15 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		
 	}
 	
+	
+	
 	private void prepareLedgers(Map<String,List<LedgerEntry>> ledgerMap){
+		final Document document = new Document();
+		final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 		try {
 			String outputFile = FileNameGenerator.getTmpDir() + "Ledger.pdf";
 			OutputStream file = new FileOutputStream(outputFile);
-			Document document = new Document();
+			
 			PdfWriter.getInstance(document, file);
 			document.open();
 			
@@ -74,11 +80,9 @@ public class LedgerPreparationProgram extends AbstractProgram{
 					
 					try {
 						addSectionHeader(document,broker);
-						PdfPTable table = new PdfPTable(4);
+						final PdfPTable table = new PdfPTable(4);
 						String headers[] = new String[]{"Date","Description","Amount","Balance"};
 						addHeaders(table,headers);
-
-						DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 						list.forEach(new Consumer<LedgerEntry>(){
 							@Override
 							public void accept(LedgerEntry le) {
@@ -127,7 +131,7 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		list.add(le);
 	}
 	
-	private void merge(List<Trade> trades, Map<String,List<LedgerEntry>> ledgerMap){
+	private void merge(List<Trade> trades, final Map<String,List<LedgerEntry>> ledgerMap){
 		trades.forEach(new Consumer<Trade>(){
 			@Override
 			public void accept(Trade t) {
@@ -153,7 +157,7 @@ public class LedgerPreparationProgram extends AbstractProgram{
 	}
 	
 	private void mergePayEntries(List<LedgerEntry> normalLedgerEntries, 
-			Map<String,List<LedgerEntry>> ledgerMap){
+			final Map<String,List<LedgerEntry>> ledgerMap){
 		normalLedgerEntries.forEach(new Consumer<LedgerEntry>(){
 			@Override
 			public void accept(LedgerEntry le) {
