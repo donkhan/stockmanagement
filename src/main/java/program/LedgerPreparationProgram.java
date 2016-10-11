@@ -55,6 +55,7 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		
 		merge(trades,ledgerMap);
 		mergePayEntries(normalLedgerEntries,ledgerMap);
+		
 		prepareLedgers(ledgerMap);
 		
 	}
@@ -76,8 +77,8 @@ public class LedgerPreparationProgram extends AbstractProgram{
 				public void accept(String broker, List<LedgerEntry> list) {
 					if(list == null) return;
 					System.out.println("Broker ...." + broker);
+//					if(!broker.equals("Kotak")) return;
 					Collections.sort(list);
-					
 					try {
 						addSectionHeader(document,broker);
 						final PdfPTable table = new PdfPTable(4);
@@ -156,13 +157,14 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		});
 	}
 	
-	private void mergePayEntries(List<LedgerEntry> normalLedgerEntries, 
+	private void mergePayEntries(final List<LedgerEntry> normalLedgerEntries, 
 			final Map<String,List<LedgerEntry>> ledgerMap){
 		normalLedgerEntries.forEach(new Consumer<LedgerEntry>(){
 			@Override
 			public void accept(LedgerEntry le) {
 				List<LedgerEntry> list = ledgerMap.get(le.getBroker());
 				merge(list,le);
+				//list.addAll(normalLedgerEntries);
 			}
 		});
 	}

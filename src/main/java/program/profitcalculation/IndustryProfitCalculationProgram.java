@@ -103,7 +103,19 @@ public class IndustryProfitCalculationProgram extends AbstractProfitCalculationP
 		
 		
 		System.out.println("Total Profit " + df.format(totalProfit));
-		System.out.println("Current Average " + stock.getAverage());
+		
+		
+		double costBasis = 0;
+		double remainingStocks = 0;
+		for(int i= buyIndex;i<buyTrades.size();i++){
+			Trade bt = buyTrades.get(i);
+			costBasis += (bt.getQuantity() * bt.getNetRate());
+			remainingStocks += bt.getQuantity();
+		}
+		if(remainingStocks > 0){
+			System.out.println("Average " + costBasis/remainingStocks + " Stocks " + remainingStocks);
+		}
+		
 		System.out.println("-----------------------------");
 	}
 	

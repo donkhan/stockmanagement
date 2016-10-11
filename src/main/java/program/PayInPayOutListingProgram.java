@@ -73,7 +73,9 @@ public class PayInPayOutListingProgram extends AbstractProgram{
 		
 		for(int i = 0;i<rows;i++){
 			LedgerEntry le = new LedgerEntry();
-			StringTokenizer d = new StringTokenizer(sheet.getCell(0, i).getContents(),"/");
+			String dc = sheet.getCell(0, i).getContents();
+			dc = dc.replaceAll("\"", "");
+			StringTokenizer d = new StringTokenizer(dc,"/");
 			Calendar c = new GregorianCalendar();
 			c.set(Calendar.DATE, Integer.parseInt(d.nextToken()));
 			c.set(Calendar.MONTH, Integer.parseInt(d.nextToken())-1);
