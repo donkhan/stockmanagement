@@ -43,6 +43,9 @@ public class LedgerEntry implements Comparable<LedgerEntry>{
 	}
 	@Override
 	public int compareTo(LedgerEntry le) {
+		if(le.getTime().getTimeInMillis() == getTime().getTimeInMillis()){
+			return 0;
+		}
 		return le.getTime().after(getTime()) ? -1 : 1;
 	}
 	

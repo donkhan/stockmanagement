@@ -182,7 +182,9 @@ public class StockBuilder {
 	private void fill(Trade trade,Sheet sheet,int index){
 		Cell cell = sheet.getCell(1, index);
 		handleTransactionDate(trade,cell);
+		
 		trade.setName(sheet.getCell(0,index).getContents());
+		handleSettlementDate(trade,sheet.getCell(11, index));
 		trade.setTradeType(sheet.getCell(2, index).getContents());
 		trade.setQuantity(Long.parseLong(sheet.getCell(4, index).getContents()));
 		trade.setGrossRate(Double.parseDouble(sheet.getCell(3, index).getContents()));
@@ -263,16 +265,26 @@ public class StockBuilder {
 		return null;
 	}
 	
-	private void handleTransactionDate(Trade trade,Cell cell){
+	private void handleSettlementDate(Trade trade,Cell cell){
+		if(cell == null) return;
 		String content = cell.getContents();
-		
+		if("".equals(content)){
+			return;
+		}
+		trade.setSettlementTime(getDate(content));
+	}
+	
+	private void handleTransactionDate(Trade trade,Cell cell){
+		trade.setTransactionTime(getDate(cell.getContents()));
+	}
+	
+	private Calendar getDate(String content){
 		StringTokenizer tokenizer = new StringTokenizer(content,"/");
 		Calendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.MONTH, Integer.parseInt(tokenizer.nextToken())-1);
 		calendar.set(Calendar.DATE, Integer.parseInt(tokenizer.nextToken()));
 		calendar.set(Calendar.YEAR, 2000+Integer.parseInt(tokenizer.nextToken()));
-		trade.setTransactionTime(calendar);
-
+		return calendar;
 	}
 	
 	

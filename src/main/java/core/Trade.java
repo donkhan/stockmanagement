@@ -182,7 +182,19 @@ public class Trade implements Comparable<Trade>{
 		this.referenceRate = referenceRate;
 	}
 
+	private Calendar settlementTime;
 
+
+	public Calendar getSettlementTime() {
+		return settlementTime;
+	}
+
+
+	public void setSettlementTime(Calendar settlementTime) {
+		this.settlementTime = settlementTime;
+	}
+	
+	
 	
 	
 }

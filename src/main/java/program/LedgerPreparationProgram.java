@@ -47,7 +47,7 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		begin.set(Calendar.YEAR, 2012);
 		tp.setBegin(begin);
 		List<Trade> trades = tp.build(args);
-		Collections.sort(trades);
+		//Collections.sort(trades);
 		
 		
 		PayInPayOutListingProgram cp = new PayInPayOutListingProgram();
@@ -55,11 +55,8 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		
 		merge(trades,ledgerMap);
 		mergePayEntries(normalLedgerEntries,ledgerMap);
-		
 		prepareLedgers(ledgerMap);
-		
 	}
-	
 	
 	
 	private void prepareLedgers(Map<String,List<LedgerEntry>> ledgerMap){
@@ -77,7 +74,7 @@ public class LedgerPreparationProgram extends AbstractProgram{
 				public void accept(String broker, List<LedgerEntry> list) {
 					if(list == null) return;
 					System.out.println("Broker ...." + broker);
-//					if(!broker.equals("Kotak")) return;
+					//if(!broker.equals("Kotak")) return;
 					Collections.sort(list);
 					try {
 						addSectionHeader(document,broker);
@@ -138,7 +135,11 @@ public class LedgerPreparationProgram extends AbstractProgram{
 			public void accept(Trade t) {
 				LedgerEntry le = new LedgerEntry();
 				le.setAmount(t.getQuantity()* t.getNetRate());
-				le.setTime(t.getTransactionTime());
+				if(t.getSettlementTime() != null){
+					le.setTime(t.getSettlementTime());
+				}else{
+					le.setTime(t.getTransactionTime());
+				}
 				if(t.getTradeType().equals(Trade.BUY)){
 					le.setAmount(le.getAmount() * -1);
 					le.setDescription("Bought " + t.getQuantity() + " " + t.getName());
@@ -163,8 +164,8 @@ public class LedgerPreparationProgram extends AbstractProgram{
 			@Override
 			public void accept(LedgerEntry le) {
 				List<LedgerEntry> list = ledgerMap.get(le.getBroker());
-				merge(list,le);
-				//list.addAll(normalLedgerEntries);
+				//merge(list,le);
+				list.add(le);
 			}
 		});
 	}
