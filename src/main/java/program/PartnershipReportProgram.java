@@ -78,12 +78,16 @@ public class PartnershipReportProgram extends AbstractProgram{
 		
 		DailyProfitCalculationProgram dpp = new DailyProfitCalculationProgram();
 		List<ProfitCalendarInterface> profitCalendarList = dpp.process(dpp.buildMap(args));
+		
 		readShareHolding(wb,args);
 		findStakeHoldersShare();	
+		Calendar cutOffDate = new GregorianCalendar();
+		setArgs(args,cutOffDate);
 		
 		for(StakeHolder stakeHolder : stakeHolders){
 			try {
-				String fileName = FileNameGenerator.getTmpDir() + stakeHolder.getName() + "-PartnerShipReport.pdf";
+				String fileName = FileNameGenerator.getTmpDir() + stakeHolder.getName() 
+					+ "-" + cutOffDate.get(Calendar.MONTH) + "-" + cutOffDate.get(Calendar.YEAR) + "-PartnerShipReport.pdf";
 				System.out.println(fileName);
 				OutputStream file = new FileOutputStream(fileName);
 				Document document = new Document();

@@ -14,14 +14,14 @@ public class DailyProfitCalculationProgram extends AbstractProfitCalculationProg
 	
 	public void prepareCutOff(String[] args) {
 		if(args.length == 1){
-			int month = this.getIntegerValue(args, "month");
+			int month = getIntegerValue(args, "month","" + begin.get(Calendar.MONTH));
 			begin.set(Calendar.MONTH,month);
 			end.set(Calendar.MONTH,month);
 		}
 		
 		if(args.length == 2){
-			int month = getIntegerValue(args, "month");
-			int year = getIntegerValue(args, "year");
+			int month = getIntegerValue(args, "month","" + begin.get(Calendar.MONTH));
+			int year = getIntegerValue(args, "year","" + begin.get(Calendar.YEAR));
 			begin.set(Calendar.MONTH,month);
 			begin.set(Calendar.YEAR, year);
 			end.set(Calendar.MONTH,month);
