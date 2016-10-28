@@ -106,12 +106,16 @@ public class DividendListingProgram extends AbstractProgram{
 	
 	private void handleDividendDate(Dividend dividend,Cell cell){
 		String content = cell.getContents();
+		content = content.replaceAll("\"", "");
 		
 		StringTokenizer tokenizer = new StringTokenizer(content,"/");
 		Calendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.DATE, Integer.parseInt(tokenizer.nextToken()));
 		calendar.set(Calendar.MONTH, Integer.parseInt(tokenizer.nextToken())-1);
-		calendar.set(Calendar.YEAR, 2000+Integer.parseInt(tokenizer.nextToken()));
+		int year = Integer.parseInt(tokenizer.nextToken());
+		if(year < 2000){
+			calendar.set(Calendar.YEAR, 2000+year);
+		}
 		
 		dividend.setDividendPaidTime(calendar);
 
