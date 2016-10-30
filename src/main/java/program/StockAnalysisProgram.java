@@ -32,8 +32,8 @@ public class StockAnalysisProgram extends AbstractProgram{
 	protected void execute(boolean force, String[] args) {
 		String specificStock = getValue(args, "specificstock", "None");
 		String specificBroker = getValue(args, "specificbroker", "None");
-		//specificStock = "SAIL";
-		//specificBroker = "Kotak";
+		specificStock = "SAIL";
+		specificBroker = "Geojit";
 		if(specificStock.equals("None")){
 			System.err.println("Usage java -classpath stockmanagement.jar program.StockAnalysisProram <stockname>");
 			return;
@@ -83,7 +83,7 @@ public class StockAnalysisProgram extends AbstractProgram{
 				row.add(trade.getNetRate());
 				row.add(trade.getProfit());
 				if(trade.getBuyTradeIds() != null){
-					row.add(trade.getBuyTradeIds().toString());
+					row.add(trade.getReferenceRate());
 				}else{
 					row.add("");
 				}
