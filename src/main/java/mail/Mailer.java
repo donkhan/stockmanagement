@@ -26,7 +26,7 @@ public class Mailer extends AbstractProgram{
 	}
 	
 	public void mail(String fileName,StringBuffer subject) {
-		mail(fileName,subject,null);
+		mail(fileName,subject,null,null);
 	}
 	
 	private Properties getSMTPProperties(){
@@ -63,11 +63,11 @@ public class Mailer extends AbstractProgram{
 		return session;
 	}
 		
-	public void mail(String fileName,StringBuffer subject,StringBuffer content){
+	public void mail(String fileName,StringBuffer subject,StringBuffer content,String to){
 		try {
 			Message message = new MimeMessage(getSession());
 			message.setFrom(new InternetAddress("secret-friend@gmail.com"));
-			message.setRecipients(Message.RecipientType.TO,InternetAddress.parse("routetokamil@gmail.com"));
+			message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(to));
 			message.setSubject(subject.toString());
 	        
 			if(fileName != null){

@@ -80,21 +80,27 @@ public class StockTrackingProgram extends AbstractProgram{
 	
 	private void analyse(List<StockTrack> list,String[] args){
 		String mailContent = "";
+		boolean sendMail = false;
 		for(StockTrack st: list){
 			if(st.getCurrentPrice() <= st.getLowerPrice()){
+				sendMail = true;
 				mailContent += st.getName() + "'s Price is " + st.getCurrentPrice() 
 					+ " and it violates lower value " + st.getLowerPrice(); 
 			}
 			if(st.getCurrentPrice() >= st.getUpperPrice()){
+				sendMail = true;
 				mailContent += st.getName() + "'s Price is " + st.getCurrentPrice() 
 				+ " and it violates upper value " + st.getUpperPrice(); 
 			}
+			mailContent = mailContent + "\n";
 		}
 		System.out.println(mailContent);
-		if(!mailContent.equals("")){
-			
+		if(sendMail){
+			String to = this.getValue(args, "to", "routetokamil@gmail.com");
+			System.out.println(to);
 			Mailer mailer = new Mailer(args);
-			//mailer.mail(null, new StringBuffer("Immediate Attention"),new StringBuffer(mailContent));
+			mailer.mail(null, new StringBuffer("Immediate Attention"),
+					new StringBuffer(mailContent),to);
 		}
 		
 	}
