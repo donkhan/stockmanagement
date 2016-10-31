@@ -23,6 +23,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import core.LedgerEntry;
 import core.Trade;
 import file.FileNameGenerator;
+import util.MathUtils;
 
 public class LedgerPreparationProgram extends AbstractProgram{
 
@@ -37,8 +38,10 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		main.startExecute(args);
 	}
 	
-	private double balance = 0;
+	
 	private final Map<String,List<LedgerEntry>> ledgerMap = new HashMap<String,List<LedgerEntry>>();
+	private double balance = 0;
+	private final Map<String,Double> accountMap = new HashMap<String,Double>();
 	
 	@Override
 	protected void execute(boolean force, String[] args) {
@@ -47,9 +50,6 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		begin.set(Calendar.YEAR, 2012);
 		tp.setBegin(begin);
 		List<Trade> trades = tp.build(args);
-		//Collections.sort(trades);
-		
-		
 		PayInPayOutListingProgram cp = new PayInPayOutListingProgram();
 		List<LedgerEntry> normalLedgerEntries = cp.build(args);
 		
@@ -68,16 +68,30 @@ public class LedgerPreparationProgram extends AbstractProgram{
 			
 			PdfWriter.getInstance(document, file);
 			document.open();
+
+			ledgerMap.forEach(new BiConsumer<String,List<LedgerEntry>>(){
+				double accountBalance = 0;
+				@Override
+				public void accept(String broker, List<LedgerEntry> list) {
+					if(list == null) return;
+					Collections.sort(list);
+					list.forEach(new Consumer<LedgerEntry>(){
+						@Override
+						public void accept(LedgerEntry le) {
+							accountBalance += le.getAmount();
+						}
+					});
+					accountMap.put(broker,accountBalance);
+					accountBalance = 0;
+				}
+			});
 			
 			ledgerMap.forEach(new BiConsumer<String,List<LedgerEntry>>(){
 				@Override
 				public void accept(String broker, List<LedgerEntry> list) {
 					if(list == null) return;
-					System.out.println("Broker ...." + broker);
-					//if(!broker.equals("Kotak")) return;
-					Collections.sort(list);
 					try {
-						addSectionHeader(document,broker);
+						addSectionHeader(document,broker + ":  Balance Rs " + MathUtils.Round(accountMap.get(broker),2));
 						final PdfPTable table = new PdfPTable(4);
 						String headers[] = new String[]{"Date","Description","Amount","Balance"};
 						addHeaders(table,headers);
@@ -98,8 +112,6 @@ public class LedgerPreparationProgram extends AbstractProgram{
 					} catch (DocumentException e) {
 						e.printStackTrace();
 					}
-					
-					
 				}
 			});
 			document.close();
@@ -114,8 +126,6 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		
 		
 	}
-	
-	
 
 	protected void merge(List<LedgerEntry> list, LedgerEntry le) {
 		for(int i = 0;i<list.size();i++){
@@ -164,7 +174,6 @@ public class LedgerPreparationProgram extends AbstractProgram{
 			@Override
 			public void accept(LedgerEntry le) {
 				List<LedgerEntry> list = ledgerMap.get(le.getBroker());
-				//merge(list,le);
 				list.add(le);
 			}
 		});
