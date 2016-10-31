@@ -97,14 +97,6 @@ public class Mailer extends AbstractProgram{
 		
 	}
 	
-	
-	
-	public static void main(String args[]){
-		Mailer mailer = new Mailer(args);
-		StringBuffer subject = new StringBuffer(); subject.append("Test Subject");
-		StringBuffer content = new StringBuffer(); content.append("Summa Summa");
-		mailer.mail("c://users//kkhan//sweeties///carmen//stockmanagement//src//main//resources//Trade.xls", subject,content);
-	}
 
 	@Override
 	protected long getTimerInterval() {
