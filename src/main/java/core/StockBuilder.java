@@ -197,8 +197,7 @@ public class StockBuilder {
             System.out.println("Gross Rate " + trade.getGrossRate());
         }
 		
-		CommissionCalculator cc = getCommissionCalculator(broker);
-		cc.calculateCommission(trade);
+		calculateNetRate(trade,sheet,index);
 		
 		if(trade.getTradeType().equals(Trade.SELL)){
 			int columns = sheet.getColumns();
@@ -213,6 +212,20 @@ public class StockBuilder {
 		}
 	}
 	
+	private void calculateNetRate(Trade trade, Sheet sheet, int index) {
+		Cell cell = sheet.getCell(10, index);
+		if(cell != null){
+			String content = cell.getContents();
+			if(content != null && !content.equals("")){
+				trade.setExtraCost(Double.parseDouble(content));
+				return;
+			}
+		}
+		CommissionCalculator cc = getCommissionCalculator(trade.getBroker());
+		cc.calculateCommission(trade);
+		
+	}
+
 	private void handleSoldOffs(Sheet sheet,int col,int index,Trade trade){
 		Cell cell = sheet.getCell(col,index);
 		if(cell != null){
