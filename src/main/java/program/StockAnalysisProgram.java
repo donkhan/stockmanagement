@@ -31,9 +31,9 @@ public class StockAnalysisProgram extends AbstractProgram{
 	@Override
 	protected void execute(boolean force, String[] args) {
 		String specificStock = getValue(args, "specificstock", "None");
-		String specificBroker = getValue(args, "specificbroker", "None");
-		if(specificStock.equals("None")){
-			System.err.println("Usage java -classpath stockmanagement.jar program.StockAnalysisProram <stockname>");
+		String specificBroker = getValue(args, "broker", "None");
+		if(specificStock.equals("None") || specificBroker.equals("None")){
+			System.err.println("Usage java -classpath stockmanagement.jar program.StockAnalysisProgram --specificstock=<stockname> broker=<broker>");
 			return;
 		}
 		StockBuilder builder = new StockBuilder();
