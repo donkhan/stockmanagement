@@ -63,10 +63,12 @@ public class StockBuilder {
 		tradeSummary = new TradeSummary();
 		int noOfTrades = sheet.getRows();
 		tradeSummary.setNoOfTrades(noOfTrades);
-		
 		Global.printLine();
 		for (int i = 1; i < noOfTrades; i++) {
 			String stockName = sheet.getCell(0, i).getContents();
+			if(stockName == null || stockName.equals("")){
+				continue;
+			}
 			if(!specificStock.equals("None") && !stockName.contains(specificStock)){
 				continue;
 			}
@@ -292,8 +294,14 @@ public class StockBuilder {
 	}
 	
 	private Calendar getDate(String content){
-		StringTokenizer tokenizer = new StringTokenizer(content,"/");
 		Calendar calendar = new GregorianCalendar();
+		if(content == null){
+			return calendar;
+		}
+		StringTokenizer tokenizer = new StringTokenizer(content,"/");
+		if(!tokenizer.hasMoreTokens()){
+			return calendar;
+		}
 		calendar.set(Calendar.MONTH, Integer.parseInt(tokenizer.nextToken())-1);
 		calendar.set(Calendar.DATE, Integer.parseInt(tokenizer.nextToken()));
 		calendar.set(Calendar.YEAR, 2000+Integer.parseInt(tokenizer.nextToken()));
