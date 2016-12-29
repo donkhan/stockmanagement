@@ -161,8 +161,14 @@ public class TradeListingProgram extends AbstractProgram{
 			row.add(trade.getName());
 			row.add(trade.getTradeType());
 			row.add(trade.getQuantity());
-			row.add(trade.getNetRate());
-			if(trade.getTradeType().equals(Trade.SELL)){
+			
+			if(trade.getTradeType().equals(Trade.INTRA_DAY)){
+				row.add(trade.getIntraBuyRate() + "-" + trade.getIntraSellRate());
+			}else{
+				row.add(trade.getNetRate());
+			}
+			
+			if(trade.getTradeType().equals(Trade.SELL) || trade.getTradeType().equals(Trade.INTRA_DAY)){
 				row.add(trade.getProfit());
 			}else{
 				row.add(" ");

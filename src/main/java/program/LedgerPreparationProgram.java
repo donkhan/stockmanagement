@@ -160,6 +160,9 @@ public class LedgerPreparationProgram extends AbstractProgram{
 				if(t.getTradeType().equals(Trade.SELL)){
 					le.setDescription("Sold " + t.getQuantity() + " " + t.getName());
 				}
+				if(t.getTradeType().equals(Trade.INTRA_DAY)){
+					le.setDescription("IntraDay" + t.getQuantity() + " " + t.getName());
+				}
 				List<LedgerEntry> list = ledgerMap.get(t.getBroker());
 				
 				if(list == null){

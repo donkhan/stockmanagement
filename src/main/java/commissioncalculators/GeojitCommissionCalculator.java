@@ -7,6 +7,7 @@ import util.Global;
 public class GeojitCommissionCalculator extends SEBICommissionCalculator implements CommissionCalculator{
 
 	private void setCommission(Trade trade,double transactionAmount,double stockPrice,double quantity){
+		
 		double commission = transactionAmount * .3/100;
 		if(commission <= 20){
 			commission = 20;
@@ -17,6 +18,9 @@ public class GeojitCommissionCalculator extends SEBICommissionCalculator impleme
 		}
 		if(trade.getTradeType().equals("R")){
 			trade.setExtraCost(0);
+		}
+		if(trade.getTradeType().equals("I")){
+			commission =  quantity * .02;
 		}
 		
 		if(Global.debug){

@@ -159,7 +159,9 @@ public class Stock {
 		if(trade.getTradeType().equals("S")){
             handleSell(trade,true,summary);
 		}
-        
+		if(trade.getTradeType().equals("I")){
+            handleIntraDay(trade,true,summary);
+		}
 		if(Global.debug){
 			System.out.println("Trade Value " + trade.getQuantity() * trade.getNetRate());
 			print();
@@ -167,6 +169,17 @@ public class Stock {
 		}
 	}
 	
+	private void handleIntraDay(Trade trade, boolean b, TradeSummary summary) {
+		double profit = (trade.getIntraSellRate() - trade.getIntraBuyRate()) * trade.getQuantity();
+		trade.setProfit(profit);
+        appendProfit(profit);
+        summary.incrementBuyTrade();
+        summary.incrementSellTrade();
+        summary.incrementTurnOver(trade.getIntraBuyRate() * trade.getQuantity());
+        summary.incrementTurnOver(trade.getIntraSellRate() * trade.getQuantity());
+		
+	}
+
 	private List<Trade> tradeList = new ArrayList<Trade>();
 	private List<Trade> positiveTrades = new ArrayList<Trade>();
 	

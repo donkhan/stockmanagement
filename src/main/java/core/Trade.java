@@ -12,8 +12,31 @@ public class Trade implements Comparable<Trade>{
 
 	private boolean soldOff = false;
 	private int unsoldUnits = 0;
+	
+	private double intraBuyRate;
+	private double intraSellRate;
 
 	
+	public double getIntraBuyRate() {
+		return intraBuyRate;
+	}
+
+
+	public void setIntraBuyRate(double intraBuyRate) {
+		this.intraBuyRate = intraBuyRate;
+	}
+
+
+	public double getIntraSellRate() {
+		return intraSellRate;
+	}
+
+
+	public void setIntraSellRate(double intraSellRate) {
+		this.intraSellRate = intraSellRate;
+	}
+
+
 	public Trade(int id){
 		this.id = id;
 	}
@@ -66,6 +89,7 @@ public class Trade implements Comparable<Trade>{
 	public static String SELL = "S";
 	public static String DELETED = "D";
 	public static String RIGHTS = "R";
+	public static String INTRA_DAY = "I";
 	
 	public String getBroker() {
 		return broker;

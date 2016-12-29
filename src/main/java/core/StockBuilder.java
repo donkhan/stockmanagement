@@ -189,13 +189,21 @@ public class StockBuilder {
 		handleSettlementDate(trade,sheet.getCell(11, index));
 		trade.setTradeType(sheet.getCell(2, index).getContents());
 		trade.setQuantity(Long.parseLong(sheet.getCell(4, index).getContents()));
-		trade.setGrossRate(Double.parseDouble(sheet.getCell(3, index).getContents()));
+		if(trade.getTradeType().equals(Trade.INTRA_DAY)){
+			String intraDayRate = sheet.getCell(3, index).getContents();
+			StringTokenizer tokenizer = new StringTokenizer(intraDayRate,"-");
+			trade.setIntraBuyRate(Double.parseDouble(tokenizer.nextToken()));
+			trade.setIntraSellRate(Double.parseDouble(tokenizer.nextToken()));
+		}
+		else{
+			trade.setGrossRate(Double.parseDouble(sheet.getCell(3, index).getContents()));
+		}
 		String broker = sheet.getCell(6, index).getContents();
 		trade.setBroker(broker);
 		
 		if(Global.debug){
             System.out.println("Name " + trade.getName() + " Quantity " + trade.getQuantity() + " "
-                    + (trade.getTradeType().equals(Trade.SELL) ? "SELL" : "BUY") + "  "+ trade.getTransactionTime().getTime()  + " " + trade.getBroker());
+                    + trade.getTradeType() + trade.getTransactionTime().getTime()  + " " + trade.getBroker());
             System.out.println("Gross Rate " + trade.getGrossRate());
         }
 		
