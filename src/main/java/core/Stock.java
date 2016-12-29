@@ -170,7 +170,8 @@ public class Stock {
 	}
 	
 	private void handleIntraDay(Trade trade, boolean b, TradeSummary summary) {
-		double profit = (trade.getIntraSellRate() - trade.getIntraBuyRate()) * trade.getQuantity();
+		double profit = (trade.getIntraSellRate() - trade.getIntraBuyRate() ) * trade.getQuantity();
+		profit -= trade.getExtraCost();
 		trade.setProfit(profit);
         appendProfit(profit);
         summary.incrementBuyTrade();

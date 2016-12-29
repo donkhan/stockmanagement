@@ -20,7 +20,7 @@ public class GeojitCommissionCalculator extends SEBICommissionCalculator impleme
 			trade.setExtraCost(0);
 		}
 		if(trade.getTradeType().equals("I")){
-			commission =  quantity * .02;
+			commission = getIntraDayCommission(trade);
 		}
 		
 		if(Global.debug){
@@ -40,6 +40,16 @@ public class GeojitCommissionCalculator extends SEBICommissionCalculator impleme
 		trade.setExtraCost(extraCost);
 	}
 	
+	private double getIntraDayCommission(Trade trade) {
+		double totalValue = trade.getIntraBuyRate() * trade.getQuantity();
+		totalValue += (trade.getIntraSellRate() * trade.getQuantity());
+		double c = totalValue * .01/100;
+		if(c < 20){
+			c = 20;
+		}
+		return c/(trade.getQuantity()*2);
+	}
+
 	private double getBrokerageCommission(Trade trade) {
 		return ServiceTaxUtil.getServiceTax(trade.getTransactionTime());
 	}
