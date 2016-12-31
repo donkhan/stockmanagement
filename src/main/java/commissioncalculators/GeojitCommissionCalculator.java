@@ -2,6 +2,7 @@ package commissioncalculators;
 import core.Stock;
 import core.Trade;
 import util.Global;
+import util.MathUtils;
 
 
 public class GeojitCommissionCalculator extends SEBICommissionCalculator implements CommissionCalculator{
@@ -47,7 +48,10 @@ public class GeojitCommissionCalculator extends SEBICommissionCalculator impleme
 		if(c < 20){
 			c = 20;
 		}
-		return c/(trade.getQuantity()*2);
+		double d = c/(trade.getQuantity()*2);
+		trade.setIntraBuyRate(MathUtils.Round(trade.getIntraBuyRate() + d, 2));
+		trade.setIntraSellRate(MathUtils.Round(trade.getIntraSellRate()-d, 2));
+		return d;
 	}
 
 	private double getBrokerageCommission(Trade trade) {
