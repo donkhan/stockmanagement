@@ -285,6 +285,9 @@ public class StockBuilder {
 		if(broker.equals("Money Palm")){
 			return mcc;
 		}
+		if(broker.equals("Zerodha")){
+			return gcc;
+		}
 		return null;
 	}
 	
