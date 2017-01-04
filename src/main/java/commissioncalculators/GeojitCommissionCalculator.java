@@ -1,4 +1,7 @@
 package commissioncalculators;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import core.Stock;
 import core.Trade;
 import util.Global;
@@ -42,11 +45,19 @@ public class GeojitCommissionCalculator extends SEBICommissionCalculator impleme
 	}
 	
 	private double getIntraDayCommission(Trade trade) {
+		Calendar year2016 = new GregorianCalendar();
+		year2016.set(Calendar.YEAR,2016); year2016.set(Calendar.MONTH,11); 
+		year2016.set(Calendar.DATE,31);
 		double totalValue = trade.getIntraBuyRate() * trade.getQuantity();
 		totalValue += (trade.getIntraSellRate() * trade.getQuantity());
 		double c = totalValue * .01/100;
-		if(c < 20){
-			c = 20;
+		
+		if(trade.getTransactionTime().after(year2016)){
+			c = totalValue * .03/100;
+		}else{
+			if(c < 20){
+				c = 20;
+			}
 		}
 		double d = c/(trade.getQuantity()*2);
 		trade.setIntraBuyRate(MathUtils.Round(trade.getIntraBuyRate() + d, 2));
