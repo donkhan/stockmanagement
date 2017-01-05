@@ -88,7 +88,7 @@ public class DividendListingProgram extends AbstractProgram{
 		builder.setFullReport(true);
 		builder.setWorkBook();
 		List<Dividend> allDividends = new ArrayList<Dividend>();
-		Sheet sheet = builder.getWorkBook().getSheet(5);
+		Sheet sheet = builder.getWorkBook().getSheet("Dividend");
 		for(int index = 0;index< sheet.getRows();index++){
 			Dividend d = new Dividend();
 			handleDividendDate(d,sheet.getCell(0,index));
