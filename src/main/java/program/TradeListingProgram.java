@@ -38,7 +38,6 @@ public class TradeListingProgram extends AbstractProgram{
 		resetCalendar(begin); resetCalendar(end);
 		begin.set(Calendar.DATE, 1);end.set(Calendar.DATE, 1);
 		end.add(Calendar.MONTH,1); end.add(Calendar.MILLISECOND, -1);
-		end.add(Calendar.YEAR, 1);
 		System.out.println("Begin " + begin.getTime());
 		System.out.println("End " + end.getTime());
 	}
