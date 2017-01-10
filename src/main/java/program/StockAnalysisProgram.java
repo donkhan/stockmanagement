@@ -55,17 +55,21 @@ public class StockAnalysisProgram extends AbstractProgram{
 			long q = 0;
 			
 			addSectionHeader(document,"Trades");
-			PdfPTable table = new PdfPTable(7);
-			String headers[] = new String[]{"Date","Quantity","Net","Gross","Net","Profit","Reference"};
+			PdfPTable table = new PdfPTable(8);
+			String headers[] = new String[]{"Date","Quantity","Net","Gross","Net","Average","Profit","Reference"};
 			addHeaders(table,headers);
 			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 			double tb = 0,ts = 0,tp = 0;
 			int nb = 0,ns = 0;
+			double ma = 0;
 			for(Trade trade : trades){
+				if(trade.getTradeType().equals(Trade.DELETED)){
+					continue;
+				}
 				List<Object> row = new ArrayList<Object>();
 				row.add(df.format(trade.getTransactionTime().getTime()));
 				if(trade.getTradeType().equals(Trade.INTRA_DAY)){
-					row.add(trade.getQuantity());
+					row.add("~" + trade.getQuantity());
 					tp += trade.getProfit();
 					ns++;nb++;
 				}
@@ -75,17 +79,27 @@ public class StockAnalysisProgram extends AbstractProgram{
 					row.add(-1*trade.getQuantity());
 					tp += trade.getProfit();
 					ns++;
+					if(q == 0){
+						ma = 0;
+					}
+					
 				}
-				if(trade.getTradeType().equals(Trade.BUY)){
+				if(trade.getTradeType().equals(Trade.BUY) || trade.getTradeType().equals(Trade.RIGHTS)){
+					ma = ((ma * q) + (trade.getQuantity() * trade.getNetRate())) / (q + trade.getQuantity());
 					q += trade.getQuantity();
 					row.add(trade.getQuantity());
 					tb += (trade.getQuantity() * trade.getNetRate());
 					nb++;
+				
 				}
 				row.add(q);	
 				row.add(trade.getGrossRate());
 				row.add(trade.getNetRate());
+				
+				row.add(ma);
+				
 				row.add(trade.getProfit());
+				
 				if(trade.getBuyTradeIds() != null){
 					row.add(trade.getReferenceRate());
 				}else{
