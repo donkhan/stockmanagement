@@ -64,13 +64,19 @@ public class StockAnalysisProgram extends AbstractProgram{
 			for(Trade trade : trades){
 				List<Object> row = new ArrayList<Object>();
 				row.add(df.format(trade.getTransactionTime().getTime()));
+				if(trade.getTradeType().equals(Trade.INTRA_DAY)){
+					row.add(trade.getQuantity());
+					tp += trade.getProfit();
+					ns++;nb++;
+				}
 				if(trade.getTradeType().equals(Trade.SELL)){
 					q -= trade.getQuantity();
 					ts += (trade.getQuantity() * trade.getNetRate());
 					row.add(-1*trade.getQuantity());
 					tp += trade.getProfit();
 					ns++;
-				}else{
+				}
+				if(trade.getTradeType().equals(Trade.BUY)){
 					q += trade.getQuantity();
 					row.add(trade.getQuantity());
 					tb += (trade.getQuantity() * trade.getNetRate());
