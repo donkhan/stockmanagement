@@ -143,11 +143,16 @@ public class LedgerPreparationProgram extends AbstractProgram{
 		trades.forEach(new Consumer<Trade>(){
 			@Override
 			public void accept(Trade t) {
-				if(t.getTradeType().equals(Trade.RIGHTS)){
+				if(t.getTradeType().equals(Trade.RIGHTS) || t.getTradeType().equals(Trade.DELETED)){
 					return;
 				}
 				LedgerEntry le = new LedgerEntry();
-				le.setAmount(t.getQuantity()* t.getNetRate());
+				if(t.getTradeType().equals(Trade.INTRA_DAY)){
+					le.setAmount((t.getIntraSellRate() - t.getIntraBuyRate() ) * t.getQuantity());
+				}else{
+					le.setAmount(t.getQuantity()* t.getNetRate());
+				}
+				
 				if(t.getSettlementTime() != null){
 					le.setTime(t.getSettlementTime());
 				}else{

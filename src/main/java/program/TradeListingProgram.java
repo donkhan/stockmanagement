@@ -38,6 +38,7 @@ public class TradeListingProgram extends AbstractProgram{
 		resetCalendar(begin); resetCalendar(end);
 		begin.set(Calendar.DATE, 1);end.set(Calendar.DATE, 1);
 		end.add(Calendar.MONTH,1); end.add(Calendar.MILLISECOND, -1);
+		end.add(Calendar.YEAR, 1);
 		System.out.println("Begin " + begin.getTime());
 		System.out.println("End " + end.getTime());
 	}
@@ -127,8 +128,8 @@ public class TradeListingProgram extends AbstractProgram{
 	private void filter(List<Trade> list) {
 		Iterator<Trade> iterator = list.iterator();
 		while(iterator.hasNext()){
-			Trade pi = iterator.next();
-			if(remove(pi)) iterator.remove();
+			Trade trade = iterator.next();
+			if(remove(trade)) iterator.remove();
 		}
 	}
 	
