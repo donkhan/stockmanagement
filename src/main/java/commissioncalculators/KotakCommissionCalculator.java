@@ -16,6 +16,10 @@ public class KotakCommissionCalculator extends SEBICommissionCalculator implemen
 			commission = _sebiMaxCommission;
 		}
 		
+		if(trade.getTradeType().equals(Trade.INTRA_DAY)){
+			commission = 42;
+		}
+		
 		if(Global.debug){
 			System.out.println("Brokerage " + commission);
 		}
