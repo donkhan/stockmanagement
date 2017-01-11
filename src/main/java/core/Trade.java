@@ -149,10 +149,10 @@ public class Trade implements Comparable<Trade>{
 	public String toString(){
 		double cost = getNetRate() * getQuantity();
 		if(getTradeType().equals(Trade.INTRA_DAY)){
-			return id + " Intra Day Trade Buy Rate : " + this.getIntraBuyRate() + " Sell Rate " + this.getIntraSellRate() + " @ " + getTransactionTime().getTime(); 
+			return id + " Intra Day Trade Buy Rate : " + this.getIntraBuyRate() + " Sell Rate " + getIntraSellRate() + " @ " + getTransactionTime().getTime(); 
 		}
 		return id + ":" + getTradeTypeSymbol() + " " + quantity
-				+ " " + name +  " " + cost + "  @" + getTransactionTime().getTime();
+				+ " " + name +  " " + cost + "  @" + getTransactionTime().getTime() + " Settled @ " + getSettlementTime().getTime();
 	}
 	
 	public void print(){
