@@ -51,6 +51,10 @@ public class StockAnalysisProgram extends AbstractProgram{
 			PdfWriter.getInstance(document, file);
 			document.open();
 			
+			if(stock == null){
+				System.err.println("Please check stock name and broker name. I do not find any entries here");
+				return;
+			}
 			List<Trade> trades = stock.getTradeList();
 			long q = 0;
 			
