@@ -59,8 +59,8 @@ public class StockAnalysisProgram extends AbstractProgram{
 			long q = 0;
 			
 			addSectionHeader(document,"Trades");
-			PdfPTable table = new PdfPTable(8);
-			String headers[] = new String[]{"Date","Quantity","Net","Gross","Net","Average","Profit","Reference"};
+			PdfPTable table = new PdfPTable(7);
+			String headers[] = new String[]{"Date","Quantity","Net","Gross","Net","Profit","Reference"};
 			addHeaders(table,headers);
 			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 			double tb = 0,ts = 0,tp = 0;
@@ -100,7 +100,7 @@ public class StockAnalysisProgram extends AbstractProgram{
 				row.add(trade.getGrossRate());
 				row.add(trade.getNetRate());
 				
-				row.add(ma);
+				//row.add(ma);
 				
 				row.add(trade.getProfit());
 				
