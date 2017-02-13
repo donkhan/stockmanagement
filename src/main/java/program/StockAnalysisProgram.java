@@ -106,6 +106,9 @@ public class StockAnalysisProgram extends AbstractProgram{
 				
 				if(trade.getBuyTradeIds() != null){
 					row.add(trade.getReferenceRate());
+				}else if(trade.getTradeType().equals(Trade.INTRA_DAY)){
+					row.add(trade.getIntraBuyRate() + "-" + trade.getIntraSellRate());
+					
 				}else{
 					row.add("");
 				}
