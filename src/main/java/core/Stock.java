@@ -122,13 +122,11 @@ public class Stock {
     private void addProfitAndAdjustAverage(Trade trade){
         double profit = 0;
         List<Integer> buyTradeIds = trade.getBuyTradeIds();
+        long quantity = trade.getQuantity();
         if(buyTradeIds != null){
         	for(int buyTradeId : buyTradeIds){
         		Trade buyTrade = getTrade(buyTradeId);
-        		long quantity = trade.getQuantity();
-        		if(quantity > buyTrade.getQuantity()){
-        			quantity = buyTrade.getQuantity();
-        		}
+        		
         		profit = (trade.getNetRate() - buyTrade.getNetRate()) * quantity;
         		trade.setReferenceRate(trade.getReferenceRate() + " " + quantity+"@"+MathUtils.Round(buyTrade.getNetRate(),1));
         		long remainingQuantity = totalQuantity - quantity;
@@ -136,6 +134,10 @@ public class Stock {
         			double newAverage = ((totalQuantity * getAverage()) - (buyTrade.getNetRate() * quantity))/ (totalQuantity - quantity);
         			setAverage(newAverage);
         		}
+        		if(buyTrade.getQuantity() > quantity)
+        			quantity = quantity - buyTrade.getQuantity();
+        		else
+        			quantity = 0;
         		totalQuantity = (int)remainingQuantity;
         	}
         }else{
@@ -216,8 +218,7 @@ public class Stock {
 	}
 
 	public String toString(){
-		//return  name + "  " + tradeList + "\n";
-		return name + " " + totalQuantity;
+		return name + " " + totalQuantity + " Average " + getAverage();
 	}
 
 	public double getCurrentPrice() {
