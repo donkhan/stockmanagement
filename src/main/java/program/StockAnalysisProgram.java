@@ -128,10 +128,9 @@ public class StockAnalysisProgram extends AbstractProgram{
 			double diff = MathUtils.Round((stock.getCurrentPrice() - stock.getAverage()) * stock.getTotalQuantity(), 2);
 			document.add(new Paragraph(" UnRealized Loss/Gain : "	 + diff));
 			
-			
-			
 			document.close();
 			file.close();
+			System.out.println("output is created File is " + outputFile);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (DocumentException e) {
