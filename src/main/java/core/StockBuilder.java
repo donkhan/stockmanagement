@@ -266,7 +266,7 @@ public class StockBuilder {
 				StringTokenizer tokenizer = new StringTokenizer(content,",");
 				List<Integer> buyTradeIds = new ArrayList<Integer>();
 				while(tokenizer.hasMoreTokens()){
-					String token = tokenizer.nextToken();
+					String token = tokenizer.nextToken().trim();
 					int buyTradeId = Integer.parseInt(token);
 					buyTradeIds.add(buyTradeId);
 				}
