@@ -131,7 +131,8 @@ public class StockBuilder {
 	protected String getURL(Sheet sheet,String stockName){
 		int rows = sheet.getRows();
 		for(int i  =0;i<rows;i++){
-			if(sheet.getCell(0, i).getContents().equals(stockName)){
+			String cell = sheet.getCell(0, i).getContents();
+			if(cell.trim().equals(stockName.trim())){
 				return sheet.getCell(1,i).getContents();
 			}
 		}
